@@ -1,0 +1,25 @@
+payment_user-insert	There is no active transaction	::1	2020-06-10 03:43:28
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'kikxi' for key 'username'	::1	2020-06-10 04:21:16
+payment_user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`book_it`.`users_payments`, CONSTRAINT `users_payments_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE)	::1	2020-06-10 04:21:16
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'mikica' for key 'username'	::1	2020-06-10 04:27:38
+payment_user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`book_it`.`users_payments`, CONSTRAINT `users_payments_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE)	::1	2020-06-10 04:27:38
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'mikica' for key 'username'	::1	2020-06-10 04:32:15
+payment_user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`book_it`.`users_payments`, CONSTRAINT `users_payments_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE)	::1	2020-06-10 04:32:15
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 07:53:14
+payment_user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`book_it`.`users_payments`, CONSTRAINT `users_payments_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE)	::1	2020-06-10 07:53:14
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 07:54:32
+payment_user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`book_it`.`users_payments`, CONSTRAINT `users_payments_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE)	::1	2020-06-10 07:54:32
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 07:55:48
+payment_user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`book_it`.`users_payments`, CONSTRAINT `users_payments_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE)	::1	2020-06-10 07:55:48
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:09:38
+delete from db	SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'person_id = '12'' at line 1	::1	2020-06-10 08:09:38
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:09:53
+delete from db	SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'person_id = '13'' at line 1	::1	2020-06-10 08:09:53
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:11:14
+delete from db	SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'person_id = '14'' at line 1	::1	2020-06-10 08:11:14
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:14:11
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:14:53
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:14:56
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:18:28
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:18:45
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:22:20

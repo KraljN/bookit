@@ -1,0 +1,90 @@
+@import'rfs_partial.scss';
+#background{
+    h1{
+        font-size: 2rem;
+    }
+    h2{
+        font-size: .8rem;
+    }
+}
+#aboutUs{
+    height:350px;
+}
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+    nav{
+        @include font-size(.8rem);
+        li{
+            width:100px!important;
+        }
+    }
+    #background{
+        h1{
+            font-size: 2.4rem;
+        }
+        h2{
+            font-size: 1rem;
+        }
+    }
+    .wrong{
+        font-size: 15px;
+      }
+ }
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) { 
+    nav{
+        @include font-size(1.2rem);
+        li{
+            width:120px!important;
+        }
+    }
+    #background{
+        h1{
+            font-size: 2.8rem;
+        }
+        h2{
+            font-size: 1.3rem;
+        }
+    }
+    #aboutUs{
+        height:550px;
+    }
+ }
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+
+    header{
+        .cart{
+            max-width: 34px;
+        }
+        .main-menu{
+            .navbar-light{
+                .navbar-nav{
+                    .navbar-item{
+                        padding: 0;
+                        margin-bottom: 10px;
+                        &:after{
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    #background{
+        h1{
+            font-size: 3rem;
+        }
+        h2{
+            font-size: 1.4rem;
+        }
+    }
+ }
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { 
+
+}
+//.about-sec .about-img figure
