@@ -1,4 +1,5 @@
     <body>
+        <input type="hidden" name="page" id="page" value="<?php echo $_GET["page"]=="single-product"?"{$_GET["page"]};id={$_GET["id"]}":$_GET["page"];?>"/>
         <header>
             <div class="main-menu">
                 <div class="container">

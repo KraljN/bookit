@@ -23,3 +23,5 @@ user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entr
 user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:18:28
 user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:18:45
 user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'nixi' for key 'username'	::1	2020-06-10 08:22:20
+	SQLSTATE[HY000] [1049] Unknown database 'book_it'	::1	2020-07-20 00:09:34
+	SQLSTATE[HY000] [1049] Unknown database 'book_it'	::1	2020-07-20 15:10:28

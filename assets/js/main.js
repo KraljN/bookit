@@ -1,5 +1,6 @@
 $(document).ready(function () {
     menu();
+    insertAccess();
     if(window.location.href.includes("home")){
         newlyAdded();
     }
@@ -169,4 +170,18 @@ function proveraTb(field, regExp, index){
             return true
         }
     }
+}
+function insertAccess(){
+    $.ajax({
+        type: "POST",
+        url: "models/insertAccess.php",
+        data: {
+            action:"pristup",
+            stranica:$("#page").val()
+        },
+        dataType: "json",
+        success: function (response) {
+            
+        }
+    });
 }
