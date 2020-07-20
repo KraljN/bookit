@@ -76,8 +76,8 @@ function getLastInsertedId($db){
    $output = $db->lastInsertId();
    return $output;
 }
-function insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email){
-    $prepare = $db->prepare("INSERT INTO users VALUES (NULL, :userame, :password, :personId, :address, :cityId, :roleId, :phoneNumber, :date, :email)");
+function insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged){
+    $prepare = $db->prepare("INSERT INTO users VALUES (NULL, :userame, :password, :personId, :address, :cityId, :roleId, :phoneNumber, :date, :email, :loged)");
     $prepare->bindParam(":email", $email);
     $password = md5($password);
     $prepare->bindParam(":password", $password);
@@ -89,6 +89,8 @@ function insertUser($db, $username, $password, $lastPersonId, $address, $inserte
     $prepare->bindParam(":cityId", $insertedCityId);
     $prepare->bindParam(":roleId", $roleId);
     $prepare->bindParam(":userame", $username);
+    $prepare->bindParam(":loged", $loged);
+
     try{
         $prepare->execute();
         return true;

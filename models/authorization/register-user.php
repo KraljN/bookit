@@ -15,8 +15,8 @@ if(isset($_POST["register"])){
     $address = $_POST["address"];
     $number = $_POST["number"];
     $cvv = $_POST["cvv"];
-    define("KORISNIK", 2);
     $roleId=KORISNIK;
+    $loged = NIJE_ULOGOVAN;
  
     $greske = [];
     $regExpName = "/^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}$/";
@@ -75,7 +75,7 @@ if(isset($_POST["register"])){
             $insertedCityId = getCityId($db, $city);
             insertPerson($db, $name, $lastName);
             $lastPersonId = getLastInsertedId($db);
-            if(insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email)){
+            if(insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){
                 $lastUserId = getLastInsertedId($db);
                 insertPayment($db, $card, $cvv, $lastUserId);
             }
@@ -90,7 +90,7 @@ if(isset($_POST["register"])){
             $insertedCityId = getCityId($db, $city);
             insertPerson($db, $name, $lastName);
             $lastPersonId = getLastInsertedId($db);
-            if(insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email)){
+            if(insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){
                 $lastUserId = getLastInsertedId($db);
                 insertPayment($db, $card, $cvv, $lastUserId);
             }
@@ -102,7 +102,7 @@ if(isset($_POST["register"])){
             $insertedCityId = getCityId($db, $city);
             insertPerson($db, $name, $lastName);
             $lastPersonId = getLastInsertedId($db);
-            if(insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email)){
+            if(insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){
                 $lastUserId = getLastInsertedId($db);
                 insertPayment($db, $card, $cvv, $lastUserId);
             }

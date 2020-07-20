@@ -15,6 +15,13 @@
     define("USERNAME", getParameter("USERNAME"));
     define("PASSWORD", getParameter("PASSWORD"));
 
+
+    //=======USER INSERT=====
+    define("NIJE_ULOGOVAN", 0);
+    define("ULOGOVAN", 1);
+    define("KORISNIK", 2);
+
+
     function getParameter($name){
         $file =  fopen(ENV_PATH, "r");
         $output = "";

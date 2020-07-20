@@ -26,14 +26,12 @@ function menu(){
 }
 function createMenu(data){
     var output = "";
-    output += `<ul class="navbar-nav ml-auto">`;
     data.forEach(el => {
         output+=`
         <li class="navbar-item text-start text-sm-center mx-auto"><a href="${el.href}" class="nav-link">${el.text}</a></li>
         `;
     });
-    output+=`</ul>`;
-    $("#navigation").html(output);
+    $(output).insertBefore("#navigation");
 }
 function newlyAdded(){
     $.ajax({
@@ -117,7 +115,7 @@ function proveraRegister(e){
     if(validnoIme && validnoPrezime && validnoMail && validnoUsername && validnoCredit && validnoPass && validnoCountry && validnoCity && validnoAddress && validnoNumber && validnoCVV){
         $.ajax({
             type: "POST",
-            url: "models/users-manipulation/insert-user.php",
+            url: "models/authorization/register-user.php",
             data: {
                 name:ime.val(),
                 lastName:prezime.val(),

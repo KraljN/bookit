@@ -1,5 +1,14 @@
-    <body>
-        <input type="hidden" name="page" id="page" value="<?php echo $_GET["page"]=="single-product"?"{$_GET["page"]};id={$_GET["id"]}":$_GET["page"];?>"/>
+   <body>
+        <?php var_dump($_SESSION["korisnik"]);?>
+        <!-- Nije dovrsen log in log out -->
+        <input type="hidden" name="page" id="page" value="<?php 
+            if(isset($_GET["page"])){
+                echo $_GET["page"]=="single-product"?"{$_GET["page"]};id={$_GET["id"]}":$_GET["page"];
+            }
+            else{
+                echo "home";
+            }
+        ?>"/>
         <header>
             <div class="main-menu">
                 <div class="container">
@@ -9,8 +18,9 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                            <div id="navigation">
-                            </div>
+                                <ul class="navbar-nav ml-auto"> 
+                                <li class="navbar-item text-start text-sm-center mx-auto" id="navigation"><a href="index.php?page=login" class="nav-link"><?php echo isset($_SESSION["korisnik"])?"Log out":"Log in"?></a></li>
+                                </ul>
                             <a href="index.php?page=cart" id="cart-link">
                                 <div class="cart mb-2 mx-auto">
                                     <span>
