@@ -8,6 +8,9 @@ $(document).ready(function () {
     $("#register").click(proveraRegister);
     $("#successInfo").hide();
     $("#errorInfo").hide();
+    if(window.location.href.includes("login")){
+        $("#login").click(proveriLogin);
+    }
 });
 function menu(){
     $.ajax({
@@ -101,17 +104,17 @@ function proveraRegister(e){
 
     let validnoIme, validnoNumber,  validnoPrezime, validnoMail, validnoUsername, validnoPass, validnoCredit, validnoCountry, validnoCity, validnoAddress, validnoCVV;
 
-    validnoIme = proveraTb(ime, regExpName, 0);
-    validnoPrezime = proveraTb(prezime, regExpLastName, 1);
-    validnoMail = proveraTb(email, regExpEmail, 2);
-    validnoUsername = proveraTb(username, regExpUsername, 3);
-    validnoPass = proveraTb(password, regExpUsername, 4);
-    validnoCredit = proveraTb(creditCard, regExpCreditCard, 5);
-    validnoCVV = proveraTb(cvv, regExpCVV, 6);
-    validnoCountry = proveraTb(country, regExpCountry, 7);
-    validnoCity = proveraTb(city, regExpCountry, 8);
-    validnoAddress = proveraTb(address, regExpAddress, 9);
-    validnoNumber = proveraTb(number, regExpNumber, 10);
+    validnoIme = proveraTb(ime, regExpName, 2);
+    validnoPrezime = proveraTb(prezime, regExpLastName, 3);
+    validnoMail = proveraTb(email, regExpEmail, 4);
+    validnoUsername = proveraTb(username, regExpUsername, 5);
+    validnoPass = proveraTb(password, regExpUsername, 6);
+    validnoCredit = proveraTb(creditCard, regExpCreditCard, 7);
+    validnoCVV = proveraTb(cvv, regExpCVV, 8);
+    validnoCountry = proveraTb(country, regExpCountry, 9);
+    validnoCity = proveraTb(city, regExpCountry, 10);
+    validnoAddress = proveraTb(address, regExpAddress, 11);
+    validnoNumber = proveraTb(number, regExpNumber, 12);
     if(validnoIme && validnoPrezime && validnoMail && validnoUsername && validnoCredit && validnoPass && validnoCountry && validnoCity && validnoAddress && validnoNumber && validnoCVV){
         $.ajax({
             type: "POST",
@@ -182,4 +185,33 @@ function insertAccess(){
             
         }
     });
+}
+function proveriLogin(e){
+    e.preventDefault();
+    let regExpUsername = /[\d\w\.-_]{4,15}/;
+    let username = $("#logUser");
+    let password = $("#logPass");
+    let validnoUsername, validnoPass;
+    validnoPass = proveraTb(username, regExpUsername, 0);
+    validnoUsername = proveraTb(password, regExpUsername, 1);
+    if(validnoPass && validnoPass){
+        $.ajax({
+            type: "POST",
+            url: "models/authorization/logIn.php",
+            data: {
+                username:username.val(),
+                password:password.val(),
+                action:"uloguj"
+            },
+            dataType: "json",
+            success: function (data) {
+                if(data.redirect == true){
+                    window.location.href = "index.php?page=login";
+                }
+            },
+            error: function(error, status, message){
+        
+            }
+        });
+    }
 }

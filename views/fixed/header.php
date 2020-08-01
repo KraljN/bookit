@@ -1,5 +1,5 @@
    <body>
-        <?php var_dump($_SESSION["korisnik"]);?>
+        <?php var_dump($_SESSION["greske"]);?>
         <!-- Nije dovrsen log in log out -->
         <input type="hidden" name="page" id="page" value="<?php 
             if(isset($_GET["page"])){

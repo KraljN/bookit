@@ -6,17 +6,30 @@
             <form>
                 <div class="row">
                     <div class="col-md-6">
-                        <input  class="form-control" placeholder="Enter User Name" required/>
+                        <input  class="form-control" placeholder="Enter Username" required="required" id="logUser"/>
                         <span class="required-star">*</span>
+                        <span class="text-danger ml-2 wrong d-none">Minimum 5 maximum 15 ([A-z][0-9].-_)</span>
                     </div>
                     <div class="col-md-6">
-                        <input class="form-control" type="password" placeholder="Enter Password" required/>
+                        <input class="form-control" type="password" placeholder="Enter Password" id="logPass" required="required"/>
                         <span class="required-star">*</span>
+                        <span class="text-danger ml-2 wrong d-none">Minimum 5 maximum 15 ([A-z][0-9].-_)</span>
+
                     </div>
                     <div class="col-lg-8 col-md-12">
-                        <button class="btn black button-width">Login</button>
+                        <button class="btn black button-width" id="login">Login</button>
                     </div>
                 </div>
+                <?php if(isset($_SESSION["greske"])): ?>
+                    <ul class="text-center">
+                        <?php foreach($_SESSION["greske"] as $greska): ?>
+                            <li class="text-danger"><?= $greska ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <?php
+                    endif;
+                    unset($_SESSION["greske"]);
+                ?>
             </form>
         </div>
         <h2 class="mt-5 mt-sm-0">Register</h1>
