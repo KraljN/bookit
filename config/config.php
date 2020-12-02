@@ -1,13 +1,13 @@
 <?php
     //========PATHS========
-    define("PATH", $_SERVER["DOCUMENT_ROOT"] . "/bookIt");
-    define("ENV_PATH", PATH . "/config/.env");
+    define("ROOT_PATH", $_SERVER["DOCUMENT_ROOT"] . "/bookIt");
+    define("ENV_PATH", ROOT_PATH . "/config/.env");
 
     //========LOGS========
 
     define("SEPARATOR", "\t");
-    define("ACCESS_LOG", PATH . "/data/access.txt");
-    define("ERRORS_LOG", PATH . "/data/errors.txt");
+    @define("ACCESS_LOG", ROOT_PATH . "/data/access.txt");
+    @define("ERRORS_LOG", ROOT_PATH . "/data/errors.txt");
 
     //========DATABASE========
     define("DBNAME", getParameter("DBNAME"));

@@ -2,7 +2,7 @@
 session_start();
 if(isset($_POST["register"])){
     require_once "../../config/connection.php";
-    include "../functions.php";
+    include "../forbidden/functions.php";// OVDE JE MOGUCE DA NASTAJE PROBLEM PRI PRAVLJENJU NOVOG KORISNIKA, RADILO JE PRE PROMENE DIREKTORIJUMA
     $name = $_POST["name"];
     $lastName = $_POST["lastName"];
     $email = $_POST["email"];
@@ -25,7 +25,7 @@ if(isset($_POST["register"])){
     $regExpUsername = "/[\d\w\.-_]{4,15}/";
     $regExpCreditCard = "/^\d{4}(\-\d{4}){3}$/";
     $regExpCountry = '/^[A-Z]\w{2,10}$/';
-    $regExpAddress = "/^[A-Z][\w]{5,10}(\s[\w]{5,10}){0,5}(\s[0-9]{1,4})$/";
+    $regExpAddress = "/^[A-Z][\w]{5,20}(\s[\w]{5,20}){0,5}(\s[0-9]{1,4})$/";
     $regExpPhoneNumber = "/^\+?[0-9]{9,15}$/";
     $regExpCVV = "/^[0-9]{3}$/";
 
@@ -62,7 +62,7 @@ if(isset($_POST["register"])){
     if(!preg_match($regExpCVV, $cvv)){
         $greske[] = "Wrong CVV format(Last 3 numbers on back of your card)";
     }
-    if(count($greske)==0){
+    if(count($greske) == 0){
         $card = str_replace('-', '', $creditCard);
         $countryId = getCountryId($db, $country);
         $cityId = getCityId($db, $city);

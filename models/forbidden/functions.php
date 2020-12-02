@@ -1,4 +1,18 @@
 <?php
+function generisiCapchaText($opseg, $duzina){
+    $duzinaOpsega = strlen($opseg);
+    $text = "";
+    for($i = 0; $i < $duzina; $i++){
+        $randomKarakter = $opseg[rand(0, $duzinaOpsega - 1)];
+        $text .= $randomKarakter;
+    }
+    return $text;
+}
+function vratiJSON($array, $statusCode){
+    http_response_code($statusCode);
+    header("Content-Type: application/json");
+    echo json_encode($array);
+}
 function getCountryId($db, $countryName){
     $prepare = $db->prepare("SELECT country_id FROM countries WHERE country_name = :drzava");
     $prepare->bindParam(":drzava", $countryName);
@@ -32,10 +46,7 @@ function insertCountry($db, $countryName){
     catch(PDOException $ex){
         logError($ex->getMessage(), "country-insert");
         $message = "Error entering country";
-        $status = 500;
-        header('Content-Type: application/json');
-        http_response_code($status);
-        echo json_encode(["message"=>$message]);
+        vratiJSON(["message"=>$message], 500);
     }
 }
 function insertCity($db, $cityName, $countryId){
@@ -48,10 +59,8 @@ function insertCity($db, $cityName, $countryId){
     catch(PDOException $ex){
         logError($ex->getMessage(), "city-insert");
         $message = "Error entering city";
-        $status = 500;
-        header('Content-Type: application/json');
-        http_response_code($status);
-        echo json_encode(["message"=>$message]);
+        vratiJSON(["message"=>$message], 500);
+
     }
 }
 function insertPerson($db, $name, $lastName){
@@ -65,10 +74,7 @@ function insertPerson($db, $name, $lastName){
     catch(PDOException $ex){
         logError($ex->getMessage(), "person-insert");
         $message = "Error inserting person";
-        $status = 500;
-        header('Content-Type: application/json');
-        http_response_code($status);
-        echo json_encode(["message"=>$message]);
+        vratiJSON(["message"=>$message], 500);
         return false;
     }
 }
@@ -77,9 +83,8 @@ function getLastInsertedId($db){
    return $output;
 }
 function insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged){
-    $prepare = $db->prepare("INSERT INTO users VALUES (NULL, :userame, :password, :personId, :address, :cityId, :roleId, :phoneNumber, :date, :email, :loged)");
+    $prepare = $db->prepare("INSERT INTO users VALUES (NULL, :userame, :password, :personId, :address, :cityId, :roleId, :phoneNumber, :date, :email)");
     $prepare->bindParam(":email", $email);
-    $password = md5($password);
     $prepare->bindParam(":password", $password);
     $prepare->bindParam(":personId", $lastPersonId);
     $prepare->bindParam(":address", $address);
@@ -89,7 +94,6 @@ function insertUser($db, $username, $password, $lastPersonId, $address, $inserte
     $prepare->bindParam(":cityId", $insertedCityId);
     $prepare->bindParam(":roleId", $roleId);
     $prepare->bindParam(":userame", $username);
-    $prepare->bindParam(":loged", $loged);
 
     try{
         $prepare->execute();
@@ -98,10 +102,7 @@ function insertUser($db, $username, $password, $lastPersonId, $address, $inserte
     catch(PDOException $ex){
         logError($ex->getMessage(), "user-insert");
         $message = "User already exist";
-        $status = 500;
-        header('Content-Type: application/json');
-        http_response_code($status);
-        echo json_encode(["message"=>$message]);
+        vratiJSON(["message"=>$message], 409);
         return false;
     }
 }
@@ -116,10 +117,8 @@ function insertPayment($db, $card, $cvv, $lastUserId){
     catch(PDOException $ex){
         logError($ex->getMessage(), "payment-insert");
         $message = "Error while entering card";
-        $status = 500;
-        header('Content-Type: application/json');
-        http_response_code($status);
-        echo json_encode(["message"=>$message]);
+        vratiJSON(["message"=>$message], 500);
+
     } 
     $userPayment = $db->prepare("INSERT INTO users_payments VALUES (NULL, :userId, :paymentId)");
     $userPayment->bindParam(":userId", $lastUserId);
@@ -127,19 +126,15 @@ function insertPayment($db, $card, $cvv, $lastUserId){
     try{
         $userPayment->execute();
         $message = "You successfuly made account";
-        $status = 201;
-        header('Content-Type: application/json');
-        http_response_code($status);
-        echo json_encode(["message"=>$message]);
+        vratiJSON(["message"=>$message], 201);
+
         return true;
     }
     catch(PDOException $ex){
         logError($ex->getMessage(), "payment_user-insert");
         $message = "Error while entering card";
-        $status = 500;
-        header('Content-Type: application/json');
-        http_response_code($status);
-        echo json_encode(["message"=>$message]);
+        vratiJSON(["message"=>$message], 500);
+
         return false;
     } 
 }

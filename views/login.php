@@ -1,9 +1,14 @@
+<?php 
+include "models/capchas/generateCapchaText.php"
+// $opseg = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789";
+// $_SESSION["capchaText"] = rand(10000, 999999)
+?>
 <section class="static about-sec">
     <div class="container">
         <h1>Login</h1>
         <p>Login into our site so you can make purchases</p>
         <div class="form">
-            <form>
+            <form action="obrada.php" method="POST">
                 <div class="row">
                     <div class="col-md-6">
                         <input  class="form-control" placeholder="Enter Username" required="required" id="logUser"/>
@@ -16,9 +21,23 @@
                         <span class="text-danger ml-2 wrong d-none">Minimum 5 maximum 15 ([A-z][0-9].-_)</span>
 
                     </div>
-                    <div class="col-lg-8 col-md-12">
-                        <button class="btn black button-width" id="login">Login</button>
+                    <div class="row">
+                        <div class="col-md-6 mx-auto mt-3 d-flex justify-content-center align-items-center">
+                            <img src="models/capchas/getCapchaPicture.php" class="m-0" alt="capcha picture"/>
+                        </div>
+                        <div class="col-md-6 mx-auto mt-3 d-flex">
+                            <input  class="form-control" placeholder="Enter Capcha" required="required" id="tbCapcha"/>
+                            <span class="required-star">*</span>
+                        </div>
                     </div>
+                    <div class="row">
+                        <span class="text-danger ml-4 mt-1  d-none wrong">Minimum 5 maximum 6 letters or numbers</span>
+                    </div>
+                    <div class="col-md-12 col-lg-8 form-group d-flex flex-column">
+                        <button class="btn black button-width" id="login">Login</button>
+                        <span class="text-danger font-weight-bold ml-1 mt-3" id="loginInfo">Wrong username, password or capcha</span>
+                    </div>
+
                 </div>
                 <?php if(isset($_SESSION["greske"])): ?>
                     <ul class="text-center">
@@ -44,7 +63,7 @@
                 <div class="col-md-6 form-group">
                     <input type="text" class="form-control input-height mb-2" id="regLastName" name="regLastName" placeholder="Last Name"/>
                     <span class="required-star">*</span>
-                    <span class="text-danger ml-2 wrong d-none">Wrong last name format (Exp. Miles)</span>
+                    <span class="text-danger ml-2 wrong d-none">Wrong last name format (Exp. Miles (Johnes))</span>
                 </div>
                 </div>
                 <div class="col-md-12 form-group ">
@@ -56,12 +75,12 @@
                     <div class="col-md-6 form-group ">
                         <input type="text" class="form-control input-height mb-2" id="regUser" name="regUser" placeholder="Username"/>
                         <span class="required-star">*</span>
-                        <span class="text-danger ml-2 wrong d-none">Minimum 5 maximum 15 ([A-z][0-9].-_)</span>
+                        <span class="text-danger ml-2 wrong d-none">Minimum 5 maximum 15 ([A-z][0-9].-_ allowed)</span>
                     </div>
                     <div class="col-md-6 form-group">
                         <input type="password" class="form-control input-height mb-2" id="regPassword" name="regPassword" placeholder="Password"/>
                         <span class="required-star">*</span>
-                        <span class="text-danger ml-2 wrong d-none">Minimum 5 maximum 15 ([A-z][0-9].-_)</span>
+                        <span class="text-danger ml-2 wrong d-none">Minimum 5 maximum 15 ([A-z][0-9].-_ allowed)</span>
                     </div>
                  </div>
             <div class="row">
@@ -96,10 +115,9 @@
                 <span class="required-star">*</span>
                 <span class="text-danger ml-2 wrong d-none">Wrong mobile number format (Ex. +381621235234)</span>
             </div>
-                            <div class="col-md-12 form-group text-center font-weight-bold" id="registerObavestenje"></div>
             <div class="col-md-12 form-group d-flex flex-column">
             <span class="text-success text-center font-weight-bold" id="successInfo">Succefuly made account</span>
-            <span class="text-danger text-center font-weight-bold" id="errorInfo">User with that username already exist</span>
+            <span class="text-danger text-center font-weight-bold mb-3" id="errorInfo">User with that username already exist</span>
                 <button type="submit" value="submit" class="btn button-width" name="register" id="register">
                     Register
                 </button>

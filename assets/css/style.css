@@ -9,6 +9,9 @@
 /* Font size */
 /* mixin */
 @import url('https://fonts.googleapis.com/css2?family=Bitter&display=swap');
+textarea{
+  resize: none;
+}
 body {
   margin: 0px;
   padding: 0px;
@@ -36,12 +39,18 @@ h1, h2, h3, h4, h5, h6, ul {
   padding: 0px; }
 
 input {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Bitter', sans-serif;
   outline: 0; }
 
 textarea {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Bitter', sans-serif;
   outline: 0; }
+select:focus, select:active{
+  font-family: 'Bitter', sans-serif;
+  outline: none!important;
+  box-shadow: none!important;
+  border: 1px solid black!important;
+}
 
 .btn {
   background: #ff9700;
@@ -1051,11 +1060,21 @@ footer {
       font-weight: 300;
       padding-right: 50px;
       line-height: 24px; }
+  .timing {
+    margin-top: 30px;
+    margin-bottom: 50px;
+  }
   footer .timing h6 {
     color: #464646;
     font-size: 14px;
     margin-bottom: 10px;
     font-weight: 300; }
+  .timing h3{
+    font-size: 25px;
+  }
+  .address h2{
+    font-size: 30px;
+  }
   footer ul li {
     margin-bottom: 5px;
     list-style: none; }
@@ -1186,4 +1205,13 @@ width: 200px;
 }
 #login{
   margin-top: 30px;
+}
+#submitForm{
+  margin-top: 40px;
+}
+#contactTitle{
+  margin-bottom: 70px;
+}
+#contactTitle h1{
+  font-size: 30px;
 }

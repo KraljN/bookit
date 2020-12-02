@@ -31,7 +31,17 @@
     font-size: 1.3rem; }
 
   #aboutUs {
-    height: 550px; } }
+    height: 550px; }
+
+  .timing {
+    margin-top: 130px;
+    margin-bottom: none; }
+
+  #contactTitle h1 {
+    font-size: 45px; }
+
+  #submitForm {
+    margin-top: 60px; } }
 @media (min-width: 992px) {
   header .cart {
     max-width: 34px; }
