@@ -44,6 +44,8 @@
                                     <span class="text-danger  wrong d-none">Message cannot be empty</span>
                                 </div>
                                 <div class="col-md-12 pt-4">
+                                    <span class="text-success text-center font-weight-bold successInfo">Succefuly made account</span></br>
+                                    <span class="text-danger text-center font-weight-bold mb-3 errorInfo">User with that username already exist</span>
                                     <?php if(isset($_SESSION["greske"])): ?>
                                         <ul class="text-center list-unstyled">
                                             <?php foreach($_SESSION["greske"] as $greska): ?>
@@ -53,6 +55,12 @@
                                     <?php
                                     endif;
                                     unset($_SESSION["greske"]);
+                                    ?>
+                                    <?php if(isset($_SESSION["greskeOther"])): ?>
+                                        <li class="text-danger"><?= $_SESSION["greskeOther"] ?></li>
+                                    <?php 
+                                    endif;
+                                    unset($_SESSION["greskeOther"]);
                                     ?>
                                 </div>
                                 <div class="col-md-12">

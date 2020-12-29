@@ -2,6 +2,7 @@
 session_start();
 if(isset($_POST["action"]) && $_POST["action"] == "contact"){
     include "../../config/connection.php";
+    include "../forbidden/functions.php";
     $name = $_POST["name"];
     $email = $_POST["email"];
     $subject = $_POST["subject"];
@@ -30,8 +31,61 @@ if(isset($_POST["action"]) && $_POST["action"] == "contact"){
         $greske[] = "Message can't be empty!";
     }
     if(count($greske) == 0){
+
+        $pripremaUnos = $db -> prepare("INSERT INTO contact_forms VALUES (NULL, :message, :email, :name)");
+        $pripremaUnos -> bindParam(":message", $message);
+        $pripremaUnos -> bindParam(":email", $email);
+        $pripremaUnos -> bindParam(":name", $name);
+        try{
+            $pripremaUnos -> execute();
+            $formId = $db -> lastInsertId();
+        }
+        catch(PDOExcetption $ex){
+            logError($ex->getMessage(), "contact_forms-insert");
+            $message = "Error while entering contact message";
+            vratiJSON(["message"=>$message], 500);
+        }
         if($subject == "other"){
-            $pripremaUnos = $db -> prepare("INSERT INTO contact_forms VALUES (NULL, :message, :subjectId, :name)");
+            $greskaOther = "";
+            if(!preg_match($nameRegexp, $other)){
+                $greskaOther = "Wrong subject format (Exp. Other Problematic Subject)";
+            }
+            if(empty($greskaOther)){
+                $pripremaUnos = $db -> prepare("INSERT INTO subject_descriptions VALUES (NULL, :description, :formId)");
+                $pripremaUnos -> bindParam(":description", $other);
+                $pripremaUnos -> bindParam(":formId", $formId);
+                try{
+                    $pripremaUnos -> execute();
+                    $message = "Message successfully sent";
+                    vratiJSON(["message"=>$message], 201);
+                }
+                catch(PDOExcetption $ex){
+                    logError($ex->getMessage(), "subject_descriptions-insert");
+                    $message = "Error while entering contact message";
+                    vratiJSON(["message"=>$message], 500);
+                }
+            }
+            else{
+                $_SESSION['greskeOther'] = $greskaOther;
+                $output = ["redirect" => true];
+                header("Content-Type: application/json");
+                echo json_encode($output);
+            }
+        }
+        else{
+            $pripremaUnos = $db -> prepare("INSERT INTO contact_forms_form_subjects VALUES (NULL, :formId, :subjectId)");
+            $pripremaUnos -> bindParam(":subjectId", $subject);
+            $pripremaUnos -> bindParam(":formId", $formId);
+            try{
+                $pripremaUnos -> execute();
+                $message = "Message successfully sent";
+                vratiJSON(["message"=>$message], 201);
+            }
+            catch(PDOExcetption $ex){
+                logError($ex->getMessage(), "contact_forms_form_subjects-insert");
+                $message = "Error while entering contact message";
+                vratiJSON(["message"=>$message], 500);
+            }
         }
     }
     else{

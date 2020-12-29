@@ -1215,3 +1215,6 @@ width: 200px;
 #contactTitle h1{
   font-size: 30px;
 }
+.contactInfo, .errorInfo, .loginInfo, .successInfo{
+  display:none;
+}

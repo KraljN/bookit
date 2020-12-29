@@ -35,7 +35,7 @@ include "models/capchas/generateCapchaText.php"
                     </div>
                     <div class="col-md-12 col-lg-8 form-group d-flex flex-column">
                         <button class="btn black button-width" id="login">Login</button>
-                        <span class="text-danger font-weight-bold ml-1 mt-3" id="loginInfo">Wrong username, password or capcha</span>
+                        <span class="text-danger font-weight-bold ml-1 mt-3 loginInfo">Wrong username, password or capcha</span>
                     </div>
 
                 </div>
@@ -116,8 +116,8 @@ include "models/capchas/generateCapchaText.php"
                 <span class="text-danger ml-2 wrong d-none">Wrong mobile number format (Ex. +381621235234)</span>
             </div>
             <div class="col-md-12 form-group d-flex flex-column">
-            <span class="text-success text-center font-weight-bold" id="successInfo">Succefuly made account</span>
-            <span class="text-danger text-center font-weight-bold mb-3" id="errorInfo">User with that username already exist</span>
+            <span class="text-success text-center font-weight-bold successInfo">Succefuly made account</span>
+            <span class="text-danger text-center font-weight-bold mb-3 errorInfo">User with that username already exist</span>
                 <button type="submit" value="submit" class="btn button-width" name="register" id="register">
                     Register
                 </button>

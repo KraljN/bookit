@@ -8,10 +8,14 @@ $(document).ready(function () {
     $("#card").keyup(prilagodiFormat);
     $("#register").click(proveraRegister);
     if(window.location.href.includes("login")){
-        $("#successInfo").hide();
-        $("#errorInfo").hide();
-        $("#loginInfo").hide();
         $("#login").click(proveriLogin);
+    }
+    if(window.location.href.includes("contact")){
+        $("#submitForm").click(function(){
+            $(".errorInfo").show();
+            $(".successInfo").show();
+            console.log("pokrenut je klik");
+        })
     }
     if(window.location.href.includes("contact")){
         dohvatiSubjects();
@@ -144,14 +148,14 @@ function proveraRegister(e){
                     window.location.href = "index.php?page=login";
                 }
                 if(data.message == "You successfuly made account"){
-                    $("#errorInfo").hide();
-                    $("#successInfo").slideDown();
+                    $(".errorInfo").hide();
+                    $(".successInfo").slideDown();
                 }
             },
             error: function(error, status, message){
                 if(error.responseText){
-                    $("#successInfo").hide();
-                    $("#errorInfo").slideDown();
+                    $(".successInfo").hide();
+                    $(".errorInfo").slideDown();
                 }
             }
         });
@@ -223,8 +227,8 @@ function proveriLogin(e){
             },
             error: function(error, status, message){
                 if(error.responseText){
-                    $("#loginInfo").hide();
-                    $("#loginInfo").slideDown();
+                    $(".loginInfo").hide();
+                    $(".loginInfo").slideDown();
                 }
             }
         });
