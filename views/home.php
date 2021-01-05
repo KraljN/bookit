@@ -55,7 +55,7 @@
                     <h6>If you are not satisfied with book you bougth, whenever in 30 days period, you will get 100&percnt; of your money back</h6>
                 </li>
                 <li class="border">
-                    <span class="icon chat"><i class="fa fa-comments" aria-hidden="true"></i></span>
+                    <span class="icon chat"><i class="fa fa-comments plava" aria-hidden="true"></i></span>
                     <h3 class="text-uppercase">24/7 support</h3>
                     <h5>Online consultations</h5>
                     <h6>Whenever you have any doubt about some book or you have problems about it, you can easly contact us 24/7.</h6>

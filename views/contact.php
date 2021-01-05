@@ -64,10 +64,45 @@
                                     ?>
                                 </div>
                                 <div class="col-md-12">
-                                    <button class="btn black" id="submitForm">Submit Message</button>
+                                    <button class="btn orangeSubmit" id="submitForm">Submit Message</button>
                                 </div>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="position-fixed shadow d-flex justify-content-center align-items-center" data-toggle="modal" data-target="#modalAbout" id="autor"><i class="fas fa-address-card plava"></i></div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="modalAbout" pr-0 aria-hidden="true">
+            <div class="modal-dialog modalSirina" role="document">
+                <div class="modal-content h-100">
+                    <div class="row">
+                        <div class="model-body px-5 pt-1 pb-5 position-relative">
+                            <button type="button" class="close position-absolute izlaz" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div id="about" class="col-12">
+                                <div class="row text-center d-block mt-3">
+                                    <h3>About me</h3>
+                                    <hr class="w-25 mt-2 mb-3"/>
+                                </div>
+                                <div class="row">
+                                <div class="col-10 col-sm-5 mx-auto">
+                                    <img src="assets/img/autor.jpg" alt="autor" class="img-fluid rounded"/>
+                                </div>
+                                <div class="col-10 col-sm-7 d-flex mx-auto flex-column align-items-center justify-content-center">
+                                    <ul id='info' class="p-0 m-0 list-unstyled">
+                                        <li class="mb-3 mt-3 mt-sm-0">Name: Nikola Kralj</li>
+                                        <li class="my-3">Email: nikolakralj9@gmail.com</li>
+                                        <li class="my-3">Index number: 76/18</li>
+                                        <li class="my-3">Year of study: Second</li>
+                                        <li class="mt-3">Site made for purpose of Workshop for PHP </li>
+                                    </ul>
+                                    <button class="btn purpleSubmit mt-4 text-uppercase text-white"><i class="fas fa-file-download mr-2 te"></i>Download</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

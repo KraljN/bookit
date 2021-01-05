@@ -90,12 +90,21 @@ section {
     background: #fff;
     color: #0072bc; }
 
-.black {
-  background: #252525;
-  border: 2px solid #252525; }
-  .black:hover {
+.orangeSubmit {
+  background: #ffaf00;
+  border: 2px solid #ffaf00; }
+  .orangeSubmit:hover {
     background: transparent;
-    color: #252525; }
+    color: #ffaf00; }
+.purpleSubmit{
+  background: #ff427f;
+  border: 2px solid #ff427f;
+  cursor: pointer; }
+  .purpleSubmit:hover {
+    background: transparent!important;
+    color: #ff427f!important;
+    cursor: pointer;
+}
 
 img {
   max-width: 100%; }
@@ -433,8 +442,6 @@ header .cart {
       margin-bottom: 30px; }
       .features-sec ul li span.icon.return {
         color: #ff427f; }
-      .features-sec ul li span.icon.chat {
-        color: #007892; }
     .features-sec ul li h3 {
       font-size: 24px;
       font-weight: 400;
@@ -1217,4 +1224,30 @@ width: 200px;
 }
 .contactInfo, .errorInfo, .loginInfo, .successInfo{
   display:none;
+}
+#autor{
+  width: 50px;
+  height: 50px;
+  bottom: 50px;
+  right: 50px;
+  border-radius: 50%;
+  z-index: 1;
+  background-color: #dcdcdc;
+  cursor: pointer;
+}
+#autor i{
+  font-size:1.5rem;
+}
+#about #info li{
+  font-size: 1rem;
+}
+.modalSirina{
+  max-width: 800px;
+}
+.plava {
+  color: #007892;
+}
+.izlaz{
+  top: 5px;
+  right: 15px;
 }
