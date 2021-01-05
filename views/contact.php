@@ -44,8 +44,8 @@
                                     <span class="text-danger  wrong d-none">Message cannot be empty</span>
                                 </div>
                                 <div class="col-md-12 pt-4">
-                                    <span class="text-success text-center font-weight-bold successInfo">Succefuly made account</span></br>
-                                    <span class="text-danger text-center font-weight-bold mb-3 errorInfo">User with that username already exist</span>
+                                    <span class="text-success text-center font-weight-bold successInfo">Message succefuly sent</span></br>
+                                    <span class="text-danger text-center font-weight-bold mb-3 errorInfo">Error while trying to sent message</span>
                                     <?php if(isset($_SESSION["greske"])): ?>
                                         <ul class="text-center list-unstyled">
                                             <?php foreach($_SESSION["greske"] as $greska): ?>

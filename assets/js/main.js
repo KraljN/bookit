@@ -11,13 +11,6 @@ $(document).ready(function () {
         $("#login").click(proveriLogin);
     }
     if(window.location.href.includes("contact")){
-        $("#submitForm").click(function(){
-            $(".errorInfo").show();
-            $(".successInfo").show();
-            console.log("pokrenut je klik");
-        })
-    }
-    if(window.location.href.includes("contact")){
         dohvatiSubjects();
     }
 });
@@ -350,6 +343,14 @@ function proveraContact(e){
             success: function (data) {
                 if(data.redirect){
                     window.location.href = "index.php?page=contact";
+                }
+                if(data.message == "success"){
+                    $(".successInfo").slideDown();
+                }
+            },
+            error: function(error){
+                if(error.responseJSON.message == "error"){
+                    $(".errorInfo").slideDown();
                 }
             }
         });

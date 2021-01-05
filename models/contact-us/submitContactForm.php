@@ -42,7 +42,7 @@ if(isset($_POST["action"]) && $_POST["action"] == "contact"){
         }
         catch(PDOExcetption $ex){
             logError($ex->getMessage(), "contact_forms-insert");
-            $message = "Error while entering contact message";
+            $message = "error";
             vratiJSON(["message"=>$message], 500);
         }
         if($subject == "other"){
@@ -56,12 +56,12 @@ if(isset($_POST["action"]) && $_POST["action"] == "contact"){
                 $pripremaUnos -> bindParam(":formId", $formId);
                 try{
                     $pripremaUnos -> execute();
-                    $message = "Message successfully sent";
+                    $message = "success";
                     vratiJSON(["message"=>$message], 201);
                 }
                 catch(PDOExcetption $ex){
                     logError($ex->getMessage(), "subject_descriptions-insert");
-                    $message = "Error while entering contact message";
+                    $message = "error";
                     vratiJSON(["message"=>$message], 500);
                 }
             }
@@ -78,12 +78,12 @@ if(isset($_POST["action"]) && $_POST["action"] == "contact"){
             $pripremaUnos -> bindParam(":formId", $formId);
             try{
                 $pripremaUnos -> execute();
-                $message = "Message successfully sent";
+                $message = "success";
                 vratiJSON(["message"=>$message], 201);
             }
             catch(PDOExcetption $ex){
                 logError($ex->getMessage(), "contact_forms_form_subjects-insert");
-                $message = "Error while entering contact message";
+                $message = "error";
                 vratiJSON(["message"=>$message], 500);
             }
         }
