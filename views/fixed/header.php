@@ -45,7 +45,7 @@
                                 </a>
                                 </li>
                                 </ul>
-                            <a href="index.php?page=cart" id="cart-link">
+                            <a href="index.php?page=shopping-cart" id="cart-link">
                                 <div class="cart mb-2 mx-auto">
                                     <span>
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i></span>

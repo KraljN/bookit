@@ -19,6 +19,8 @@
             case 'contact':
                 include "views/contact.php";
                 break;
+            case 'shopping-cart':
+                include "views/shopping-cart.php";
         }
     }
     include "views/fixed/footer.php";

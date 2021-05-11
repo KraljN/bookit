@@ -32,7 +32,7 @@
                 <p>In this cruel world we are aware that books are much lesser valued at each day, so our goal is to close up books with people again.</p>
                 <p>Order some of best and most famous books online and without step outside your house expect to get your favourite book at record time. If you have any inquiries or you are interested to help our project, you can easly contact us clicking on the buttton.</p>
                 <div class="btn-sec">
-                    <a href="index.php?page=contact-us" class="btn black">Contact us</a>
+                    <a href="index.php?page=contact" class="btn black">Contact us</a>
                 </div>
             </div>
         </section>
