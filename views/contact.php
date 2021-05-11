@@ -98,7 +98,7 @@
                                         <li class="my-3">Year of study: Second</li>
                                         <li class="mt-3">Site made for purpose of Workshop for PHP </li>
                                     </ul>
-                                    <button class="btn purpleSubmit mt-4 text-uppercase text-white"><i class="fas fa-file-download mr-2 te"></i>Download</button>
+                                    <a href="models/contact-us/authorWord.php" class="btn purpleSubmit mt-4 text-uppercase text-white" id="authorDownload"><i class="fas fa-file-download mr-2 te"></i>Download</a>
                                 </div>
                                 </div>
                             </div>

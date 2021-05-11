@@ -12,6 +12,7 @@ $(document).ready(function () {
     }
     if(window.location.href.includes("contact")){
         dohvatiSubjects();
+        $("#authorDownload").on("click", preuzmiWord)
     }
 });
 function menu(){
@@ -355,4 +356,15 @@ function proveraContact(e){
             }
         });
     }
+}
+function preuzmiWord(){
+    $.ajax({
+        type: "GET",
+        url: "models/contact-us/authorWord.php",
+        data: "data",
+        dataType: "dataType",
+        success: function (response) {
+            console.log(response);
+        }
+    });
 }
