@@ -14,6 +14,8 @@ $(document).ready(function () {
         dohvatiSubjects();
         $("#authorDownload").on("click", preuzmiWord)
     }
+    $(".shoppingCartAction").click(addCart);
+
 });
 function menu(){
     $.ajax({
@@ -56,11 +58,12 @@ function newlyAdded(){
 }
 function fillNewlyAdded(data){
     var output = "";
+    let imgPath = $("#imgPath").val();
     data.forEach(el=>{
         output+=`
         <div class="col-lg-3 col-md-6">
             <div class="item">
-                <img src="${el.path}" alt="${el.alt}" class="img-fluid"/>
+                <img src="${imgPath + el.path}" alt="${el.alt}" class="img-fluid"/>
                 <h3>${el.title}</h3>
                 <h6><span class="price">${el.value}&euro;</span></h6>
                 <div class="hover">
@@ -365,6 +368,26 @@ function preuzmiWord(){
         dataType: "dataType",
         success: function (response) {
             console.log(response);
+        }
+    });
+}
+function addCart(){
+    var id = $(this).data("id");
+    console.log(id);
+    var action = "add";
+    $.ajax({
+        type: "POST",
+        url: "models/shopping-cart/shopping-cart-manipulation.php",
+        data: {
+            id,
+            action
+        },
+        success: function (response) {
+            // obavesti();
+
+        },
+        error(error){
+            console.log(error.responseText);
         }
     });
 }

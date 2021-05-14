@@ -2,6 +2,7 @@
     //========PATHS========
     define("ROOT_PATH", $_SERVER["DOCUMENT_ROOT"] . "/bookIt");
     define("ENV_PATH", ROOT_PATH . "/config/.env");
+    define("IMG_PATH", "assets/img/");// =========== KADA SE DIZE NA HOSTING DODATI ROOT_PATH ISPRED "/assets/img/" ===============
 
     //========LOGS========
 

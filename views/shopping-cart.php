@@ -7,6 +7,30 @@
          </div>
          <div class="card-body">
                  <!-- PRODUCT -->
+                 <?php 
+
+
+                $query = "SELECT b.book_id AS id, bi.path, bi.alt, p.value AS price, b.title
+                            FROM book_images bi  
+                            INNER JOIN books b ON bi.book_id = b.book_id 
+                            INNER JOIN books_prices bp ON b.book_id = bp.book_id
+                            INNER JOIN prices p ON (SELECT price_id 
+                                                    FROM books_prices bp
+                                                    WHERE bp.book_id = b.book_id
+                                                    ORDER BY date_become_effective DESC
+                                                    LIMIT 1)  = p.price_id";
+
+                
+
+                  if(isset($_SESSION["shoppingCart"])):
+                        foreach($_SESSION["shoppingCart"] as $i => $quantity):
+                 ?>
+
+                 <?php
+                    endforeach;
+                    else: 
+                 ?>
+                 <?php endif ?>
                  <div class="row">
                      <div class="col-12 col-sm-12 col-md-2 text-center mb-2 mb-sm-0">
                              <img class="img-responsive" src="https://place-hold.it/80x120" alt="prewiew"/>

@@ -1,10 +1,11 @@
-  <?php
+  <?php 
+       require_once "config/config.php";
        if(isset($_GET["logout"])){
             unset($_SESSION["korisnik"]);
         } 
     ?>
    <body>
-        <?php var_dump($_SESSION)?>
+        <?php var_dump($_SESSION)?> <!-- =======OVE JE ISPIS CELE SESIJE  -->
         <input type="hidden" name="page" id="page" value="<?php 
             if(isset($_GET["page"])){
                 echo $_GET["page"]=="single-product"?"{$_GET["page"]};id={$_GET["id"]}":$_GET["page"];
@@ -15,7 +16,8 @@
         ?>"/>
         <input type="hidden" name="isLogged" id="isLogged" value="
         <?php echo isset($_SESSION["korisnik"])?"true":"false" ?>
-        ">
+        "/>
+        <input type="hidden" id="imgPath" value="<?= IMG_PATH ?>" />
         <header>
             <div class="main-menu">
                 <div class="container">

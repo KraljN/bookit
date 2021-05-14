@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 11, 2021 at 07:48 PM
+-- Generation Time: May 14, 2021 at 08:58 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.31
 
@@ -121,15 +121,15 @@ CREATE TABLE `book_images` (
 --
 
 INSERT INTO `book_images` (`image_id`, `alt`, `path`, `book_id`) VALUES
-(10, 'girl', 'assets/img/girl.jpg', 28),
-(11, 'goalie', 'assets/img/goalie.jpg', 29),
-(12, 'hamlet', 'assets/img/hamlet.jpg', 30),
-(13, 'handmaid', 'assets/img/handmaid.jpg', 31),
-(14, 'lolita', 'assets/img/lolita.jpg', 32),
-(15, 'romeo', 'assets/img/romeo.jpg', 33),
-(16, 'short_letter', 'assets/img/short_letter.jpg', 34),
-(17, 'sorrow', 'assets/img/sorrow.jpg', 35),
-(18, 'testaments', 'assets/img/testaments.png', 36);
+(10, 'girl', 'girl.jpg', 28),
+(11, 'goalie', 'goalie.jpg', 29),
+(12, 'hamlet', 'hamlet.jpg', 30),
+(13, 'handmaid', 'handmaid.jpg', 31),
+(14, 'lolita', 'lolita.jpg', 32),
+(15, 'romeo', 'romeo.jpg', 33),
+(16, 'short_letter', 'short_letter.jpg', 34),
+(17, 'sorrow', 'sorrow.jpg', 35),
+(18, 'testaments', 'testaments.png', 36);
 
 -- --------------------------------------------------------
 
