@@ -49,7 +49,7 @@
                                 <div class="cart mb-2 mx-auto">
                                     <span>
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                                    <span class="quntity">3</span>
+                                    <span class="quantity">3</span>
                                 </div>
                             </a>
                         </div>
