@@ -1337,3 +1337,7 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+#emptyCart{
+  min-height: 330px;
+}
