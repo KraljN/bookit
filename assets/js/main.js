@@ -14,7 +14,15 @@ $(document).ready(function () {
         dohvatiSubjects();
         $("#authorDownload").on("click", preuzmiWord)
     }
-    $(".shoppingCartAction").click(addCart);
+    if(window.location.href.includes("contact")){
+        dohvatiSubjects();
+        $("#authorDownload").on("click", preuzmiWord)
+    }
+    if(window.location.href.includes("shopping-cart")){
+        $(".reload").on("click", function(){location.reload()})
+        $("input[type=number]").on("blur", function(){manipulateShoppingCart(this)})
+    }
+    $(".shoppingCartAction").click(function(){manipulateShoppingCart(this)});
 
 });
 function menu(){
@@ -371,10 +379,10 @@ function preuzmiWord(){
         }
     });
 }
-function addCart(){
-    var id = $(this).data("id");
+function manipulateShoppingCart(obj){
+    var action = obj.dataset.action;
+    var id = obj.dataset.id;
     console.log(id);
-    var action = "add";
     $.ajax({
         type: "POST",
         url: "models/shopping-cart/shopping-cart-manipulation.php",

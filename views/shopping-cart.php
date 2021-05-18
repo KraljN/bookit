@@ -11,7 +11,7 @@
                  <?php 
 
 
-                if(isset($_SESSION["shoppingCart"])):
+                if(isset($_SESSION["shoppingCart"]) && !empty($_SESSION["shoppingCart"])):
                     $cartProductsIds = array_keys($_SESSION["shoppingCart"]);
                     $ids = join(",", $cartProductsIds);
                     $query = "SELECT b.book_id AS id, bi.path, bi.alt, p.value AS price, b.title
@@ -26,8 +26,9 @@
                     WHERE b.book_id IN ($ids)";
                     $results  = $db -> query($query)->fetchAll();
                     
-                
+                        $total = 0;
                         foreach($results as $bookInCart):
+                            $total += $bookInCart->price * $_SESSION["shoppingCart"][$bookInCart->id]["productQuantity"];
                  ?>
 
                     <div class="row">
@@ -43,14 +44,14 @@
                             </div>
                             <div class="col-6 col-sm-4 mb-2 mb-sm-0 d-flex justify-content-center">
                                 <div class="quantity">
-                                    <input type="button" value="+" class="plus">
-                                    <input type="number" step="1" max="99" min="1" value="<?= $_SESSION["shoppingCart"][$bookInCart->id]["productQuantity"] ?>" title="Qty" class="qty"
-                                            size="4">
-                                    <input type="button" value="-" class="minus">
+                                    <input type="button" value="&plus;" data-action="add" data-id="<?= $bookInCart->id ?>" class="plus shoppingCartAction reload" />
+                                    <input type="number" data-action="changeQuantity" data-id="<?= $bookInCart->id ?>" step="1" max="99" min="1" value="<?= $_SESSION["shoppingCart"][$bookInCart->id]["productQuantity"] ?>" title="Qty" class="qty"
+                                            size="4"/>
+                                    <input type="button" data-action="removeOne" data-id="<?= $bookInCart->id ?>" value="&minus;" class="minus shoppingCartAction reload"/>
                                 </div>
                             </div>
-                            <div class="col-5 col-sm-3 text-center text-sm-left">
-                                <button type="button" class="btn red-button btn-xs">
+                            <div  data-action="remove" data-id="<?= $bookInCart->id ?>" class="col-5 col-sm-3 text-center text-sm-left shoppingCartAction">
+                                <button type="button" class="btn red-button btn-xs reload">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -68,11 +69,11 @@
                  <?php endif ?>
          </div>
          <div class="card-footer">
-            <?php if(isset($_SESSION["shoppingCart"])): ?>
+            <?php if(isset($_SESSION["shoppingCart"]) && !empty($_SESSION["shoppingCart"])): ?>
              <div class="float-right m-3">
                  <button class="btn" id="purchase">Purhcase</button>
                  <div class="pull-right m-2">
-                     Total price: <b>50.00€</b>
+                     Total price: <b><?= $total ?>&euro;</b>
                  </div>
              </div>
              <?php else: ?>

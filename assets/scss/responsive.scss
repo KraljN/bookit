@@ -1,14 +1,22 @@
 @import'rfs_partial.scss';
-#background{
-    h1{
-        font-size: 2rem;
+@media (max-width: 576px){
+    #background{
+        h1{
+            font-size: 2rem;
+        }
+        h2{
+            font-size: .8rem;
+        }
     }
-    h2{
-        font-size: .8rem;
+    #aboutUs{
+        height:350px;
     }
-}
-#aboutUs{
-    height:350px;
+    #emptyCart{
+        min-height: 240px;
+        h2{
+            @include font-size(1.4rem);
+        }
+    }
 }
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
@@ -29,6 +37,7 @@
     .wrong{
         font-size: 15px;
       }
+      
  }
 
 // Medium devices (tablets, 768px and up)
@@ -95,6 +104,5 @@
 
 // Extra large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) { 
-
 }
 //.about-sec .about-img figure

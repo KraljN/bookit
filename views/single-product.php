@@ -14,23 +14,23 @@ $key =  key($resultGenres);
                     <p><?= $result->description ?></p>
                     <ul class="mx-auto">
                         <li>
-                            <span class="name">Author</span><span class="clm d-none d-sm-inline-block">:</span>
+                            <span class="name">Author</span><span class="clm d-none d-xl-inline-block">:</span>
                             <span class="price pl-sm-3"><?= $result->first_name .  "&nbsp;" . $result->last_name ?></span>
                         </li>
                         <li>
-                            <span class="name">Publisher</span><span class="clm d-none d-sm-inline-block">:</span>
+                            <span class="name">Publisher</span><span class="clm d-none d-xl-inline-block">:</span>
                             <span class="price pl-sm-3"><?= $result->publisher_name ?></span>
                         </li>
                         <li>
-                            <span class="name">Published</span><span class="clm d-none d-sm-inline-block">:</span>
+                            <span class="name">Published</span><span class="clm d-none d-xl-inline-block">:</span>
                             <span class="price pl-sm-3"><?= $result->publication_year ?></span>
                         </li>
                         <li>
-                            <span class="name">Number of pages</span><span class="clm d-none d-sm-inline-block">:</span>
+                            <span class="name">Number of pages</span><span class="clm d-none d-xl-inline-block">:</span>
                             <span class="price pl-sm-3"><?= $result->pages ?></span>
                         </li>
                         <li>
-                            <span class="name">Genres</span><span class="clm d-none d-sm-inline-block">:</span>
+                            <span class="name">Genres</span><span class="clm d-none d-xl-inline-block">:</span>
                             <span class="price pl-sm-3">
                                 <?php foreach($resultGenres as $i => $genre){
                                     echo $genre->genre;
@@ -39,7 +39,7 @@ $key =  key($resultGenres);
                             </span>
                         </li>
                         <li>
-                            <span class="name">Price</span><span class="clm d-none d-sm-inline-block">:</span>
+                            <span class="name">Price</span><span class="clm d-none d-xl-inline-block">:</span>
                             <span class="price final pl-sm-3"><?= $result->price ?>&euro;</span>
                         </li>
                         
