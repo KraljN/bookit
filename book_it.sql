@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 14, 2021 at 08:58 PM
+-- Generation Time: May 25, 2021 at 09:03 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.31
 
@@ -344,7 +344,8 @@ INSERT INTO `payments` (`payment_id`, `card_number`, `card_verification_value`) 
 (4, '123412341234', '442'),
 (5, '123412341234', '442'),
 (9, '123412341234', '123'),
-(10, '123412341234', '123');
+(10, '123412341234', '123'),
+(11, '123412341234', '123');
 
 -- --------------------------------------------------------
 
@@ -513,7 +514,7 @@ CREATE TABLE `user_activities` (
 
 INSERT INTO `user_activities` (`user_activity_id`, `user_id`, `last_activity`) VALUES
 (2, 13, '2021-01-05 12:48:44'),
-(3, 17, '2020-09-21 15:16:05');
+(3, 17, '2021-05-25 19:03:21');
 
 --
 -- Indexes for dumped tables
@@ -772,13 +773,13 @@ ALTER TABLE `order_items`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `payment_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `persons`
 --
 ALTER TABLE `persons`
-  MODIFY `person_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `person_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `prices`
@@ -808,13 +809,13 @@ ALTER TABLE `subject_descriptions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `user_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `users_payments`
 --
 ALTER TABLE `users_payments`
-  MODIFY `user_payment_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_payment_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user_activities`

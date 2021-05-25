@@ -398,7 +398,7 @@ function manipulateShoppingCart(obj){
             quantity
         },
         success: function (response) {
-            notificate("Succefuly added to cart!"); // SAMO DA BUDE U ODREĐENIM DELOVIMA OBAVEŠTENJE, NE U SVAKOM SLUČAJU
+            notificate("Succefuly added to cart!");
 
         },
         error(error){
