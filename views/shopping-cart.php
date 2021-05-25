@@ -14,17 +14,16 @@
                 if(isset($_SESSION["shoppingCart"]) && !empty($_SESSION["shoppingCart"])):
                     $cartProductsIds = array_keys($_SESSION["shoppingCart"]);
                     $ids = join(",", $cartProductsIds);
-                    $query = "SELECT b.book_id AS id, bi.path, bi.alt, p.value AS price, b.title
+                    $query = "SELECT b.book_id AS id, bi.path, bi.alt, (SELECT p.value
+                                                                        FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                                                        WHERE bp.book_id = b.book_id
+                                                                        ORDER BY date_become_effective DESC
+                                                                        LIMIT 1) AS price, b.title
                     FROM book_images bi  
                     INNER JOIN books b ON bi.book_id = b.book_id 
-                    INNER JOIN books_prices bp ON b.book_id = bp.book_id
-                    INNER JOIN prices p ON (SELECT price_id 
-                                            FROM books_prices bp
-                                            WHERE bp.book_id = b.book_id
-                                            ORDER BY date_become_effective DESC
-                                            LIMIT 1)  = p.price_id
                     WHERE b.book_id IN ($ids)";
                     $results  = $db -> query($query)->fetchAll();
+                    var_dump($results);
                     
                         $total = 0;
                         foreach($results as $bookInCart):
@@ -75,12 +74,15 @@
                  <div class="pull-right mt-2 mb-1">
                      Total price: <b><?= $total ?>&euro;</b>
                  </div>
-                 <!-- <div class="text-danger font-weight-bold">
+            <?php endif; if(isset($_SESSION["shoppingCart"]) && !empty($_SESSION["shoppingCart"]) && !isset($_SESSION["korisnik"])): ?>
+
+            <div class="text-danger font-weight-bold">
                         You can't make an order if you are not logged in!
-                </div>  -->
+                </div>
+                <?php endif; ?>
              </div>
  
-             <?php else: ?>
+             <?php if(!isset($_SESSION["shoppingCart"]) && empty($_SESSION["shoppingCart"])): ?>
                 <div class="float-right m-3">
                     <a href="index.php?page=shop" class="btn">See Offer</a>
                  </div>

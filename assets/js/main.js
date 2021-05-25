@@ -77,7 +77,7 @@ function fillNewlyAdded(data){
             <div class="item">
                 <img src="${imgPath + el.path}" alt="${el.alt}" class="img-fluid"/>
                 <h3>${el.title}</h3>
-                <h6><span class="price">${el.value}&euro;</span></h6>
+                <h6><span class="price">${el.price}&euro;</span></h6>
                 <div class="hover">
                     <a href="index.php?page=single-product&id=${el.id}">
                     <span><i class="fas fa-long-arrow-alt-right"></i></span>
@@ -412,7 +412,7 @@ function makeOrder(){
     $.ajax({
         type: "POST",
         url: "models/shopping-cart/make-order.php",
-        data: action,
+        data: {action:action},
         dataType: "json",
         success: function (response) {
             
