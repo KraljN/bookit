@@ -11,17 +11,20 @@
     #aboutUs{
         height:350px;
     }
-    #emptyCart{
+    .cartHeight{
         min-height: 240px;
         h2{
             @include font-size(1.4rem);
         }
     }
+    .product-name{
+        @include font-size(1rem);
+    }
 }
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
     nav{
-        @include font-size(.8rem);
+        @include font-size(1rem);
         li{
             width:100px!important;
         }
@@ -37,6 +40,9 @@
     .wrong{
         font-size: 15px;
       }
+      .product-name{
+        @include font-size(1.2rem);
+    }
       
  }
 

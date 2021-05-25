@@ -64,50 +64,50 @@ if(isset($_POST["register"])){
     }
     if(count($greske) == 0){
         $card = str_replace('-', '', $creditCard);
-        $countryId = getCountryId($db, $country);
-        $cityId = getCityId($db, $city);
+        $countryId = getCountryId($country);// $db, 
+        $cityId = getCityId($city);// $db, 
         $date = date("Y-m-d H:i:s");
         $password = md5($password);
         if((!$countryId && !$cityId) || (!$countryId && $cityId)){
-            insertCountry($db, $country);
-            $insertedCountryId = getCountryId($db, $country);
-            insertCity($db, $city, $insertedCountryId);
-            $insertedCityId = getCityId($db, $city);
-            insertPerson($db, $name, $lastName);
-            $lastPersonId = getLastInsertedId($db);
-            if(insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){
-                $lastUserId = getLastInsertedId($db);
-                insertPayment($db, $card, $cvv, $lastUserId);
+            insertCountry($country);// $db, 
+            $insertedCountryId = getCountryId($country);// $db, 
+            insertCity( $city, $insertedCountryId);// $db,
+            $insertedCityId = getCityId($city);// $db, 
+            insertPerson($name, $lastName);// $db, 
+            $lastPersonId = getLastInsertedId();// $db
+            if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){// $db, 
+                $lastUserId = getLastInsertedId();//$db
+                insertPayment($card, $cvv, $lastUserId);// $db, 
             }
             else{
-                deleteFromDb($db, $lastPersonId, "persons", "person");
+                deleteFromDb($lastPersonId, "persons", "person");// $db, 
             }
 
         }
         if($countryId && !$cityId){
-            $insertedCountryId = getCountryId($db, $country);
-            insertCity($db, $city, $insertedCountryId);
-            $insertedCityId = getCityId($db, $city);
-            insertPerson($db, $name, $lastName);
-            $lastPersonId = getLastInsertedId($db);
-            if(insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){
-                $lastUserId = getLastInsertedId($db);
-                insertPayment($db, $card, $cvv, $lastUserId);
+            $insertedCountryId = getCountryId($country);// $db, 
+            insertCity($city, $insertedCountryId);// $db, 
+            $insertedCityId = getCityId($city);// $db, 
+            insertPerson($name, $lastName);// $db, 
+            $lastPersonId = getLastInsertedId();// $db
+            if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){// $db, 
+                $lastUserId = getLastInsertedId();// $db
+                insertPayment($card, $cvv, $lastUserId);// $db, 
             }
             else{
-                deleteFromDb($db, $lastPersonId, "persons", "person");
+                deleteFromDb( $lastPersonId, "persons", "person");// $db,
             }
         }
         if($countryId && $cityId){
-            $insertedCityId = getCityId($db, $city);
-            insertPerson($db, $name, $lastName);
-            $lastPersonId = getLastInsertedId($db);
-            if(insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){
-                $lastUserId = getLastInsertedId($db);
-                insertPayment($db, $card, $cvv, $lastUserId);
+            $insertedCityId = getCityId($city);// $db, 
+            insertPerson($name, $lastName);// $db, 
+            $lastPersonId = getLastInsertedId();// $db
+            if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){// $db,
+                $lastUserId = getLastInsertedId();// $db
+                insertPayment($card, $cvv, $lastUserId);// $db, 
             }
             else{
-                deleteFromDb($db, $lastPersonId, "persons", "person");
+                deleteFromDb($lastPersonId, "persons", "person");//$db, 
             }
         }
     }

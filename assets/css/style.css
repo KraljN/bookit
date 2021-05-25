@@ -1338,6 +1338,15 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-#emptyCart{
-  min-height: 330px;
+.cartHeight{
+  min-height: 340px;
+}
+#popUp{
+  margin-bottom: 70px;
+  padding: 10px 50px;
+  background-color: green;
+  display: none;
+}
+#popUp p{
+  font-size:1.3rem;
 }

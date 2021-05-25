@@ -20,7 +20,11 @@ $(document).ready(function () {
     }
     if(window.location.href.includes("shopping-cart")){
         $(".reload").on("click", function(){location.reload()})
-        $("input[type=number]").on("blur", function(){manipulateShoppingCart(this)})
+        $("input[type=number]").on("blur", function(){
+            manipulateShoppingCart(this);
+            location.reload();
+        })
+        $("#purchase").on("click", makeOrder);
     }
     $(".shoppingCartAction").click(function(){manipulateShoppingCart(this)});
 
@@ -382,20 +386,42 @@ function preuzmiWord(){
 function manipulateShoppingCart(obj){
     var action = obj.dataset.action;
     var id = obj.dataset.id;
-    console.log(id);
+    var quantity = null;
+    if(action == "changeQuantity") quantity = obj.value;
+    // console.log(quantity);
     $.ajax({
         type: "POST",
         url: "models/shopping-cart/shopping-cart-manipulation.php",
         data: {
             id,
-            action
+            action,
+            quantity
         },
         success: function (response) {
-            // obavesti();
+            notificate("Succefuly added to cart!"); // SAMO DA BUDE U ODREĐENIM DELOVIMA OBAVEŠTENJE, NE U SVAKOM SLUČAJU
 
         },
         error(error){
             console.log(error.responseText);
         }
     });
+}
+function makeOrder(){
+    console.log("porudzbina poslata");
+    var action="purchase";
+    $.ajax({
+        type: "POST",
+        url: "models/shopping-cart/make-order.php",
+        data: action,
+        dataType: "json",
+        success: function (response) {
+            
+        }
+    });
+}
+function notificate(message){
+    $("#popUp p").html(message);
+    $("#popUp").finish().delay(200).fadeIn();
+    $("#popUp").delay(1800).fadeOut();
+
 }

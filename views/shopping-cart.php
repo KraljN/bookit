@@ -6,7 +6,7 @@
              Shopping cart
              <div class="clearfix"></div>
          </div>
-         <div class="card-body">
+         <div class="card-body cartHeight">
                  <!-- PRODUCT -->
                  <?php 
 
@@ -63,19 +63,23 @@
                     endforeach;
                     else: 
                  ?>
-                    <div id="emptyCart" class="d-flex justify-content-center align-items-center">
+                    <div class="d-flex justify-content-center align-items-center cartHeight">
                         <h2>Your shopping cart is currently empty.</h2>
                     </div>
                  <?php endif ?>
          </div>
          <div class="card-footer">
             <?php if(isset($_SESSION["shoppingCart"]) && !empty($_SESSION["shoppingCart"])): ?>
-             <div class="float-right m-3">
-                 <button class="btn" id="purchase">Purhcase</button>
-                 <div class="pull-right m-2">
+             <div class="float-right m-3 d-flex flex-column align-items-center">
+                 <input type="button" value="Purchase" class="btn" <?php  if(!isset($_SESSION["korisnik"])) echo 'disabled="disabled"' ?>  id="purchase"/>
+                 <div class="pull-right mt-2 mb-1">
                      Total price: <b><?= $total ?>&euro;</b>
                  </div>
+                 <!-- <div class="text-danger font-weight-bold">
+                        You can't make an order if you are not logged in!
+                </div>  -->
              </div>
+ 
              <?php else: ?>
                 <div class="float-right m-3">
                     <a href="index.php?page=shop" class="btn">See Offer</a>

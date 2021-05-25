@@ -2,6 +2,13 @@
 end($resultGenres);
 $key =  key($resultGenres);
 ?>
+<!-- NOTIFICATION -->
+<div class="row">
+        <div class="col-10 col-sm-6 col-md-5 col-lg-4  justify-content-center align-items-center mx-auto fixed-bottom rounded" id="popUp">
+            <p class=" text-white my-2 text-center"></p>
+        </div>
+</div>
+<!-- END OF NOTIFICATION -->
 <div class="row">
 <section class="product-sec">
         <div class="container">

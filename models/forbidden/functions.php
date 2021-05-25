@@ -13,7 +13,8 @@ function vratiJSON($array, $statusCode){
     header("Content-Type: application/json");
     echo json_encode($array);
 }
-function getCountryId($db, $countryName){
+function getCountryId($countryName){// $db, 
+    global $db;
     $prepare = $db->prepare("SELECT country_id FROM countries WHERE country_name = :drzava");
     $prepare->bindParam(":drzava", $countryName);
     $prepare->execute();
@@ -25,7 +26,8 @@ function getCountryId($db, $countryName){
         return false;
     }
 }
-function getCityId($db, $cityName){
+function getCityId($cityName){// $db, 
+    global $db;
     $prepare = $db->prepare("SELECT city_id FROM cities WHERE city_name = :city");
     $prepare->bindParam(":city", $cityName);
     $prepare->execute();
@@ -37,7 +39,8 @@ function getCityId($db, $cityName){
         return false;
     }
 }
-function insertCountry($db, $countryName){
+function insertCountry($countryName){// $db, 
+    global $db;
     $prepare = $db->prepare("INSERT INTO countries VALUES (NULL, :drzava)");
     $prepare->bindParam(":drzava", $countryName);
     try{
@@ -49,7 +52,8 @@ function insertCountry($db, $countryName){
         vratiJSON(["message"=>$message], 500);
     }
 }
-function insertCity($db, $cityName, $countryId){
+function insertCity($cityName, $countryId){// $db, 
+    global $db;
     $prepare = $db->prepare("INSERT INTO cities VALUES (NULL, :city, :countryId)");
     $prepare->bindParam(":city", $cityName);
     $prepare->bindParam(":countryId", $countryId);
@@ -63,7 +67,8 @@ function insertCity($db, $cityName, $countryId){
 
     }
 }
-function insertPerson($db, $name, $lastName){
+function insertPerson($name, $lastName){// $db, 
+    global $db;
     $prepare  = $db->prepare("INSERT INTO persons VALUES (NULL, :firstName, :lastName)");
     $prepare->bindParam(":firstName", $name);
     $prepare->bindParam(":lastName", $lastName);
@@ -78,11 +83,13 @@ function insertPerson($db, $name, $lastName){
         return false;
     }
 }
-function getLastInsertedId($db){
+function getLastInsertedId(){
+    global $db;
    $output = $db->lastInsertId();
    return $output;
 }
-function insertUser($db, $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged){
+function insertUser( $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged){// $db,
+    global $db;
     $prepare = $db->prepare("INSERT INTO users VALUES (NULL, :userame, :password, :personId, :address, :cityId, :roleId, :phoneNumber, :date, :email)");
     $prepare->bindParam(":email", $email);
     $prepare->bindParam(":password", $password);
@@ -106,7 +113,8 @@ function insertUser($db, $username, $password, $lastPersonId, $address, $inserte
         return false;
     }
 }
-function insertPayment($db, $card, $cvv, $lastUserId){
+function insertPayment($card, $cvv, $lastUserId){// $db, 
+    global $db;
     $prepare = $db->prepare("INSERT INTO payments VALUES (NULL, :card, :cvv)");
     $prepare->bindParam(":card", $card);
     $prepare->bindParam(":cvv", $cvv);
@@ -138,7 +146,8 @@ function insertPayment($db, $card, $cvv, $lastUserId){
         return false;
     } 
 }
-function deleteFromDb($db, $id, $tableName, $idPrefix){
+function deleteFromDb($id, $tableName, $idPrefix){// $db, 
+    global $db;
     $prepare = $db->prepare("DELETE FROM " . $tableName . " WHERE " . $idPrefix . "_id = :id");
     $prepare->bindParam(":id", $id);
     try{
