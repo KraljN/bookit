@@ -52,7 +52,7 @@ $key =  key($resultGenres);
                         
                     </ul>
                     <div class="btn-sec">
-                        <button class="btn shoppingCartAction" data-action="add" data-id=<?= $result->id ?>>Add To cart</button>
+                        <button class="btn shoppingCartAction addCart" data-action="add" data-id=<?= $result->id ?>>Add To cart</button>
                     </div>
                 </div>
             </div>

@@ -19,14 +19,13 @@ $(document).ready(function () {
         $("#authorDownload").on("click", preuzmiWord)
     }
     if(window.location.href.includes("shopping-cart")){
-        $(".reload").on("click", function(){location.reload()})
         $("input[type=number]").on("blur", function(){
             manipulateShoppingCart(this);
-            location.reload();
         })
         $("#purchase").on("click", makeOrder);
     }
     $(".shoppingCartAction").click(function(){manipulateShoppingCart(this)});
+    $(".addCart").on("click", increaseCartQuantity);
 
 });
 function menu(){
@@ -399,6 +398,9 @@ function manipulateShoppingCart(obj){
         },
         success: function (response) {
             notificate("Succefuly added to cart!");
+            if(!window.location.href.includes("single-product")){
+                location.reload();
+            }
 
         },
         error(error){
@@ -415,7 +417,14 @@ function makeOrder(){
         data: {action:action},
         dataType: "json",
         success: function (response) {
-            
+            notificate("Order succefuly made!");
+            $("#errorMessage").html("");
+            setTimeout(function(){location.reload()}, 1300);
+        },
+        error: function (error){
+            if(error.status >= 400){
+                $("#errorMessage").html("There is problem with proceding your order, please try again later.");
+            }
         }
     });
 }
@@ -424,4 +433,9 @@ function notificate(message){
     $("#popUp").finish().delay(200).fadeIn();
     $("#popUp").delay(1800).fadeOut();
 
+}
+function increaseCartQuantity(){
+    let quantity = parseInt($("#cartQuantity").html());
+    quantity ++;
+    $("#cartQuantity").html(quantity);
 }

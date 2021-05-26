@@ -3,9 +3,16 @@
        if(isset($_GET["logout"])){
             unset($_SESSION["korisnik"]);
         } 
+        $quantity = 0;
+        if(!isset($_SESSION["shoppingCart"])) $quantity = 0;
+        else{
+            foreach($_SESSION["shoppingCart"] as $cartProduct){
+                $quantity += $cartProduct["productQuantity"];
+            }
+        }
     ?>
    <body>
-         <?php var_dump($_SESSION)?><!-- =======OVE JE ISPIS CELE SESIJE  -->
+        <?php  var_dump($_SESSION) ?>       <!-- =======OVE JE ISPIS CELE SESIJE  -->
         <input type="hidden" name="page" id="page" value="<?php 
             if(isset($_GET["page"])){
                 echo $_GET["page"]=="single-product"?"{$_GET["page"]};id={$_GET["id"]}":$_GET["page"];
@@ -51,7 +58,7 @@
                                 <div class="cart mb-2 mx-auto">
                                     <span>
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                                    <span class="quantity">3</span>
+                                    <?php if($quantity > 0): ?> <span class="quantity" id="cartQuantity"><?= $quantity ?></span> <?php endif ?>
                                 </div>
                             </a>
                         </div>

@@ -3,22 +3,25 @@
     if(isset($_POST["action"]) && $_POST["action"] == "purchase" && isset($_SESSION["korisnik"])){
         require_once "../../config/connection.php";
         require_once "../forbidden/functions.php";
-        $query = "INSERT INTO orders VALUES (NULL, :user_id)";
+        $query = "INSERT INTO orders VALUES (NULL, :user_id, :date)";
         $pripremaOrder = $db -> prepare ($query);
         $userId = $_SESSION["korisnik"]->user_id;
         $pripremaOrder -> bindParam(":user_id", $userId);
+        $date = date("Y-m-d H:i:s");
+        $pripremaOrder->bindParam(":date", $date);
         $db -> beginTransaction();
         try{
             $pripremaOrder -> execute();
+            $orderId = getLastInsertedId();
         }
         catch(PDOException $e){
-            logError($ex->getMessage(), "user-insert");
+            logError($e->getMessage(), "order-insert");
             $message = "error";
             vratiJSON(["message"=>$message], 500);
             $db -> rollBack();
         }
 
-        $orderId = getLastInsertedId();
+
 
         $query = "INSERT INTO order_items VALUES (NULL, :book_id, :order_id, :quantity, :price)";
         $pripremaOrder = $db -> prepare($query);
@@ -31,8 +34,7 @@
         LIMIT 1";
 
         $pripremaPrice = $db -> prepare ($priceQuery);
-        
-
+        $success = true;
         foreach ($_SESSION["shoppingCart"] as $productId => $quantity){
             $pripremaOrder -> bindParam(":book_id", $productId);
             $pripremaOrder -> bindParam(":order_id", $orderId);
@@ -45,14 +47,27 @@
             $price = $pripremaPrice -> fetch();
             $price = $price -> price * $quantity["productQuantity"];
 
-            //try i catch
-            //COMMIT IDE NA KRAJ OVOG TRY BLOKA
-            // $pripremaOrder -> execute();
+            try{
+                   $pripremaOrder -> execute(); 
 
-            //Obavestavanje korisnika o uspesnosti
+            }
+            catch(PDOException $e){
+                logError($e->getMessage(), "user-insert");
+                $success = false;
+            }
+
         }
-
-        $db -> commit();
+        if($success) {
+            $message = "success";
+            unset($_SESSION["shoppingCart"]);
+            vratiJSON(["message"=>$message], 201);
+            $db -> commit();
+        }
+        else{
+            $db -> rollBack();
+            $message = "error";
+            vratiJSON(["message"=>$message], 500);
+        }
     }
     else{
         header("Location: ../index.php?page=login");

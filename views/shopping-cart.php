@@ -1,4 +1,11 @@
 <?php require_once "config/connection.php"?>
+<!-- NOTIFICATION -->
+<div class="row">
+        <div class="col-10 col-sm-6 col-md-5 col-lg-4  justify-content-center align-items-center mx-auto fixed-bottom rounded" id="popUp">
+            <p class=" text-white my-2 text-center"></p>
+        </div>
+</div>
+<!-- END OF NOTIFICATION -->
 <div class="container">
 <div class="card shopping-cart">
          <div class="card-header bg-dark text-light">
@@ -23,7 +30,6 @@
                     INNER JOIN books b ON bi.book_id = b.book_id 
                     WHERE b.book_id IN ($ids)";
                     $results  = $db -> query($query)->fetchAll();
-                    var_dump($results);
                     
                         $total = 0;
                         foreach($results as $bookInCart):
@@ -43,14 +49,14 @@
                             </div>
                             <div class="col-6 col-sm-4 mb-2 mb-sm-0 d-flex justify-content-center">
                                 <div class="quantity">
-                                    <input type="button" value="&plus;" data-action="add" data-id="<?= $bookInCart->id ?>" class="plus shoppingCartAction reload" />
+                                    <input type="button" value="&plus;" data-action="add" data-id="<?= $bookInCart->id ?>" class="plus shoppingCartAction" />
                                     <input type="number" data-action="changeQuantity" data-id="<?= $bookInCart->id ?>" step="1" max="99" min="1" value="<?= $_SESSION["shoppingCart"][$bookInCart->id]["productQuantity"] ?>" title="Qty" class="qty"
                                             size="4"/>
-                                    <input type="button" data-action="removeOne" data-id="<?= $bookInCart->id ?>" value="&minus;" class="minus shoppingCartAction reload"/>
+                                    <input type="button" data-action="removeOne" data-id="<?= $bookInCart->id ?>" value="&minus;" class="minus shoppingCartAction"/>
                                 </div>
                             </div>
                             <div  data-action="remove" data-id="<?= $bookInCart->id ?>" class="col-5 col-sm-3 text-center text-sm-left shoppingCartAction">
-                                <button type="button" class="btn red-button btn-xs reload">
+                                <button type="button" class="btn red-button btn-xs">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -73,21 +79,22 @@
                  <input type="button" value="Purchase" class="btn" <?php  if(!isset($_SESSION["korisnik"])) echo 'disabled="disabled"' ?>  id="purchase"/>
                  <div class="pull-right mt-2 mb-1">
                      Total price: <b><?= $total ?>&euro;</b>
-                 </div>
+             </div>
+             <div class="text-danger font-weight-bold" id="errorMessage">
+            </div>
             <?php endif; if(isset($_SESSION["shoppingCart"]) && !empty($_SESSION["shoppingCart"]) && !isset($_SESSION["korisnik"])): ?>
 
-            <div class="text-danger font-weight-bold">
-                        You can't make an order if you are not logged in!
+                <div class="text-danger font-weight-bold">
+                    You can't make an order if you are not logged in!
                 </div>
                 <?php endif; ?>
+                <?php if(!isset($_SESSION["shoppingCart"]) || empty($_SESSION["shoppingCart"])): ?>
+                    <div class="m-3">
+                        <a href="index.php?page=shop" class="btn float-right">See Offer</a>
+                    </div>
+                <?php endif ?>
              </div>
  
-             <?php if(!isset($_SESSION["shoppingCart"]) && empty($_SESSION["shoppingCart"])): ?>
-                <div class="float-right m-3">
-                    <a href="index.php?page=shop" class="btn">See Offer</a>
-                 </div>
-             </div>
-            <?php endif ?>
          </div>
      </div>
 </div>
