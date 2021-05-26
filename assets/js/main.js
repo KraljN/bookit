@@ -10,6 +10,9 @@ $(document).ready(function () {
     if(window.location.href.includes("login")){
         $("#login").click(proveriLogin);
     }
+    if(window.location.href.includes("shop")){
+        displayProducts();
+    }
     if(window.location.href.includes("contact")){
         dohvatiSubjects();
         $("#authorDownload").on("click", preuzmiWord)
@@ -438,4 +441,16 @@ function increaseCartQuantity(){
     let quantity = parseInt($("#cartQuantity").html());
     quantity ++;
     $("#cartQuantity").html(quantity);
+}
+function displayProducts(){
+    let action = "show"
+    $.ajax({
+        type: "GET",
+        url: "models/shop/get-products.php",
+        data: action,
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+        }
+    });
 }

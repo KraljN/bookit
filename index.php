@@ -21,6 +21,10 @@
                 break;
             case 'shopping-cart':
                 include "views/shopping-cart.php";
+                break;
+            case "shop":
+                include "views/products.php";
+                break;
         }
     }
     include "views/fixed/footer.php";
