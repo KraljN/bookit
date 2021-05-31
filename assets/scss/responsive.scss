@@ -1,5 +1,8 @@
 @import'rfs_partial.scss';
 @media (max-width: 576px){
+    #books .item img{
+        height: 380px;
+      }
     #background{
         h1{
             font-size: 2rem;

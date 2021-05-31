@@ -22,7 +22,7 @@
             case 'shopping-cart':
                 include "views/shopping-cart.php";
                 break;
-            case "shop":
+            case "products":
                 include "views/products.php";
                 break;
         }

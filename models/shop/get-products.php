@@ -11,4 +11,4 @@
 
     $books = $db -> query($query) -> fetchAll();
 
-    vratiJSON($books, 201);
+    vratiJSON($books, 200);

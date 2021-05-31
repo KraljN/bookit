@@ -10,7 +10,7 @@ $(document).ready(function () {
     if(window.location.href.includes("login")){
         $("#login").click(proveriLogin);
     }
-    if(window.location.href.includes("shop")){
+    if(window.location.href.includes("products")){
         displayProducts();
     }
     if(window.location.href.includes("contact")){
@@ -27,7 +27,7 @@ $(document).ready(function () {
         })
         $("#purchase").on("click", makeOrder);
     }
-    $(".shoppingCartAction").click(function(){manipulateShoppingCart(this)});
+    $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
     $(".addCart").on("click", increaseCartQuantity);
 
 });
@@ -385,7 +385,8 @@ function preuzmiWord(){
         }
     });
 }
-function manipulateShoppingCart(obj){
+function manipulateShoppingCart(obj, event){
+    event.preventDefault();
     var action = obj.dataset.action;
     var id = obj.dataset.id;
     var quantity = null;
@@ -401,7 +402,7 @@ function manipulateShoppingCart(obj){
         },
         success: function (response) {
             notificate("Succefuly added to cart!");
-            if(!window.location.href.includes("single-product")){
+            if(window.location.href.includes("shopping-cart")){
                 location.reload();
             }
 
@@ -450,7 +451,27 @@ function displayProducts(){
         data: action,
         dataType: "json",
         success: function (response) {
-            console.log(response);
+            showProducts(response);
+            $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
+            $(".addCart").on("click", increaseCartQuantity);
         }
     });
+}
+function showProducts(data){
+    let output = "";
+    let imgPath = $("#imgPath").val();
+    data.forEach(el=>{
+        output += `
+        <div class="col-sm-6 col-lg-4">
+            <div class="item">
+                <a href="index.php?page=single-product&id=${el.id}" class="text-secondary">
+                <img src="${imgPath + el.path}" alt="${el.alt}}"/>
+                <div class="title-container"><h3>${el.title}</h3></div>
+                </a>
+                <h6><span class="price">&euro;${el.price}</span> / <a href="#" class="shoppingCartAction addCart" data-action="add" data-id="33">Add to cart</a></h6>
+            </div>
+        </div>
+        `
+    });
+    $("#books").html(output);
 }
