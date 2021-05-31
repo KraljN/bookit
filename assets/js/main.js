@@ -444,14 +444,18 @@ function increaseCartQuantity(){
     $("#cartQuantity").html(quantity);
 }
 function displayProducts(){
-    let action = "show"
+    let action = "show";
+    pageNumber = $("#pageNumber").val();
     $.ajax({
         type: "GET",
         url: "models/shop/get-products.php",
-        data: action,
+        data: {
+                action, 
+                pageNumber
+              },
         dataType: "json",
         success: function (response) {
-            showProducts(response);
+            showProducts(response.data);
             $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
             $(".addCart").on("click", increaseCartQuantity);
         }
@@ -462,7 +466,7 @@ function showProducts(data){
     let imgPath = $("#imgPath").val();
     data.forEach(el=>{
         output += `
-        <div class="col-sm-6 col-lg-4">
+        <div class="col-sm-6">
             <div class="item">
                 <a href="index.php?page=single-product&id=${el.id}" class="text-secondary">
                 <img src="${imgPath + el.path}" alt="${el.alt}}"/>
