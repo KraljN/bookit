@@ -456,6 +456,7 @@ function displayProducts(){
         dataType: "json",
         success: function (response) {
             showProducts(response.data);
+            showPagination(response.total);
             $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
             $(".addCart").on("click", increaseCartQuantity);
         }
@@ -477,5 +478,21 @@ function showProducts(data){
         </div>
         `
     });
+    $("#books").html(output);
+}
+function showPagination(total){
+    let perPage = 4;
+    let pages = Math.ceil(total / perPage);
+    let pagination = `<div class="row m-0"> <ul class="pagination mx-auto">`;
+    for(let i = 1; i <= pages; i++){
+        pagination += `<li class="page-item `;
+        if(i == $("#pageNumber").val()) pagination +="active";
+        pagination += `"><a class="page-link" href="index.php?page=products&pageNumber=${i}">${i}</a></li>`
+    }
+    pagination += '</div> </ul>'
+
+    let output = $("#books").html();
+    output += pagination;
+
     $("#books").html(output);
 }

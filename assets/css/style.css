@@ -1351,10 +1351,13 @@ input[type=number] {
   font-size:1.3rem;
 }
 #books .item img{
-  height: 350px;
-  width: auto;
+  height: 340px;
+  width: 100%;
 }
 .title-container{
   min-height: 46px;
   width: 100%;
+}
+.default-padding{
+  padding: .375rem .75rem;
 }
