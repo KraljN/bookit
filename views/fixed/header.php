@@ -56,8 +56,7 @@
                                 </ul>
                             <a href="index.php?page=shopping-cart" id="cart-link">
                                 <div class="cart mb-2 mx-auto">
-                                    <span>
-                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                                    <span><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
                                     <?php if($quantity > 0): ?> <span class="quantity" id="cartQuantity"><?= $quantity ?></span> <?php endif ?>
                                 </div>
                             </a>
