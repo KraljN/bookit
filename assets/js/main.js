@@ -392,7 +392,6 @@ function manipulateShoppingCart(obj, event){
     var id = obj.dataset.id;
     var quantity = null;
     if(action == "changeQuantity") quantity = obj.value;
-    // console.log(quantity);
     $.ajax({
         type: "POST",
         url: "models/shopping-cart/shopping-cart-manipulation.php",
@@ -531,5 +530,4 @@ function appendPriceCount(data){
             html += ` (${data[index]})`;
             el.innerHTML = html;
     })
-    // sogolisica 3:52
 }

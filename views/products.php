@@ -19,7 +19,11 @@
                         GROUP BY g.genre_id";
     $genres = $db -> query($categoriesQuery) -> fetchAll();
 
-    $prices
+
+    $publishersQuery = "SELECT p.publisher_id AS id, p.publisher_name AS name, COUNT(b.book_id) AS book_number
+                        FROM publishers p INNER JOIN books b ON P.publisher_id = B.publisher_id
+                        GROUP BY p.publisher_id";
+    $publishers = $db -> query($publishersQuery) -> fetchAll();
 
 ?>
 <input type="hidden" id="pageNumber" value="<?= isset($_GET["pageNumber"]) ? $_GET["pageNumber"] : 1 ?>"/>
@@ -96,24 +100,14 @@
                         <div class="form-group text-center">
                             <label class="font-weight-bold text-center">Publishers</label>
                             <div class="d-flex flex-column align-items-start">
+                            <?php foreach($publishers as $publisher): ?>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios1" value="option1"/>
-                                    <label class="form-check-label" for="exampleRadios1">
-                                        Cambridge University Press
+                                    <input class="form-check-input" type="checkbox" name="publishers" value="<?= $publisher -> id ?>"/>
+                                    <label class="form-check-label">
+                                        <?= $publisher -> name . " (" . $publisher -> book_number . ")" ?>
                                     </label>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios1" value="option1"/>
-                                    <label class="form-check-label" for="exampleRadios1">
-                                        McClelland and Stewart
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios1" value="option1"/>
-                                    <label class="form-check-label" for="exampleRadios1">
-                                        Olympia Press
-                                    </label>
-                                </div>
+                                <?php endforeach ?>
                             </div>
                         </div>
                         
