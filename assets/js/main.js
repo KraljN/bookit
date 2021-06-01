@@ -12,6 +12,7 @@ $(document).ready(function () {
     }
     if(window.location.href.includes("products")){
         displayProducts();
+        showNumberOfBooksWithPrices();
     }
     if(window.location.href.includes("contact")){
         dohvatiSubjects();
@@ -440,8 +441,15 @@ function notificate(message){
 }
 function increaseCartQuantity(){
     let quantity = parseInt($("#cartQuantity").html());
+    console.log(quantity);
+    if(Number.isNaN(quantity))quantity = 0;
     quantity ++;
-    $("#cartQuantity").html(quantity);
+    if($("#cartQuantity").html() == undefined && quantity > 0){
+        $("#cart-link").children().children().after(`<span class="quantity" id="cartQuantity">1</span>`);
+    }
+    else{
+        $("#cartQuantity").html(quantity);
+    }
 }
 function displayProducts(){
     let action = "show";
@@ -473,7 +481,7 @@ function showProducts(data){
                 <img src="${imgPath + el.path}" alt="${el.alt}}"/>
                 <div class="title-container"><h3>${el.title}</h3></div>
                 </a>
-                <h6><span class="price">&euro;${el.price}</span> / <a href="#" class="shoppingCartAction addCart" data-action="add" data-id="33">Add to cart</a></h6>
+                <h6><span class="price">&euro;${el.price}</span> / <a href="#" class="shoppingCartAction addCart" data-action="add" data-id="${el.id}">Add to cart</a></h6>
             </div>
         </div>
         `
@@ -495,4 +503,33 @@ function showPagination(total){
     output += pagination;
 
     $("#books").html(output);
+}
+function showNumberOfBooksWithPrices(){
+    let action = "countBooks";
+    let nizCheckbox = [];
+    $.each($('input[name="prices"]'), function(index, el){
+        nizCheckbox.push(el.value);
+    })
+    
+    console.log(nizCheckbox);
+    $.ajax({
+        type: "GET",
+        url: "models/shop/count-products-with-prices.php",
+        data: {
+            action,
+            nizCheckbox
+        },
+        dataType: "json",
+        success: function (response) {
+            appendPriceCount(response);
+        }
+    });
+}
+function appendPriceCount(data){
+    $.each($('.priceCheckboxLabel'), function(index, el){
+            let html = el.innerHTML.trim();
+            html += ` (${data[index]})`;
+            el.innerHTML = html;
+    })
+    // sogolisica 3:52
 }

@@ -90,7 +90,7 @@
                 <?php endif; ?>
                 <?php if(!isset($_SESSION["shoppingCart"]) || empty($_SESSION["shoppingCart"])): ?>
                     <div class="m-3">
-                        <a href="index.php?page=shop" class="btn float-right">See Offer</a>
+                        <a href="index.php?page=products" class="btn float-right">See Offer</a>
                     </div>
                 <?php endif ?>
              </div>
