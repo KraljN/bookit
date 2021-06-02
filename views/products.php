@@ -32,14 +32,14 @@
             <h1 class="mb-5">Book it shop offer</h1>
             <div class="recent-book-sec mb-0">
                 <div class="row justify-content-around m-0">
-                    <div class="col-md-6 col-lg-4 px-5">
+                    <div class="col-md-6 col-lg-5 col-xl-4 px-5">
                         <div class="form-group">
-                            <label for="exampleFormControlSelect1" class="font-weight-bold text-left">Order By</label>
-                            <select class="form-control" id="exampleFormControlSelect1">
-                                <option>Price Descending</option>
-                                <option>Price Ascending</option>
-                                <option>A-Z</option>
-                                <option>Z-A</option>
+                            <label for="sort" class="font-weight-bold text-left">Order By</label>
+                            <select class="form-control filterBooks" id="sort">
+                                <option value="price-desc">Price Descending</option>
+                                <option value="price-asc">Price Ascending</option>
+                                <option value="word-asc">A-Z</option>
+                                <option value="word-desc">Z-A</option>
                             </select>
                         </div>
                         <div class="form-group text-center">
@@ -47,7 +47,7 @@
                             <div class="d-flex flex-column align-items-start">
                             <?php foreach($authors as $author): ?>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="authors[]" value="<?= $author -> id ?>"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" name="authors" value="<?= $author -> id ?>"/>
                                     <label class="form-check-label">
                                         <?= $author -> name . " " . $author -> surname . " (" . $author -> book_number . ")" ?>
                                     </label>
@@ -60,7 +60,7 @@
                             <div class="d-flex flex-column align-items-start">
                             <?php foreach($genres as $genre): ?>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="genres[]" value="<?= $genre -> id ?>"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" name="genres" value="<?= $genre -> id ?>"/>
                                     <label class="form-check-label">
                                         <?= $genre -> name . " (" . $genre -> book_number . ")" ?>
                                     </label>
@@ -72,25 +72,25 @@
                             <label class="font-weight-bold text-center">Prices</label>
                             <div class="d-flex flex-column align-items-start">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="prices" value="0-5"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" name="prices" value="0-5"/>
                                     <label class="form-check-label priceCheckboxLabel">
                                         0-5 &euro;
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="prices" value="5-7.5"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" name="prices" value="5-7.5"/>
                                     <label class="form-check-label priceCheckboxLabel">
                                         5-7.5 &euro;
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="prices" value="7.5-10"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" name="prices" value="7.5-10"/>
                                     <label class="form-check-label priceCheckboxLabel">
                                         7.5-10 &euro;
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="prices" value="10+"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" name="prices" value="10+"/>
                                     <label class="form-check-label priceCheckboxLabel">
                                         10+ &euro;
                                     </label>
@@ -102,7 +102,7 @@
                             <div class="d-flex flex-column align-items-start">
                             <?php foreach($publishers as $publisher): ?>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="publishers" value="<?= $publisher -> id ?>"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" name="publishers" value="<?= $publisher -> id ?>"/>
                                     <label class="form-check-label">
                                         <?= $publisher -> name . " (" . $publisher -> book_number . ")" ?>
                                     </label>
@@ -115,15 +115,15 @@
                     <div class="col-md-6">
                     <div class="row mb-2 mx-0"> 
                     <div class="input-group  mr-sm-2 d-flex justify-content-center align-items-center w-100">
-                        <form action="#" class="form-inline d-flex justify-content-center align-items-center">
+                        <div  class="form-inline d-flex justify-content-center align-items-center">
                             <div class="input-group mr-1 mb-1">
                                 <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></div>
                                 </div>
-                                <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Search By Title">
+                                <input type="text" class="form-control" id="search" placeholder="Search By Title">
                             </div>
-                            <button type="submit" class="btn default-padding mb-1">Search</button>
-                        </form>
+                            <button class="btn default-padding mb-1 filterBooks">Search</button>
+                        </div>
                     </div>
                     </div>
                         <div class="row m-0" id="books"> </div>  

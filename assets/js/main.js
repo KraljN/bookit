@@ -13,6 +13,7 @@ $(document).ready(function () {
     if(window.location.href.includes("products")){
         displayProducts();
         showNumberOfBooksWithPrices();
+        $(".filterBooks").on('change, click', displayProducts);
     }
     if(window.location.href.includes("contact")){
         dohvatiSubjects();
@@ -452,13 +453,44 @@ function increaseCartQuantity(){
 }
 function displayProducts(){
     let action = "show";
-    pageNumber = $("#pageNumber").val();
+    let order = $("#sort").val();
+    let authors = [];
+    let genres = [];
+    let prices = [];
+    let publishers = [];
+    let search = $("#search").val();
+
+    $(":checkbox").each(function(index, element){
+        if(element.checked){
+            switch(element.getAttribute("name")){
+                case("authors"):
+                    authors.push(element.value);
+                    break;
+                case("genres"):
+                    genres.push(element.value);
+                    break;
+                case("prices"):
+                    prices.push(element.value);
+                    break;
+                case("publishers"):
+                    publishers.push(element.value);
+                    break;
+            }
+        }
+    });
+    let pageNumber = $("#pageNumber").val();
     $.ajax({
         type: "GET",
         url: "models/shop/get-products.php",
         data: {
                 action, 
-                pageNumber
+                pageNumber,
+                order,
+                authors,
+                genres,
+                prices,
+                publishers,
+                search
               },
         dataType: "json",
         success: function (response) {
@@ -509,8 +541,7 @@ function showNumberOfBooksWithPrices(){
     $.each($('input[name="prices"]'), function(index, el){
         nizCheckbox.push(el.value);
     })
-    
-    console.log(nizCheckbox);
+
     $.ajax({
         type: "GET",
         url: "models/shop/count-products-with-prices.php",

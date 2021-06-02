@@ -2,6 +2,9 @@
     if(isset($_GET["action"]) && $_GET["action"] == "show"){
         require_once "../../config/connection.php";
         require_once "../forbidden/functions.php";
+
+        // var_dump($_GET);
+        // sogolisica 27
     
         @ $page = $_GET["pageNumber"];
 
