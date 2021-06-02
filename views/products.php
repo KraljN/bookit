@@ -7,20 +7,20 @@
 <!-- END OF NOTIFICATION -->
 <?php    
     require_once "config/connection.php";
-    $authorsQuery = "SELECT a.author_id AS id, p.first_name AS name, p.last_name AS surname, COUNT(b.book_id) AS book_number
+    $authorsQuery = "SELECT a.author_id AS id, p.first_name AS name, p.last_name AS surname
                      FROM persons p INNER JOIN authors a ON p.person_id = a.person_id
                      INNER JOIN books b ON a.author_id = b.author_id
                      GROUP BY a.author_id";
     $authors = $db -> query($authorsQuery) -> fetchAll();
 
-    $categoriesQuery = "SELECT g.genre_id AS id, g.genre_name AS name, COUNT(b.book_id) AS book_number
+    $categoriesQuery = "SELECT g.genre_id AS id, g.genre_name AS name
                         FROM genres g INNER JOIN genres_books gb ON g.genre_id = gb.genre_id
                         INNER JOIN books b ON gb.book_id = b.book_id
                         GROUP BY g.genre_id";
     $genres = $db -> query($categoriesQuery) -> fetchAll();
 
 
-    $publishersQuery = "SELECT p.publisher_id AS id, p.publisher_name AS name, COUNT(b.book_id) AS book_number
+    $publishersQuery = "SELECT p.publisher_id AS id, p.publisher_name AS name
                         FROM publishers p INNER JOIN books b ON P.publisher_id = B.publisher_id
                         GROUP BY p.publisher_id";
     $publishers = $db -> query($publishersQuery) -> fetchAll();
@@ -49,7 +49,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input filterBooks" type="checkbox" name="authors" value="<?= $author -> id ?>"/>
                                     <label class="form-check-label">
-                                        <?= $author -> name . " " . $author -> surname . " (" . $author -> book_number . ")" ?>
+                                        <?= $author -> name . " " . $author -> surname ?>
                                     </label>
                                 </div>
                             <?php endforeach ?>
@@ -62,7 +62,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input filterBooks" type="checkbox" name="genres" value="<?= $genre -> id ?>"/>
                                     <label class="form-check-label">
-                                        <?= $genre -> name . " (" . $genre -> book_number . ")" ?>
+                                        <?= $genre -> name ?>
                                     </label>
                                 </div>
                             <?php endforeach ?>
@@ -104,7 +104,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input filterBooks" type="checkbox" name="publishers" value="<?= $publisher -> id ?>"/>
                                     <label class="form-check-label">
-                                        <?= $publisher -> name . " (" . $publisher -> book_number . ")" ?>
+                                        <?= $publisher -> name ?>
                                     </label>
                                 </div>
                                 <?php endforeach ?>

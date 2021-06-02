@@ -12,7 +12,6 @@ $(document).ready(function () {
     }
     if(window.location.href.includes("products")){
         displayProducts();
-        showNumberOfBooksWithPrices();
         $(".filterBooks").on('change', displayProducts);
         $("#searchSubmit").on('click', displayProducts);
     }
@@ -535,31 +534,4 @@ function showPagination(total){
     output += pagination;
 
     $("#books").html(output);
-}
-function showNumberOfBooksWithPrices(){
-    let action = "countBooks";
-    let nizCheckbox = [];
-    $.each($('input[name="prices"]'), function(index, el){
-        nizCheckbox.push(el.value);
-    })
-
-    $.ajax({
-        type: "GET",
-        url: "models/shop/count-products-with-prices.php",
-        data: {
-            action,
-            nizCheckbox
-        },
-        dataType: "json",
-        success: function (response) {
-            appendPriceCount(response);
-        }
-    });
-}
-function appendPriceCount(data){
-    $.each($('.priceCheckboxLabel'), function(index, el){
-            let html = el.innerHTML.trim();
-            html += ` (${data[index]})`;
-            el.innerHTML = html;
-    })
 }

@@ -29,31 +29,157 @@
             $authorQuery = "";
             $lastAuthorId = end($authors);
             foreach($authors as $index => $author){
-                if($author != $lastAuthorId){
-                    $authorQuery .= "b.author_id = $author OR "; 
+                if($index == 0 && $author == $lastAuthorId){
+                    $authorQuery .= "b.author_id = $author "; 
                 }
+                else if($index == 0){
+                    $authorQuery .= "(b.author_id = $author OR ";
+                }
+                else if($author == $lastAuthorId){
+                    $authorQuery .= "b.author_id = $author) "; 
+                }
+
                 else{
-                    $authorQuery .= "b.author_id = $author ";
+                    $authorQuery .= "b.author_id = $author OR ";
                 }
             }
             $whereQuery .= $authorQuery;
         }
         //=====================================
 
-        if(isset($_GET["genres"])){
+
+        //===============PUBLISHER DEO=========
+        if(isset($_GET["publishers"])){
             $hasFilter = true;
-            $genres = $_GET["authors"];
-            $genresQuery = "";
-            $lastIndex = end($genres);
-            foreach($genres as $index => $genre){
-                if($index != $lastIndex){
-                    $genresQuery .= "b.author_id = $genre OR"; 
+            $publishers = $_GET["publishers"];
+            $publisherQuery = "";
+            $lastPublisherId = end($publishers);
+            foreach($publishers as $index => $publisher){
+                if($index == 0 && $publisher == $lastPublisherId){
+                    $publisherQuery .= "b.publisher_id = $publisher "; 
                 }
+                else if($index == 0){
+                    $publisherQuery .= "(b.publisher_id = $publisher OR ";
+                }
+                else if($publisher == $lastPublisherId){
+                    $publisherQuery .= "b.publisher_id = $publisher) "; 
+                }
+
                 else{
-                    $genresQuery .= "b.author_id = $genre ";
+                    $publisherQuery .= "b.publisher_id = $publisher OR ";
                 }
             }
-            $whereQuery .= $genresQuery;
+            if(strpos($whereQuery, "=") != null){
+                $whereQuery.= "AND $publisherQuery ";
+            }
+            else{
+                $whereQuery .= $publisherQuery;
+            }
+        }
+        //============================================
+
+        if(isset($_GET["prices"])){
+            $hasFilter = true;
+            $priceRanges = $_GET["prices"];
+            $priceQuery = "";
+            $lastPriceRange = end($priceRanges);
+            foreach($priceRanges as  $index => $priceRange){
+                if($index == 0 && $priceRange == $lastPriceRange){
+                    if(strpos($priceRange, "-") != null){
+                        list($min, $max) = explode("-", $priceRange);
+                        $priceQuery .= "(SELECT p.value
+                                        FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                        WHERE bp.book_id = b.book_id
+                                        ORDER BY date_become_effective DESC
+                                        LIMIT 1) > $min AND (SELECT p.value
+                                                            FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                                            WHERE bp.book_id = b.book_id
+                                                            ORDER BY date_become_effective DESC
+                                                            LIMIT 1) <= $max ";
+                    }
+                    else{
+                        list($min, $max) = explode("+", $priceRange);
+                        $priceQuery .= "(SELECT p.value
+                                        FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                        WHERE bp.book_id = b.book_id
+                                        ORDER BY date_become_effective DESC
+                                        LIMIT 1) > $min ";
+                    }
+                }
+                else if($index == 0){
+                    if(strpos($priceRange, "-") != null){
+                        list($min, $max) = explode("-", $priceRange);
+                        $priceQuery .= "((SELECT p.value
+                                        FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                        WHERE bp.book_id = b.book_id
+                                        ORDER BY date_become_effective DESC
+                                        LIMIT 1) > $min AND (SELECT p.value
+                                                            FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                                            WHERE bp.book_id = b.book_id
+                                                            ORDER BY date_become_effective DESC
+                                                            LIMIT 1) <= $max OR ";
+                    }
+                    else{
+                        list($min, $max) = explode("+", $priceRange);
+                        $priceQuery .= "((SELECT p.value
+                                        FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                        WHERE bp.book_id = b.book_id
+                                        ORDER BY date_become_effective DESC
+                                        LIMIT 1) > $min OR ";
+                    }
+                }   
+                else if($priceRange == $lastPriceRange){
+                    if(strpos($priceRange, "-") != null){
+                        list($min, $max) = explode("-", $priceRange);
+                        $priceQuery .= "(SELECT p.value
+                                        FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                        WHERE bp.book_id = b.book_id
+                                        ORDER BY date_become_effective DESC
+                                        LIMIT 1) > $min AND (SELECT p.value
+                                                            FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                                            WHERE bp.book_id = b.book_id
+                                                            ORDER BY date_become_effective DESC
+                                                            LIMIT 1) <= $max) ";
+                    }
+                    else{
+                        list($min, $max) = explode("+", $priceRange);
+                        $priceQuery .= "(SELECT p.value
+                                        FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                        WHERE bp.book_id = b.book_id
+                                        ORDER BY date_become_effective DESC
+                                        LIMIT 1) > $min) ";
+                    }
+                }
+                else{
+                    if(strpos($priceRange, "-") != null){
+                        list($min, $max) = explode("-", $priceRange);
+                        $priceQuery .= "(SELECT p.value
+                                        FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                        WHERE bp.book_id = b.book_id
+                                        ORDER BY date_become_effective DESC
+                                        LIMIT 1) > $min AND (SELECT p.value
+                                                            FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                                            WHERE bp.book_id = b.book_id
+                                                            ORDER BY date_become_effective DESC
+                                                            LIMIT 1) <= $max OR ";
+                    }
+                    else{
+                        list($min, $max) = explode("+", $priceRange);
+                        $priceQuery .= "(SELECT p.value
+                                        FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                        WHERE bp.book_id = b.book_id
+                                        ORDER BY date_become_effective DESC
+                                        LIMIT 1) > $min OR ";
+                    }
+                }
+
+            }
+            if(strpos($whereQuery, "=") != null){
+                $whereQuery.= "AND $priceQuery ";
+            }
+            else{
+                $whereQuery .= $priceQuery;
+            }
         }
 
     
@@ -75,7 +201,6 @@
         $totalQuery = "SELECT *
                        FROM books b";
 
-        if($hasFilter) $totalQuery .= $whereQuery;
 
         $totalPriprema = $db -> prepare ($totalQuery);
 
