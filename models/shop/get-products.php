@@ -78,6 +78,8 @@
         }
         //============================================
 
+
+        //================PRICES DEO===================
         if(isset($_GET["prices"])){
             $hasFilter = true;
             $priceRanges = $_GET["prices"];
@@ -181,14 +183,61 @@
                 $whereQuery .= $priceQuery;
             }
         }
+        //=============================================
+
+        //===================GENRES DEO================
+        if(isset($_GET["genres"])){
+            $hasFilter = true;
+            $genres = $_GET["genres"];
+            $genreQuery = "";
+            $lastGenreId = end($genres);
+            foreach($genres as $index => $genre){
+                if($index == 0 && $genre == $lastGenreId){
+                    $genreQuery .= "gb.genre_id = $genre ";
+                }
+                else if($index == 0){
+                    $genreQuery .= "(gb.genre_id = $genre OR ";
+                }
+                else if($genre == $lastGenreId){
+                    $genreQuery .= "gb.genre_id = $genre) "; 
+                }
+                else{
+                    $genreQuery .= "gb.genre_id = $genre OR ";
+                }
+            }
+            if(strpos($whereQuery, "=") != null){
+                $whereQuery.= "AND $genreQuery ";
+            }
+            else{
+                $whereQuery .= $genreQuery;
+            }
+        }
+        //=====================================================
+
+        //=======================SEARCH DEO=====================
+        if(!empty($_GET["search"])){
+            $hasFilter = true;
+            $lowerSearch = strtolower($_GET["search"]);
+            $search = "%$lowerSearch%";
+            $searchQuery = "LOWER(b.title) LIKE '$search' ";
+            if(strpos($whereQuery, "=") != null){
+                $whereQuery.= "AND  $searchQuery";
+            }
+            else{
+                $whereQuery .= $searchQuery;
+            }
+        }
+        //========================================================
+
 
     
-        $query = "SELECT b.book_id AS id, bi.path, b.date_inserted , bi.alt, b.title, (SELECT p.value
+        $query = "SELECT DISTINCT b.book_id AS id, bi.path, b.date_inserted , bi.alt, b.title, (SELECT p.value
                                                                                         FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
                                                                                         WHERE bp.book_id = b.book_id
                                                                                         ORDER BY date_become_effective DESC
                                                                                         LIMIT 1) AS price
                    FROM book_images bi INNER JOIN books b ON bi.book_id = b.book_id
+                   INNER JOIN genres_books gb ON b.book_id = gb.book_id
                    ";
                     if($hasFilter) $query .= $whereQuery;
                    $query .= "ORDER BY $what $how
@@ -198,14 +247,17 @@
     
         $books = $db -> query($query) -> fetchAll();
 
-        $totalQuery = "SELECT *
-                       FROM books b";
+        $totalQuery = "SELECT DISTINCT b.book_id
+                       FROM books b INNER JOIN genres_books gb ON b.book_id = gb.book_id";
+
+        if($hasFilter) $totalQuery .= $whereQuery;
 
 
-        $totalPriprema = $db -> prepare ($totalQuery);
+                //    var_dump($totalQuery);
 
-         $totalPriprema -> execute();
-         $total = $totalPriprema -> rowCount();
+
+
+        $total = $db -> query($totalQuery) -> rowCount();
 
         $output = [
             "total" => $total,
