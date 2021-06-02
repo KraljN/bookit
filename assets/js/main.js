@@ -13,7 +13,8 @@ $(document).ready(function () {
     if(window.location.href.includes("products")){
         displayProducts();
         showNumberOfBooksWithPrices();
-        $(".filterBooks").on('change, click', displayProducts);
+        $(".filterBooks").on('change', displayProducts);
+        $("#searchSubmit").on('click', displayProducts);
     }
     if(window.location.href.includes("contact")){
         dohvatiSubjects();

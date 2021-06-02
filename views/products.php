@@ -122,7 +122,7 @@
                                 </div>
                                 <input type="text" class="form-control" id="search" placeholder="Search By Title">
                             </div>
-                            <button class="btn default-padding mb-1 filterBooks">Search</button>
+                            <button class="btn default-padding mb-1" id="searchSubmit">Search</button>
                         </div>
                     </div>
                     </div>
