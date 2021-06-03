@@ -4,11 +4,21 @@
         require_once "../forbidden/functions.php";
         @ $page = $_GET["pageNumber"];
 
+
+        $hasFilter = false;
+        $hasOrder = false;
         //===========ORDER DEO============
-        $order = $_GET["order"];
-        list($what, $how) = explode("-", $order);
-        if($what == "word") $what = "b.title";
-        $how = strtoupper($how);
+        if(isset($_GET["order"])){
+            $hasOrder = true;
+            $order = $_GET["order"];
+            list($what, $how) = explode("-", $order);
+            if($what == "word") $what = "b.title";
+            $how = strtoupper($how);
+        }
+        // $order = $_GET["order"];
+        // list($what, $how) = explode("-", $order);
+        // if($what == "word") $what = "b.title";
+        // $how = strtoupper($how);
         //===================================
 
 
@@ -19,8 +29,6 @@
 
 
         $whereQuery = " WHERE ";
-
-        $hasFilter = false;
 
         //============AUTHORS============
         if(isset($_GET["authors"])){
@@ -239,9 +247,9 @@
                    FROM book_images bi INNER JOIN books b ON bi.book_id = b.book_id
                    INNER JOIN genres_books gb ON b.book_id = gb.book_id
                    ";
-                    if($hasFilter) $query .= $whereQuery;
-                   $query .= "ORDER BY $what $how
-                   LIMIT 4
+                   if($hasFilter) $query .= $whereQuery;
+                   if($hasOrder) $query .= "ORDER BY $what $how ";
+                   $query .= "LIMIT 4
                    OFFSET $offset";
                 //    var_dump($query);
     

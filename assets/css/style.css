@@ -1361,3 +1361,10 @@ input[type=number] {
 .default-padding{
   padding: .375rem .75rem;
 }
+#showAllBooks{
+  background-color: #007892;
+  border:  2px solid #007892;
+}
+#showAllBooks:hover {
+  background: #fff;
+  color: #007892; }

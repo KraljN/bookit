@@ -25,6 +25,7 @@
         <?php echo isset($_SESSION["korisnik"])?"true":"false" ?>
         "/>
         <input type="hidden" id="imgPath" value="<?= IMG_PATH ?>" />
+        <input type="hidden" id="roothPath" value="<?= ROOT_PATH ?>" />
         <header>
             <div class="main-menu">
                 <div class="container">

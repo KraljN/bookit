@@ -21,6 +21,7 @@ $(document).ready(function () {
             displayProducts();
             saveFilters();
         });
+        $("#showAllBooks").click(resetFilters);
     }
     if(window.location.href.includes("contact")){
         dohvatiSubjects();
@@ -448,7 +449,6 @@ function notificate(message){
 }
 function increaseCartQuantity(){
     let quantity = parseInt($("#cartQuantity").html());
-    console.log(quantity);
     if(Number.isNaN(quantity))quantity = 0;
     quantity ++;
     if($("#cartQuantity").html() == undefined && quantity > 0){
@@ -501,10 +501,18 @@ function displayProducts(){
               },
         dataType: "json",
         success: function (response) {
-            showProducts(response.data);
-            showPagination(response.total);
-            $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
-            $(".addCart").on("click", increaseCartQuantity);
+            if(response.data.length == 0 && response.total > 0){
+                // let rootPath = $("#roothPath").val();
+                let perPage = 4;
+                let lastAvailablePageNumber = Math.ceil(response.total / perPage);
+                location.href ="index.php?page=products&pageNumber=" + lastAvailablePageNumber;
+            }
+            else{
+                showProducts(response.data);
+                showPagination(response.total);
+                $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
+                $(".addCart").on("click", increaseCartQuantity);
+            }
         }
     });
 }
@@ -524,6 +532,9 @@ function showProducts(data){
         </div>
         `
     });
+    if(data.length == 0){
+        output += "<h4 class='font-weight-bold mt-5'>There is no products matching your selection</h4>"
+    }
     $("#books").html(output);
 }
 function showPagination(total){
@@ -592,3 +603,41 @@ function setFilters(){
     }
 
 }
+function resetFilters(){
+    // let action = "show";
+    // $.ajax({
+    //     type: "GET",
+    //     url: "models/shop/get-products.php",
+    //     data: {
+    //         action,
+    //         pageNumber:1
+    //     },
+    //     dataType: "json",
+    //     success: function (response) {
+    //         setDefaultFilters();
+    //         location.href = "index.php?page=products&pageNumber=1";
+    //         // showProducts(response.data);
+    //         // showPagination(response.total);
+    //         // $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
+    //         // $(".addCart").on("click", increaseCartQuantity);
+    //     }
+    // });
+    $("#sort").val("price-desc");
+    $("#search").val("");
+    $(":checkbox").each(function(index, element){
+        if(element.checked){
+            element.checked = false;
+        }
+    });
+    saveFilters();
+    location.href = "index.php?page=products&pageNumber=1";
+}
+// function setDefaultFilters(){
+//     $("#sort").val("price-desc");
+//     $("#search").val("");
+//     $(":checkbox").each(function(index, element){
+//         if(element.checked){
+//             element.checked = false;
+//         }
+//     });
+// }

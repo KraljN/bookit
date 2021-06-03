@@ -123,6 +123,8 @@
                                 <input type="text" class="form-control" id="search" placeholder="Search By Title">
                             </div>
                             <button class="btn default-padding mb-1" id="searchSubmit">Search</button>
+                            <button class="btn default-padding mb-1 ml-2" id="showAllBooks">Show All</button>
+                            
                         </div>
                     </div>
                     </div>
