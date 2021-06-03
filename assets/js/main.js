@@ -11,9 +11,16 @@ $(document).ready(function () {
         $("#login").click(proveriLogin);
     }
     if(window.location.href.includes("products")){
+        setFilters();
         displayProducts();
-        $(".filterBooks").on('change', displayProducts);
-        $("#searchSubmit").on('click', displayProducts);
+        $(".filterBooks").on('change', function(){
+            displayProducts();
+            saveFilters();
+        });
+        $("#searchSubmit").on('click', function(){
+            displayProducts();
+            saveFilters();
+        });
     }
     if(window.location.href.includes("contact")){
         dohvatiSubjects();
@@ -534,4 +541,54 @@ function showPagination(total){
     output += pagination;
 
     $("#books").html(output);
+}
+function saveFilters(){
+    localStorage.setItem('order', $("#sort").val());
+    localStorage.setItem('search', $("#search").val());
+    let checkboxesObj = {
+        "authors" : [],
+        "genres" : [],
+        "prices" : [],
+        "publishers" : []
+    }
+    $(":checkbox").each(function(index, element){
+        if(element.checked){
+            switch(element.getAttribute("name")){
+                case("authors"):
+                    checkboxesObj.authors.push(element.dataset.index);
+                    break;
+                case("genres"):
+                    checkboxesObj.genres.push(element.dataset.index);
+                    break;
+                case("prices"):
+                    checkboxesObj.prices.push(element.dataset.index);
+                    break;
+                case("publishers"):
+                    checkboxesObj.publishers.push(element.dataset.index);
+                    break;
+            }
+        }
+    });
+
+    let checkboxes =  JSON.stringify(checkboxesObj);
+    localStorage.setItem("checkboxes", checkboxes);
+}
+function setFilters(){
+    if(localStorage.getItem("order") != null){
+        $("#sort").val(localStorage.getItem("order"));
+    }
+    if(localStorage.getItem("search") != null){
+        $("#search").val(localStorage.getItem("search"));
+    }
+    if(localStorage.getItem("checkboxes") != null){
+        let checkboxesObj = JSON.parse(localStorage.getItem("checkboxes"));
+        $(":checkbox").each(function(index, element){
+            for(let name in checkboxesObj){
+                if(element.getAttribute("name") == name && checkboxesObj[name].includes(element.dataset.index)){
+                    element.setAttribute("checked", "checked");
+                }
+            }
+        });
+    }
+
 }

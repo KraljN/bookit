@@ -45,9 +45,9 @@
                         <div class="form-group text-center">
                             <label class="font-weight-bold text-center">Authors</label>
                             <div class="d-flex flex-column align-items-start">
-                            <?php foreach($authors as $author): ?>
+                            <?php foreach($authors as $index => $author): ?>
                                 <div class="form-check">
-                                    <input class="form-check-input filterBooks" type="checkbox" name="authors" value="<?= $author -> id ?>"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" data-index="<?= $index ?>" name="authors" value="<?= $author -> id ?>"/>
                                     <label class="form-check-label">
                                         <?= $author -> name . " " . $author -> surname ?>
                                     </label>
@@ -58,9 +58,9 @@
                         <div class="form-group text-center">
                             <label class="font-weight-bold text-center">Genres</label>
                             <div class="d-flex flex-column align-items-start">
-                            <?php foreach($genres as $genre): ?>
+                            <?php foreach($genres as $index => $genre): ?>
                                 <div class="form-check">
-                                    <input class="form-check-input filterBooks" type="checkbox" name="genres" value="<?= $genre -> id ?>"/>
+                                    <input class="form-check-input filterBooks" data-index="<?= $index ?>" type="checkbox" name="genres" value="<?= $genre -> id ?>"/>
                                     <label class="form-check-label">
                                         <?= $genre -> name ?>
                                     </label>
@@ -72,25 +72,25 @@
                             <label class="font-weight-bold text-center">Prices</label>
                             <div class="d-flex flex-column align-items-start">
                                 <div class="form-check">
-                                    <input class="form-check-input filterBooks" type="checkbox" name="prices" value="0-5"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" data-index="0" name="prices" value="0-5"/>
                                     <label class="form-check-label priceCheckboxLabel">
                                         0-5 &euro;
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input filterBooks" type="checkbox" name="prices" value="5-7.5"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" data-index="1" name="prices" value="5-7.5"/>
                                     <label class="form-check-label priceCheckboxLabel">
                                         5-7.5 &euro;
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input filterBooks" type="checkbox" name="prices" value="7.5-10"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" data-index="2" name="prices" value="7.5-10"/>
                                     <label class="form-check-label priceCheckboxLabel">
                                         7.5-10 &euro;
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input filterBooks" type="checkbox" name="prices" value="10+"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" data-index="3" name="prices" value="10+"/>
                                     <label class="form-check-label priceCheckboxLabel">
                                         10+ &euro;
                                     </label>
@@ -100,9 +100,9 @@
                         <div class="form-group text-center">
                             <label class="font-weight-bold text-center">Publishers</label>
                             <div class="d-flex flex-column align-items-start">
-                            <?php foreach($publishers as $publisher): ?>
+                            <?php foreach($publishers as $index => $publisher): ?>
                                 <div class="form-check">
-                                    <input class="form-check-input filterBooks" type="checkbox" name="publishers" value="<?= $publisher -> id ?>"/>
+                                    <input class="form-check-input filterBooks" type="checkbox" data-index="<?= $index ?>" name="publishers" value="<?= $publisher -> id ?>"/>
                                     <label class="form-check-label">
                                         <?= $publisher -> name ?>
                                     </label>
