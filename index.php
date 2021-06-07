@@ -25,6 +25,9 @@
             case "products":
                 include "views/products.php";
                 break;
+            case "admin-dashboard":
+                include "views/admin-dashboard.php";
+                break;
         }
     }
     include "views/fixed/footer.php";

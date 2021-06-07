@@ -21,7 +21,7 @@ if(isset($_POST["action"]) && $_POST["action"]=="uloguj"){
         $greske[] = "Minimum 5 maximum 6 numbers or letters";
     }
     if(count($greske) == 0){
-        $pripremaLog = $db->prepare('SELECT u.user_id, u.username, r.role_name
+        $pripremaLog = $db->prepare('SELECT u.user_id, u.username, u.role_id
                                      FROM users u INNER JOIN roles r ON U.role_id = r.role_id 
                                      WHERE u.username = :user AND u.password = :pass');
         $pripremaLog->bindParam(":user", $user);
@@ -30,30 +30,34 @@ if(isset($_POST["action"]) && $_POST["action"]=="uloguj"){
         if($pripremaLog -> rowCount() == 1 && $_SESSION["capchaText"] == $capcha){
             $_SESSION["korisnik"] = $pripremaLog->fetch();
 
-            $daLiJeVecUActivities = $db -> prepare("SELECT * 
-                                                    FROM `user_activities` 
-                                                    WHERE user_id = :userId");
-            $daLiJeVecUActivities -> bindParam(":userId", $_SESSION["korisnik"] -> user_id);
-            $daLiJeVecUActivities -> execute();
-            if($daLiJeVecUActivities -> rowCount() == 1){
+            // $daLiJeVecUActivities = $db -> prepare("SELECT * 
+            //                                         FROM `user_activities` 
+            //                                         WHERE user_id = :userId");
+            // $daLiJeVecUActivities -> bindParam(":userId", $_SESSION["korisnik"] -> user_id);
+            // $daLiJeVecUActivities -> execute();
+            // if($daLiJeVecUActivities -> rowCount() == 1){
                 
-                $updateActivities = $db -> prepare("UPDATE user_activities
-                                                    SET last_activity = :activity
-                                                    WHERE user_id = :userId");
-                $updateActivities -> bindParam(":userId", $_SESSION["korisnik"] -> user_id);
-                $currentTime = date("Y-m-d H-i-s", time());
-                $updateActivities -> bindParam(":activity", $currentTime);
-                $updateActivities -> execute(); 
+            //     $updateActivities = $db -> prepare("UPDATE user_activities
+            //                                         SET last_activity = :activity
+            //                                         WHERE user_id = :userId");
+            //     $updateActivities -> bindParam(":userId", $_SESSION["korisnik"] -> user_id);
+            //     $currentTime = date("Y-m-d H-i-s", time());
+            //     $updateActivities -> bindParam(":activity", $currentTime);
+            //     $updateActivities -> execute(); 
+            // }
+            // else{
+            //     $insertActivities = $db -> prepare("INSERT INTO  user_activities
+            //                                         VALUES(NULL, :userId, :activity)");
+            //     $insertActivities -> bindParam(":userId", $_SESSION["korisnik"] -> user_id);
+            //     $currentTime = date("Y-m-d H-i-s", time());
+            //     $insertActivities -> bindParam(":activity", $currentTime);
+            //     $insertActivities -> execute();
+            // }
+            $open = fopen(ACCESS_LOG, "a");
+            if($open){
+                fwrite($open, "logged-in". SEPARATOR ."{$_SERVER['REMOTE_ADDR']}". SEPARATOR . gmdate("Y-m-d H:i:s") ."\n");
+                fclose($open);
             }
-            else{
-                $insertActivities = $db -> prepare("INSERT INTO  user_activities
-                                                    VALUES(NULL, :userId, :activity)");
-                $insertActivities -> bindParam(":userId", $_SESSION["korisnik"] -> user_id);
-                $currentTime = date("Y-m-d H-i-s", time());
-                $insertActivities -> bindParam(":activity", $currentTime);
-                $insertActivities -> execute();
-            }
-
             $output = ["logged" => true];
             vratiJSON($output, 200);
         }

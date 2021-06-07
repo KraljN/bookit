@@ -1,9 +1,9 @@
 $(document).ready(function () {
     menu();
     insertAccess();
-    if($("#isLogged").val().trim()=="true"){
-        setInterval(updateActivity, 10000);// ============PODESITI VREME ZA KOJE SE VRSI UPDATE U BAZU AKTIVNOSTI==========
-    }
+    // if($("#isLogged").val().trim()=="true"){
+    //     setInterval(updateActivity, 10000);// ============PODESITI VREME ZA KOJE SE VRSI UPDATE U BAZU AKTIVNOSTI==========
+    // }
     newlyAdded();
     $("#card").keyup(prilagodiFormat);
     $("#register").click(proveraRegister);
@@ -36,6 +36,9 @@ $(document).ready(function () {
             manipulateShoppingCart(this);
         })
         $("#purchase").on("click", makeOrder);
+    }
+    if(window.location.href.includes("admin-dashboard")){
+        getDashboardInfo();
     }
     $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
     $(".addCart").on("click", increaseCartQuantity);
@@ -255,21 +258,21 @@ function proveriLogin(e){
         });
     }
 }
-function updateActivity(){
-    $.ajax({
-        type: "POST",
-        url: "models/onlineUsersControl/updateActivity.php",
-        data: {
-            action: "updateActivity"
-        },
-        dataType: "json",
-        success: function (response) {
-        },
-        error: function(error){
+// function updateActivity(){
+//     $.ajax({
+//         type: "POST",
+//         url: "models/onlineUsersControl/updateActivity.php",
+//         data: {
+//             action: "updateActivity"
+//         },
+//         dataType: "json",
+//         success: function (response) {
+//         },
+//         error: function(error){
 
-        }
-    });
-}
+//         }
+//     });
+// }
 function dohvatiSubjects(){
     $.ajax({
         type: "GET",
@@ -501,15 +504,17 @@ function displayProducts(){
               },
         dataType: "json",
         success: function (response) {
+            let perPage = 4;
             if(response.data.length == 0 && response.total > 0){
                 // let rootPath = $("#roothPath").val();
-                let perPage = 4;
                 let lastAvailablePageNumber = Math.ceil(response.total / perPage);
                 location.href ="index.php?page=products&pageNumber=" + lastAvailablePageNumber;
             }
             else{
                 showProducts(response.data);
-                showPagination(response.total);
+                if(response.total > perPage){
+                    showPagination(response.total);
+                }
                 $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
                 $(".addCart").on("click", increaseCartQuantity);
             }
@@ -604,24 +609,6 @@ function setFilters(){
 
 }
 function resetFilters(){
-    // let action = "show";
-    // $.ajax({
-    //     type: "GET",
-    //     url: "models/shop/get-products.php",
-    //     data: {
-    //         action,
-    //         pageNumber:1
-    //     },
-    //     dataType: "json",
-    //     success: function (response) {
-    //         setDefaultFilters();
-    //         location.href = "index.php?page=products&pageNumber=1";
-    //         // showProducts(response.data);
-    //         // showPagination(response.total);
-    //         // $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
-    //         // $(".addCart").on("click", increaseCartQuantity);
-    //     }
-    // });
     $("#sort").val("price-desc");
     $("#search").val("");
     $(":checkbox").each(function(index, element){
@@ -632,12 +619,29 @@ function resetFilters(){
     saveFilters();
     location.href = "index.php?page=products&pageNumber=1";
 }
-// function setDefaultFilters(){
-//     $("#sort").val("price-desc");
-//     $("#search").val("");
-//     $(":checkbox").each(function(index, element){
-//         if(element.checked){
-//             element.checked = false;
-//         }
-//     });
-// }
+function getDashboardInfo(){
+    let action = "getInfo";
+    $.ajax({
+        type: "GET",
+        url: "models/admin/dashboard/get-dashboard-info.php",
+        data: {
+            action
+        },
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            displayAdminInfo(response);
+        }
+    });
+}
+function displayAdminInfo(response){
+    for(let index in response){
+        console.log($("#" . index));
+        if(index == "most-popular-page-url"){
+            $("#most-popular-page-name").attr("href", response[index]);
+        }
+        else{
+            $("#" + index).html(response[index]);
+        }
+    }
+}

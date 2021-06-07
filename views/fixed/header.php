@@ -15,10 +15,10 @@
         <?php  var_dump($_SESSION) ?>       <!-- =======OVE JE ISPIS CELE SESIJE  -->
         <input type="hidden" name="page" id="page" value="<?php 
             if(isset($_GET["page"])){
-                echo $_GET["page"]=="single-product"?"{$_GET["page"]};id={$_GET["id"]}":$_GET["page"];
+                echo $_GET["page"]=="single-product"?"{$_GET["page"]}&id={$_GET["id"]}":$_GET["page"];
             }
             else{
-                echo "home";
+                echo "";
             }
         ?>"/>
         <input type="hidden" name="isLogged" id="isLogged" value="
@@ -53,6 +53,9 @@
                                             echo("Login");
                                         } ?> 
                                 </a>
+                                <?php if(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"]->role_id==ADMIN){
+                                    echo "<li class='navbar-item text-start text-sm-center mx-auto'> <a href='index.php?page=admin-dashboard' class='nav-link'>Admin</a></li>";
+                                } ?>
                                 </li>
                                 </ul>
                             <a href="index.php?page=shopping-cart" id="cart-link">

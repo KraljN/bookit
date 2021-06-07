@@ -19,7 +19,7 @@
 
     //=======USER INSERT=====
     define("NIJE_ULOGOVAN", 0);
-    define("ULOGOVAN", 1);
+    define("ADMIN", 1);
     define("KORISNIK", 2);
 
 

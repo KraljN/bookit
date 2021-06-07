@@ -112,9 +112,22 @@
             font-size: 1.4rem;
         }
     }
+    #admin #dashboard-info{
+        .card-header{
+            height: 125px;
+        }
+        .card-footer{
+            height: 33px;
+        }
+    }
  }
 
 // Extra large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) { 
+    #admin #dashboard-info{
+        .card-header{
+            height: 75px;
+        }
+    }
 }
 //.about-sec .about-img figure
