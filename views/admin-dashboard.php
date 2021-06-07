@@ -97,27 +97,24 @@
           <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Simple Table</h4>
-                  <p class="card-category"> Here is a subtitle for this table</p>
+                  <h4 class="card-title ">Pages Statistic</h4>
+                  <p class="card-category"> Take a look at statistic for every page on site</p>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="page-statistic">
                   <div class="table-responsive">
                     <table class="table">
                       <thead class=" text-primary">
                         <tr><th>
-                          ID
+                          #
                         </th>
                         <th>
-                          Name
+                          URL
                         </th>
                         <th>
-                          Country
+                          Views Last 24 Hours
                         </th>
                         <th>
-                          City
-                        </th>
-                        <th>
-                          Salary
+                          Popularity In %
                         </th>
                       </tr></thead>
                       <tbody>
@@ -134,9 +131,6 @@
                           <td>
                             Oud-Turnhout
                           </td>
-                          <td class="text-primary">
-                            $36,738
-                          </td>
                         </tr>
                         <tr>
                           <td>
@@ -150,9 +144,6 @@
                           </td>
                           <td>
                             Sinaai-Waas
-                          </td>
-                          <td class="text-primary">
-                            $23,789
                           </td>
                         </tr>
                         <tr>
@@ -168,9 +159,6 @@
                           <td>
                             Baileux
                           </td>
-                          <td class="text-primary">
-                            $56,142
-                          </td>
                         </tr>
                         <tr>
                           <td>
@@ -184,9 +172,6 @@
                           </td>
                           <td>
                             Overland Park
-                          </td>
-                          <td class="text-primary">
-                            $38,735
                           </td>
                         </tr>
                         <tr>
@@ -202,9 +187,6 @@
                           <td>
                             Feldkirchen in Kärnten
                           </td>
-                          <td class="text-primary">
-                            $63,542
-                          </td>
                         </tr>
                         <tr>
                           <td>
@@ -218,9 +200,6 @@
                           </td>
                           <td>
                             Gloucester
-                          </td>
-                          <td class="text-primary">
-                            $78,615
                           </td>
                         </tr>
                       </tbody>

@@ -5,7 +5,7 @@ if(isset($_GET["action"]) && $_GET["action"] == "getInfo"){
     $accessRows = file(ACCESS_LOG);
     $views  =  $countedPages = [];
     $loggedUsersNumber = 0;
-    $OneDayInMs = 86400000; 
+    $unixYesterday = strtotime('-1 day', time());
     foreach($accessRows as $row){
         list($action, $ip, $datetime) =  explode(SEPARATOR, $row);
         if($action == "logged-in"){
@@ -13,7 +13,6 @@ if(isset($_GET["action"]) && $_GET["action"] == "getInfo"){
             list($year, $month, $day) = explode('-', $date);
             list($hours, $minutes,$seconds) = explode(':', $time);
             @$unixLog = mktime($hours, $minutes, $seconds, $month, $day, $year);
-            $unixYesterday = time() - $OneDayInMs;
             if($unixLog > $unixYesterday) $loggedUsersNumber ++;
         }
         else{
@@ -31,8 +30,8 @@ if(isset($_GET["action"]) && $_GET["action"] == "getInfo"){
     asort($views);
     $pageViews = end($views);
     $pageName = key($views);
-    $pageUrl = "index.php?page=" . $pageName; 
-    $pageName = "www.bookit.com?page=" . $pageName;
+    $pageUrl = "index?page=" . $pageName; 
+    $pageName = "www.bookit.com/index.php?page=" . $pageName;
 
     $queryTotalUsers = "SELECT COUNT(*) AS 'number'
                         FROM users";

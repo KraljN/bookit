@@ -23,6 +23,7 @@
     define("KORISNIK", 2);
 
 
+
     function getParameter($name){
         $file =  fopen(ENV_PATH, "r");
         $output = "";

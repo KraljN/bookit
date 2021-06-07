@@ -39,6 +39,7 @@ $(document).ready(function () {
     }
     if(window.location.href.includes("admin-dashboard")){
         getDashboardInfo();
+        getPagesStatistic();
     }
     $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
     $(".addCart").on("click", increaseCartQuantity);
@@ -636,7 +637,6 @@ function getDashboardInfo(){
 }
 function displayAdminInfo(response){
     for(let index in response){
-        console.log($("#" . index));
         if(index == "most-popular-page-url"){
             $("#most-popular-page-name").attr("href", response[index]);
         }
@@ -644,4 +644,59 @@ function displayAdminInfo(response){
             $("#" + index).html(response[index]);
         }
     }
+}
+function getPagesStatistic(){
+    let action = "getStatistic";
+    $.ajax({
+        type: "GET",
+        url: "models/admin/dashboard/get-pages-statistic.php",
+        data: {
+            action
+        },
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            displayPagesStatistic(response);
+        }
+    });
+}
+function  displayPagesStatistic(data){
+    let output = `<div class="table-responsive">
+                    <table class="table">
+                    <thead class=" text-primary">
+                        <tr><th>
+                        #
+                        </th>
+                        <th>
+                        URL
+                        </th>
+                        <th>
+                        Views Last 24 Hours
+                        </th>
+                        <th>
+                        Popularity In %
+                        </th>
+                    </tr></thead>
+                    <tbody>`;
+                var index = 1;
+            for(let property in data){
+                    output += `<tr>
+                                    <td>
+                                    ${index++}
+                                    </td>
+                                    <td>
+                                        <a href="index.php?page=${property}">www.bookit.com/index.php?page=${property}</a>
+                                    </td>
+                                    <td>
+                                    ${data[property]["views"]}
+                                    </td>
+                                    <td>
+                                    ${data[property]["percentage"]} &#37;
+                                    </td>
+                                </tr>`;
+}
+    output += `     </tbody>
+                </table>
+            </div>`;
+            $("#page-statistic").html(output);
 }
