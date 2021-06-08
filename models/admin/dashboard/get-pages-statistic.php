@@ -24,18 +24,21 @@ if(isset($_GET["action"]) && $_GET["action"] == "getStatistic"){
         }
     }
     $allPages = array_unique($allPages);
-    // var_dump($allPages);
-    // foreach($allPages as $pageName => $pageViews){
-    //     $percentages[$pageName] = round($views[$pageName] / $totalViews * 100, 1);
-    // }
+    $output['totalNumber']  = count($allPages);
+
+
+    $pageNumber = isset($_GET["pageNumber"]) ? $_GET["pageNumber"] : 1;
+    define("PER_PAGE", 5);
+    $start = ($pageNumber - 1) * PER_PAGE;
+
     foreach($allPages as $singlePage){
         if(!isset($views[$singlePage])) $views[$singlePage] = 0;
         if(!isset($todayViews[$singlePage])) $todayViews[$singlePage] = 0;
         $percentages[$singlePage] = round($views[$singlePage] / $totalViews * 100, 1);
-        $output[$singlePage]["views"] = $todayViews[$singlePage];
-        $output[$singlePage]["percentage"] = $percentages[$singlePage];
+        $data['information'][$singlePage]["views"] = $todayViews[$singlePage];
+        $data['information'][$singlePage]["percentage"] = $percentages[$singlePage];
     }
-    // var_dump($views);
+    $output['information'] = array_slice($data['information'], $start, PER_PAGE);
     vratiJSON($output, 200);
 }
 else{

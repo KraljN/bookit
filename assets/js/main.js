@@ -514,7 +514,7 @@ function displayProducts(){
             else{
                 showProducts(response.data);
                 if(response.total > perPage){
-                    showPagination(response.total);
+                    showPagination(response.total, "products", "books", 4 );
                 }
                 $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
                 $(".addCart").on("click", increaseCartQuantity);
@@ -541,22 +541,6 @@ function showProducts(data){
     if(data.length == 0){
         output += "<h4 class='font-weight-bold mt-5'>There is no products matching your selection</h4>"
     }
-    $("#books").html(output);
-}
-function showPagination(total){
-    let perPage = 4;
-    let pages = Math.ceil(total / perPage);
-    let pagination = `<div class="row m-0"> <ul class="pagination mx-auto">`;
-    for(let i = 1; i <= pages; i++){
-        pagination += `<li class="page-item `;
-        if(i == $("#pageNumber").val()) pagination +="active";
-        pagination += `"><a class="page-link" href="index.php?page=products&pageNumber=${i}">${i}</a></li>`
-    }
-    pagination += '</div> </ul>'
-
-    let output = $("#books").html();
-    output += pagination;
-
     $("#books").html(output);
 }
 function saveFilters(){
@@ -647,20 +631,26 @@ function displayAdminInfo(response){
 }
 function getPagesStatistic(){
     let action = "getStatistic";
+    let pageNumber = $("#pageNumber").val();
     $.ajax({
         type: "GET",
         url: "models/admin/dashboard/get-pages-statistic.php",
         data: {
-            action
+            action,
+            pageNumber
         },
         dataType: "json",
         success: function (response) {
             console.log(response);
-            displayPagesStatistic(response);
+            displayPagesStatistic(response.information);
+            showPagination(response.totalNumber, "admin-dashboard", "page-statistic", 5);
         }
     });
 }
 function  displayPagesStatistic(data){
+    const perPage = 5;
+    let i = 0;
+    let pageNumber = $("#pageNumber").val();
     let output = `<div class="table-responsive">
                     <table class="table">
                     <thead class=" text-primary">
@@ -678,11 +668,11 @@ function  displayPagesStatistic(data){
                         </th>
                     </tr></thead>
                     <tbody>`;
-                var index = 1;
             for(let property in data){
+                    let index = (parseInt(pageNumber) - 1) * perPage + i + 1;
                     output += `<tr>
                                     <td>
-                                    ${index++}
+                                    ${index}
                                     </td>
                                     <td>
                                         <a href="index.php?page=${property}">www.bookit.com/index.php?page=${property}</a>
@@ -694,9 +684,25 @@ function  displayPagesStatistic(data){
                                     ${data[property]["percentage"]} &#37;
                                     </td>
                                 </tr>`;
+                                i++;
 }
     output += `     </tbody>
                 </table>
             </div>`;
             $("#page-statistic").html(output);
+}
+function showPagination(total, page, outputDivId, itemPerPage){
+    let pages = Math.ceil(total / itemPerPage);
+    let pagination =`<div class="row m-0"> <ul class="pagination mx-auto">`;
+    for(let i = 1; i <= pages; i++){
+        pagination += `<li class="page-item `;
+        if(i == $("#pageNumber").val()) pagination +="active";
+        pagination += `"><a class="page-link" href="index.php?page=${page}&pageNumber=${i}">${i}</a></li>`
+    }
+    pagination += '</div> </ul>'
+
+    let output = $("#" + outputDivId).html();
+    output += pagination;
+
+    $("#" + outputDivId).html(output);
 }
