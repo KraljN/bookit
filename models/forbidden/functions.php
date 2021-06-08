@@ -157,3 +157,10 @@ function deleteFromDb($id, $tableName, $idPrefix){// $db,
         logError($ex->getMessage(), "delete from db");
     }
 }
+function formatDate($datetime){
+    list($date, $time) = explode(" ", $datetime);
+    list($year, $month, $day) = explode('-', $date);
+    list($hours, $minutes,$seconds) = explode(':', $time);
+    @$output = date("d-m-Y H:i:s", mktime($hours, $minutes, $seconds, $month, $day, $year));
+    return $output;
+}

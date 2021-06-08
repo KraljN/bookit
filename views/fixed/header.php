@@ -26,6 +26,7 @@
         "/>
         <input type="hidden" id="imgPath" value="<?= IMG_PATH ?>" />
         <input type="hidden" id="roothPath" value="<?= ROOT_PATH ?>" />
+        <input type="hidden" id="displayRoothPath" value="<?= DISPLAY_ROOT_PATH ?>" />
         <header>
             <div class="main-menu">
                 <div class="container">

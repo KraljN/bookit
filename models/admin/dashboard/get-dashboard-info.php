@@ -31,7 +31,7 @@ if(isset($_GET["action"]) && $_GET["action"] == "getInfo"){
     $pageViews = end($views);
     $pageName = key($views);
     $pageUrl = "index?page=" . $pageName; 
-    $pageName = "www.bookit.com/index.php?page=" . $pageName;
+    $pageName = DISPLAY_ROOT_PATH . $pageName;
 
     $queryTotalUsers = "SELECT COUNT(*) AS 'number'
                         FROM users";

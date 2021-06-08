@@ -9,14 +9,14 @@
         </a></div>
       <div class="sidebar-wrapper ps-container ps-theme-default" data-ps-id="e6717b88-a981-a93e-667e-6457e4473953">
         <ul class="nav">
-          <li class="nav-item active ">
-            <a class="nav-link" href="./dashboard.html">
+          <li class="nav-item <?php if($_GET["page"] == "admin-dashboard")  echo("active") ?> ">
+            <a class="nav-link" href="index.php?page=admin-dashboard">
             <i class="fas fa-chart-bar"></i>
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./user.html">
+          <li class="nav-item <?php if($_GET["page"]  == "admin-reports")  echo("active") ?> ">
+            <a class="nav-link" href="index.php?page=admin-reports">
               <i class="fas fa-file-alt"></i>
               <p>Reports</p>
             </a>

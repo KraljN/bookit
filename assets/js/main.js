@@ -41,6 +41,9 @@ $(document).ready(function () {
         getDashboardInfo();
         getPagesStatistic();
     }
+    if(window.location.href.includes("admin-reports")){
+        displayReports();
+    }
     $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
     $(".addCart").on("click", increaseCartQuantity);
 
@@ -651,6 +654,7 @@ function  displayPagesStatistic(data){
     const perPage = 5;
     let i = 0;
     let pageNumber = $("#pageNumber").val();
+    let displayRootPath = $("#displayRoothPath").val();
     let output = `<div class="table-responsive">
                     <table class="table">
                     <thead class=" text-primary">
@@ -675,7 +679,7 @@ function  displayPagesStatistic(data){
                                     ${index}
                                     </td>
                                     <td>
-                                        <a href="index.php?page=${property}">www.bookit.com/index.php?page=${property}</a>
+                                        <a href="index.php?page=${property}">${displayRootPath + property}</a>
                                     </td>
                                     <td>
                                     ${data[property]["views"]}
@@ -705,4 +709,115 @@ function showPagination(total, page, outputDivId, itemPerPage){
     output += pagination;
 
     $("#" + outputDivId).html(output);
+}
+function displayReports(){
+    let action = "getReport";
+    let accessPageNumber = $("#accessPageNumber").val();
+    let errorsPageNumber = $("#errorsPageNumber").val();
+    $.ajax({
+        type: "GET",
+        url: "models/admin/reports/get-all-reports.php",
+        data: {
+            action, 
+            accessPageNumber,
+            errorsPageNumber
+        },
+        dataType: "json",
+        success: function (response) {
+            displayAccessLog(response.access);
+            showAdvancedPagination(response.accessNumber, "accessPageNumber" , "access-log", "admin-reports");
+            // displayErrorsLog(response.errors);
+        }
+    });
+}
+function displayAccessLog(data){
+    const perPage = 10;
+    let i = 0;
+    let pageNumber = $("#accessPageNumber").val();
+    let displayRootPath = $("#displayRoothPath").val();
+    let output = `<div class="table-responsive">
+                    <table class="table">
+                    <thead class=" text-primary">
+                        <tr><th>
+                        #
+                        </th>
+                        <th>
+                            URL
+                        </th>
+                        <th>
+                            IP Address
+                        </th>
+                        <th>
+                            Time
+                        </th>
+                    </tr></thead>
+                    <tbody>`;
+
+    data.forEach(el=>{
+        let index = (parseInt(pageNumber) - 1) * perPage + i + 1;
+        output += `<tr>
+                                    <td>
+                                    ${index}
+                                    </td>
+                                    <td>
+                                        <a href="index.php?page=${el.page}">${displayRootPath + el.page}</a>
+                                    </td>
+                                    <td>
+                                    ${el.ip}
+                                    </td>
+                                    <td>
+                                    ${el.time}
+                                    </td>
+                                </tr>`;
+                                i++;
+    });
+    output += `         </tbody>
+                    </table>
+                </div`;
+    $("#access-log").html(output);
+}
+function showAdvancedPagination(total, currentPageNumberHolderId , outputDivId, page){
+    if(total > 0 ){
+        if(page == "admin-reports"){
+            var otherPageNumberHolderId = currentPageNumberHolderId == "accessPageNumber" ? "errorsPageNumber" : "accessPageNumber";
+            var otherPageNumber = $("#" + otherPageNumberHolderId).val();
+        }
+        let currentPageNumber = $("#" + currentPageNumberHolderId).val();
+        const perPage = 10;
+        let ispis =`<ul class="pagination d-flex justify-content-center mt-3">`;
+        let numberOfPages = Math.ceil(total / perPage);
+        // console.log("broj stranica je: " + numberOfPages);
+        let start = currentPageNumber - 1;
+        let end = parseInt(currentPageNumber) + 1;
+
+        if( start <= 0 ) {
+            start = 1;
+            end = start + 2;
+        }
+
+        if( end > numberOfPages ){
+            end = numberOfPages;
+            start = end - 2;
+            if( start <= 0 ) start = 1;
+        }
+
+        if( currentPageNumber > 3 ) ispis+= `<li class="page-item"> <a href="index.php?page=${page}&${currentPageNumberHolderId}=1&${otherPageNumberHolderId}=${otherPageNumber}" class="page-link" data-page="1">Start</a> </li>`;
+        if(currentPageNumber > 1) ispis += `<li class="page-item"> <a class="page-link" href="index.php?page=${page}&${currentPageNumberHolderId}=${parseInt(currentPageNumber) - 1}&${otherPageNumberHolderId}=${otherPageNumber}">&lt;</a> </li>`;
+
+        for(let i = start; i<=end; i++){
+            ispis += `<li class="page-item `;
+            if( currentPageNumber == i) ispis+= `active`;
+            ispis+=`"><a class="page-link" href="index.php?page=${page}&${currentPageNumberHolderId}=${i}&${otherPageNumberHolderId}=${otherPageNumber}">${i}</a></li>`;
+        }
+        if(currentPageNumber < numberOfPages) ispis += `<li class="page-item"> <a href="index.php?page=${page}&${currentPageNumberHolderId}=${parseInt(currentPageNumber) + 1}&${otherPageNumberHolderId}=${otherPageNumber}" class="page-link">&gt;</a> </li>`
+        if( currentPageNumber < numberOfPages - 2 ) ispis+= `<li class="page-item"> <a href="index.php?page=${page}&${currentPageNumberHolderId}=${numberOfPages}&${otherPageNumberHolderId}=${otherPageNumber}" class="page-link" data-page="${numberOfPages}">Kraj</a> </li>`;
+        ispis += `</ul>`
+        let output = $("#" + outputDivId).html();
+        output += ispis;
+
+        $("#" + outputDivId).html(output);
+    }
+    else{
+        $("#" + outputDivId).html("");
+    }
 }
