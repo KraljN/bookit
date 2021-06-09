@@ -64,50 +64,50 @@ if(isset($_POST["register"])){
     }
     if(count($greske) == 0){
         $card = str_replace('-', '', $creditCard);
-        $countryId = getCountryId($country);// $db, 
-        $cityId = getCityId($city);// $db, 
+        $countryId = getCountryId($country);
+        $cityId = getCityId($city);
         $date = date("Y-m-d H:i:s");
         $password = md5($password);
         if((!$countryId && !$cityId) || (!$countryId && $cityId)){
-            insertCountry($country);// $db, 
-            $insertedCountryId = getCountryId($country);// $db, 
-            insertCity( $city, $insertedCountryId);// $db,
-            $insertedCityId = getCityId($city);// $db, 
-            insertPerson($name, $lastName);// $db, 
-            $lastPersonId = getLastInsertedId();// $db
-            if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){// $db, 
-                $lastUserId = getLastInsertedId();//$db
-                insertPayment($card, $cvv, $lastUserId);// $db, 
+            insertCountry($country);
+            $insertedCountryId = getCountryId($country);
+            insertCity( $city, $insertedCountryId);
+            $insertedCityId = getCityId($city);
+            insertPerson($name, $lastName);
+            $lastPersonId = getLastInsertedId();
+            if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){
+                $lastUserId = getLastInsertedId();
+                insertPayment($card, $cvv, $lastUserId);
             }
             else{
-                deleteFromDb($lastPersonId, "persons", "person");// $db, 
+                deleteFromDb($lastPersonId, "persons", "person");
             }
 
         }
         if($countryId && !$cityId){
-            $insertedCountryId = getCountryId($country);// $db, 
-            insertCity($city, $insertedCountryId);// $db, 
-            $insertedCityId = getCityId($city);// $db, 
-            insertPerson($name, $lastName);// $db, 
-            $lastPersonId = getLastInsertedId();// $db
-            if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){// $db, 
-                $lastUserId = getLastInsertedId();// $db
-                insertPayment($card, $cvv, $lastUserId);// $db, 
+            $insertedCountryId = getCountryId($country); 
+            insertCity($city, $insertedCountryId);
+            $insertedCityId = getCityId($city);
+            insertPerson($name, $lastName);
+            $lastPersonId = getLastInsertedId();
+            if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){
+                $lastUserId = getLastInsertedId();
+                insertPayment($card, $cvv, $lastUserId);
             }
             else{
-                deleteFromDb( $lastPersonId, "persons", "person");// $db,
+                deleteFromDb( $lastPersonId, "persons", "person");
             }
         }
         if($countryId && $cityId){
-            $insertedCityId = getCityId($city);// $db, 
-            insertPerson($name, $lastName);// $db, 
-            $lastPersonId = getLastInsertedId();// $db
+            $insertedCityId = getCityId($city);
+            insertPerson($name, $lastName);
+            $lastPersonId = getLastInsertedId();
             if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged)){// $db,
-                $lastUserId = getLastInsertedId();// $db
-                insertPayment($card, $cvv, $lastUserId);// $db, 
+                $lastUserId = getLastInsertedId();
+                insertPayment($card, $cvv, $lastUserId);
             }
             else{
-                deleteFromDb($lastPersonId, "persons", "person");//$db, 
+                deleteFromDb($lastPersonId, "persons", "person");
             }
         }
     }

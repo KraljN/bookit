@@ -21,7 +21,7 @@
 
 
     $publishersQuery = "SELECT p.publisher_id AS id, p.publisher_name AS name
-                        FROM publishers p INNER JOIN books b ON P.publisher_id = B.publisher_id
+                        FROM publishers p INNER JOIN books b ON p.publisher_id = b.publisher_id
                         GROUP BY p.publisher_id";
     $publishers = doSelect($publishersQuery);
 

@@ -3,9 +3,10 @@ session_start();
 $capchaText = $_SESSION["capchaText"];
 
 header("Content-type: image/png");
+require_once "../../config/config.php";
 
 $slika = imagecreatefrompng("../../assets/img/captchabg.png");
-$font = $_SERVER["DOCUMENT_ROOT"] . "/bookIt/assets/fonts/grandstander.ttf";
+$font = ROOT_PATH . "/assets/fonts/grandstander.ttf";
 
 $textBoja = imagecolorallocate($slika, 155, 163, 158);
 

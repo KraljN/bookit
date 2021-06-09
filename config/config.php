@@ -2,7 +2,7 @@
     //========PATHS========
     define("ROOT_PATH", $_SERVER["DOCUMENT_ROOT"] . "/bookIt");
     define("ENV_PATH", ROOT_PATH . "/config/.env");
-    define("IMG_PATH", "assets/img/");// =========== Kada se dize na hosting dodati ROOT_PATH ispred "/assets/img/" ===============
+    define("IMG_PATH", "assets/img/"); //============ dodato samo / ispred assets
     define("DISPLAY_ROOT_PATH", "www.bookit.com/index?page=");
 
     //========LOGS========

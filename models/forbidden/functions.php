@@ -13,7 +13,7 @@ function vratiJSON($array, $statusCode){
     header("Content-Type: application/json");
     echo json_encode($array);
 }
-function getCountryId($countryName){// $db, 
+function getCountryId($countryName){
     global $db;
     $prepare = $db->prepare("SELECT country_id FROM countries WHERE country_name = :drzava");
     $prepare->bindParam(":drzava", $countryName);
@@ -26,7 +26,7 @@ function getCountryId($countryName){// $db,
         return false;
     }
 }
-function getCityId($cityName){// $db, 
+function getCityId($cityName){
     global $db;
     $prepare = $db->prepare("SELECT city_id FROM cities WHERE city_name = :city");
     $prepare->bindParam(":city", $cityName);
@@ -39,7 +39,7 @@ function getCityId($cityName){// $db,
         return false;
     }
 }
-function insertCountry($countryName){// $db, 
+function insertCountry($countryName){
     global $db;
     $prepare = $db->prepare("INSERT INTO countries VALUES (NULL, :drzava)");
     $prepare->bindParam(":drzava", $countryName);
@@ -52,7 +52,7 @@ function insertCountry($countryName){// $db,
         vratiJSON(["message"=>$message], 500);
     }
 }
-function insertCity($cityName, $countryId){// $db, 
+function insertCity($cityName, $countryId){
     global $db;
     $prepare = $db->prepare("INSERT INTO cities VALUES (NULL, :city, :countryId)");
     $prepare->bindParam(":city", $cityName);
@@ -67,7 +67,7 @@ function insertCity($cityName, $countryId){// $db,
 
     }
 }
-function insertPerson($name, $lastName){// $db, 
+function insertPerson($name, $lastName){
     global $db;
     $prepare  = $db->prepare("INSERT INTO persons VALUES (NULL, :firstName, :lastName)");
     $prepare->bindParam(":firstName", $name);
@@ -113,7 +113,7 @@ function insertUser( $username, $password, $lastPersonId, $address, $insertedCit
         return false;
     }
 }
-function insertPayment($card, $cvv, $lastUserId){// $db, 
+function insertPayment($card, $cvv, $lastUserId){
     global $db;
     $prepare = $db->prepare("INSERT INTO payments VALUES (NULL, :card, :cvv)");
     $prepare->bindParam(":card", $card);
@@ -146,15 +146,17 @@ function insertPayment($card, $cvv, $lastUserId){// $db,
         return false;
     } 
 }
-function deleteFromDb($id, $tableName, $idPrefix){// $db, 
+function deleteFromDb($id, $tableName, $idPrefix){ 
     global $db;
     $prepare = $db->prepare("DELETE FROM " . $tableName . " WHERE " . $idPrefix . "_id = :id");
     $prepare->bindParam(":id", $id);
     try{
         $prepare->execute();
+        return true;
     }
     catch(PDOException $ex){
         logError($ex->getMessage(), "delete from db");
+        return false;
     }
 }
 function formatDate($datetime){

@@ -149,7 +149,7 @@ function proveraRegister(e){
     let regExpUsername = /[\d\w\.-_]{4,15}/;
     let regExpCreditCard = /^\d{4}(\-\d{4}){3}$/;
     let regExpCountry = /^[A-Z]\w{2,10}$/;
-    let regExpAddress = /^[A-Z][\w]{4,20}(\s[\w]{4,20}){0,3}(\s[0-9]{1,4})$/;
+    let regExpAddress = /^[A-Z][\w]{4,20}(\s[\w]{1,20}){0,3}(\s[0-9]{1,4})$/;
 
     let validnoIme, validnoNumber,  validnoPrezime, validnoMail, validnoUsername, validnoPass, validnoCredit, validnoCountry, validnoCity, validnoAddress, validnoCVV;
 
@@ -278,21 +278,6 @@ function proveriLogin(e){
         });
     }
 }
-// function updateActivity(){
-//     $.ajax({
-//         type: "POST",
-//         url: "models/onlineUsersControl/updateActivity.php",
-//         data: {
-//             action: "updateActivity"
-//         },
-//         dataType: "json",
-//         success: function (response) {
-//         },
-//         error: function(error){
-
-//         }
-//     });
-// }
 function dohvatiSubjects(){
     $.ajax({
         type: "GET",
@@ -396,11 +381,15 @@ function proveraContact(e){
                     window.location.href = "index.php?page=contact";
                 }
                 if(data.message == "success"){
+                    $(".errorInfo").hide();
+                    $(".successInfo").hide();
                     $(".successInfo").slideDown();
                 }
             },
             error: function(error){
                 if(error.responseJSON.message == "error"){
+                    $(".errorInfo").hide();
+                    $(".successInfo").hide();
                     $(".errorInfo").slideDown();
                 }
             }
@@ -915,6 +904,7 @@ function displayMenuItems(){
         dataType: "json",
         success: function (response) {
             showMenuItems(response);
+            $(".delete").on("click", function(){deleteItem(this, "deleteMenuItem", "/menu/delete-menu-item.php", displayMenuItems)});
         }
     });
 }
@@ -1053,5 +1043,20 @@ function setDefaultMenuItemValues(){
 
     localStorage.setItem("defaultMenuItemData", output)
 
+}
+function deleteItem(obj, actionString, targetPage, callback){
+    let id = obj.dataset.id;
+    $.ajax({
+        type: "POST",
+        url: "models/admin/content-manipulation" + targetPage,
+        data: {
+            id,
+            actionString
+        },
+        dataType: "json",
+        success: function (response) {
+            callback();
+        }
+    });
 }
 //21 min / 3:02

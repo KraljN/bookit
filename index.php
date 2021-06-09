@@ -27,19 +27,27 @@
                 include "views/products.php";
                 break;
             case "admin-dashboard":
-                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) header("Location: index.php");
+                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) echo("<script type='text/javascript'>
+                                                                                                            window.location.href = 'index.php';
+                                                                                                    </script><?php");
                 include "views/admin/dashboard.php";
                 break;
             case "admin-reports":
-                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) header("Location: index.php");
+                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) echo("<script type='text/javascript'>
+                                                                                                                window.location.href = 'index.php';
+                                                                                                        </script><?php");
                 include "views/admin/reports.php";
                 break;
             case "content-manipulation":
-                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) header("Location: index.php");
+                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) echo("<script type='text/javascript'>
+                                                                                                            window.location.href = 'index.php';
+                                                                                                    </script><?php");
                     include "views/admin/content-manipulation.php";
                     break;
             case "menu-item-form":
-                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) header("Location: index.php");
+                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) echo("<script type='text/javascript'>
+                                                                                                                window.location.href = 'index.php';
+                                                                                                        </script><?php");
                 include "views/admin/menu-item-form.php";
                 break;
         }
