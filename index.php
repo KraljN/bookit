@@ -1,5 +1,6 @@
 <?php 
     session_start();
+    require_once "config/config.php";
     include "views/fixed/head.php";
     include "views/fixed/header.php";
     if(!isset($_GET["page"])){
@@ -26,12 +27,21 @@
                 include "views/products.php";
                 break;
             case "admin-dashboard":
+                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) header("Location: index.php");
                 include "views/admin/dashboard.php";
                 break;
             case "admin-reports":
+                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) header("Location: index.php");
                 include "views/admin/reports.php";
                 break;
-
+            case "content-manipulation":
+                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) header("Location: index.php");
+                    include "views/admin/content-manipulation.php";
+                    break;
+            case "menu-item-form":
+                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) header("Location: index.php");
+                include "views/admin/menu-item-form.php";
+                break;
         }
     }
     include "views/fixed/footer.php";

@@ -11,19 +11,19 @@
                      FROM persons p INNER JOIN authors a ON p.person_id = a.person_id
                      INNER JOIN books b ON a.author_id = b.author_id
                      GROUP BY a.author_id";
-    $authors = $db -> query($authorsQuery) -> fetchAll();
+    $authors = doSelect($authorsQuery);
 
     $categoriesQuery = "SELECT g.genre_id AS id, g.genre_name AS name
                         FROM genres g INNER JOIN genres_books gb ON g.genre_id = gb.genre_id
                         INNER JOIN books b ON gb.book_id = b.book_id
                         GROUP BY g.genre_id";
-    $genres = $db -> query($categoriesQuery) -> fetchAll();
+    $genres = doSelect($categoriesQuery);
 
 
     $publishersQuery = "SELECT p.publisher_id AS id, p.publisher_name AS name
                         FROM publishers p INNER JOIN books b ON P.publisher_id = B.publisher_id
                         GROUP BY p.publisher_id";
-    $publishers = $db -> query($publishersQuery) -> fetchAll();
+    $publishers = doSelect($publishersQuery);
 
 ?>
 <input type="hidden" id="pageNumber" value="<?= isset($_GET["pageNumber"]) ? $_GET["pageNumber"] : 1 ?>"/>

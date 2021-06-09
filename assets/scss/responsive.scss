@@ -23,6 +23,9 @@
     .product-name{
         @include font-size(1rem);
     }
+    #menu-item-add-form{
+        margin-bottom: 30px!important;
+      }
 }
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {

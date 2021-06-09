@@ -1368,3 +1368,10 @@ input[type=number] {
 #showAllBooks:hover {
   background: #fff;
   color: #007892; }
+.adminAdd:hover{
+  background-color: rgba(255,255,255,0.4)!important;
+  transition: 0.3s background-color 0.05s!important;
+}
+#menu-item-add-form{
+  margin-bottom: 170px!important;
+}

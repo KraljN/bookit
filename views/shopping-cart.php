@@ -29,7 +29,7 @@
                     FROM book_images bi  
                     INNER JOIN books b ON bi.book_id = b.book_id 
                     WHERE b.book_id IN ($ids)";
-                    $results  = $db -> query($query)->fetchAll();
+                    $results  = doSelect($query);
                     
                         $total = 0;
                         foreach($results as $bookInCart):

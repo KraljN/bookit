@@ -11,6 +11,7 @@ $(document).ready(function () {
         $("#login").click(proveriLogin);
     }
     if(window.location.href.includes("products")){
+        if(localStorage.getItem("focusPoint") != null) $(document).scrollTop(localStorage.getItem("focusPoint"));
         setFilters();
         displayProducts();
         $(".filterBooks").on('change', function(){
@@ -40,13 +41,19 @@ $(document).ready(function () {
     if(window.location.href.includes("admin-dashboard")){
         getDashboardInfo();
         getPagesStatistic();
+
     }
     if(window.location.href.includes("admin-reports")){
         displayReports();
     }
     $(".shoppingCartAction").click(function(e){manipulateShoppingCart(this, e)});
     $(".addCart").on("click", increaseCartQuantity);
-
+    if(window.location.href.includes("content-manipulation")){
+        displayMenuItems();
+    }
+    if(window.location.href.includes("menu-item-form")){
+        $("#add-menu-submit").on("click", validateAddMenuItem)
+    }
 });
 function menu(){
     $.ajax({
@@ -190,10 +197,10 @@ function proveraRegister(e){
     }
 
 }
-function proveraTb(field, regExp, index){
+function proveraTb(field, regExp, index, makeBorderRed = true){
     if(!regExp.test(field.val())){
         $(".wrong:eq(" + index + ")").removeClass("d-none");
-        $(field).css("border", "1px solid red");
+        if(makeBorderRed)$(field).css("border", "1px solid red");
         return false
         
     }
@@ -204,7 +211,7 @@ function proveraTb(field, regExp, index){
         }
         else{
             $(".wrong:eq(" + index + ")").addClass("d-none");
-            $(field).css("border", "1px solid #ced4da");
+            if(makeBorderRed) $(field).css("border", "1px solid #ced4da");
             return true
         }
     }
@@ -250,7 +257,11 @@ function proveriLogin(e){
                     window.location.href = "index.php?page=login";
                 }
                 if(data.logged){
-                    window.location.href = "index.php?page=home";
+                    console.log(data.admin);
+                    if(data.admin)window.location.href = "index.php?page=admin-dashboard";
+                    else{
+                        window.location.href = "index.php?page=home";
+                    }
                 }
             },
             error: function(error, status, message){
@@ -398,7 +409,6 @@ function preuzmiWord(){
         data: "data",
         dataType: "dataType",
         success: function (response) {
-            console.log(response);
         }
     });
 }
@@ -424,12 +434,10 @@ function manipulateShoppingCart(obj, event){
 
         },
         error(error){
-            console.log(error.responseText);
         }
     });
 }
 function makeOrder(){
-    console.log("porudzbina poslata");
     var action="purchase";
     $.ajax({
         type: "POST",
@@ -617,7 +625,6 @@ function getDashboardInfo(){
         },
         dataType: "json",
         success: function (response) {
-            console.log(response);
             displayAdminInfo(response);
         }
     });
@@ -626,6 +633,9 @@ function displayAdminInfo(response){
     for(let index in response){
         if(index == "most-popular-page-url"){
             $("#most-popular-page-name").attr("href", response[index]);
+        }
+        else if(index =="most-popular-page-views-count"){
+            $("#" + index).html(response[index] + " Views");
         }
         else{
             $("#" + index).html(response[index]);
@@ -644,9 +654,9 @@ function getPagesStatistic(){
         },
         dataType: "json",
         success: function (response) {
-            console.log(response);
             displayPagesStatistic(response.information);
             showPagination(response.totalNumber, "admin-dashboard", "page-statistic", 5);
+            if(localStorage.getItem("focusPoint") != null) $(document).scrollTop(localStorage.getItem("focusPoint"));
         }
     });
 }
@@ -707,7 +717,8 @@ function showPagination(total, page, outputDivId, itemPerPage){
 
     let output = $("#" + outputDivId).html();
     output += pagination;
-
+    let focusPoint = $("#" + outputDivId).offset().top;
+    localStorage.setItem("focusPoint", focusPoint);
     $("#" + outputDivId).html(output);
 }
 function displayReports(){
@@ -726,54 +737,67 @@ function displayReports(){
         success: function (response) {
             displayAccessLog(response.access);
             showAdvancedPagination(response.accessNumber, "accessPageNumber" , "access-log", "admin-reports");
-            // displayErrorsLog(response.errors);
+            displayErrorsLog(response.errors);
+            showAdvancedPagination(response.errorsNumber, "errorsPageNumber" , "errors-log", "admin-reports");
+
+            if(localStorage.getItem("focusPointErrors") != null) $(document).scrollTop(localStorage.getItem("focusPointErrors"));
+            if(localStorage.getItem("focusPointAccess") != null) $(document).scrollTop(localStorage.getItem("focusPointAccess"));
+            setTopOffsetForAccessAndErrorsDiv();
+            $("#access-log a").on("click", function(){localStorage.removeItem("focusPointErrors")})
+            $("#errors-log a").on("click", function(){localStorage.removeItem("focusPointAccess")})
+
         }
     });
 }
 function displayAccessLog(data){
-    const perPage = 10;
-    let i = 0;
-    let pageNumber = $("#accessPageNumber").val();
-    let displayRootPath = $("#displayRoothPath").val();
-    let output = `<div class="table-responsive">
-                    <table class="table">
-                    <thead class=" text-primary">
-                        <tr><th>
-                        #
-                        </th>
-                        <th>
-                            URL
-                        </th>
-                        <th>
-                            IP Address
-                        </th>
-                        <th>
-                            Time
-                        </th>
-                    </tr></thead>
-                    <tbody>`;
+    if(data != undefined){
+        const perPage = 10;
+        let i = 0;
+        let pageNumber = $("#accessPageNumber").val();
+        let displayRootPath = $("#displayRoothPath").val();
+        var output = `<div class="table-responsive">
+                        <table class="table">
+                        <thead class=" text-primary">
+                            <tr><th>
+                            #
+                            </th>
+                            <th>
+                                URL
+                            </th>
+                            <th>
+                                IP Address
+                            </th>
+                            <th>
+                                Time
+                            </th>
+                        </tr></thead>
+                        <tbody>`;
 
-    data.forEach(el=>{
-        let index = (parseInt(pageNumber) - 1) * perPage + i + 1;
-        output += `<tr>
-                                    <td>
-                                    ${index}
-                                    </td>
-                                    <td>
-                                        <a href="index.php?page=${el.page}">${displayRootPath + el.page}</a>
-                                    </td>
-                                    <td>
-                                    ${el.ip}
-                                    </td>
-                                    <td>
-                                    ${el.time}
-                                    </td>
-                                </tr>`;
-                                i++;
-    });
-    output += `         </tbody>
-                    </table>
-                </div`;
+        data.forEach(el=>{
+            let index = (parseInt(pageNumber) - 1) * perPage + i + 1;
+            output += `<tr>
+                                        <td>
+                                        ${index}
+                                        </td>
+                                        <td>
+                                            <a href="index.php?page=${el.page}">${displayRootPath + el.page}</a>
+                                        </td>
+                                        <td>
+                                        ${el.ip}
+                                        </td>
+                                        <td>
+                                        ${el.time} UTC
+                                        </td>
+                                    </tr>`;
+                                    i++;
+        });
+        output += `         </tbody>
+                        </table>
+                    </div`;
+    }
+    else{
+        var output = "<h4 class='font-weight-bold my-4 text-center'>There is no logs at your provided page, please choose from pagination below</h4>";
+    }
     $("#access-log").html(output);
 }
 function showAdvancedPagination(total, currentPageNumberHolderId , outputDivId, page){
@@ -810,10 +834,11 @@ function showAdvancedPagination(total, currentPageNumberHolderId , outputDivId, 
             ispis+=`"><a class="page-link" href="index.php?page=${page}&${currentPageNumberHolderId}=${i}&${otherPageNumberHolderId}=${otherPageNumber}">${i}</a></li>`;
         }
         if(currentPageNumber < numberOfPages) ispis += `<li class="page-item"> <a href="index.php?page=${page}&${currentPageNumberHolderId}=${parseInt(currentPageNumber) + 1}&${otherPageNumberHolderId}=${otherPageNumber}" class="page-link">&gt;</a> </li>`
-        if( currentPageNumber < numberOfPages - 2 ) ispis+= `<li class="page-item"> <a href="index.php?page=${page}&${currentPageNumberHolderId}=${numberOfPages}&${otherPageNumberHolderId}=${otherPageNumber}" class="page-link" data-page="${numberOfPages}">Kraj</a> </li>`;
+        if( currentPageNumber < numberOfPages - 2 ) ispis+= `<li class="page-item"> <a href="index.php?page=${page}&${currentPageNumberHolderId}=${numberOfPages}&${otherPageNumberHolderId}=${otherPageNumber}" class="page-link" data-page="${numberOfPages}">End</a> </li>`;
         ispis += `</ul>`
         let output = $("#" + outputDivId).html();
         output += ispis;
+
 
         $("#" + outputDivId).html(output);
     }
@@ -821,3 +846,179 @@ function showAdvancedPagination(total, currentPageNumberHolderId , outputDivId, 
         $("#" + outputDivId).html("");
     }
 }
+function displayErrorsLog(data){
+    if(data != undefined){
+        const perPage = 10;
+        let i = 0;
+        let pageNumber = $("#errorsPageNumber").val();
+        let displayRootPath = $("#displayRoothPath").val();
+        var output = `<div class="table-responsive">
+                        <table class="table">
+                        <thead class=" text-primary">
+                            <tr><th>
+                            #
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                            <th>
+                                Message
+                            </th>
+                            <th>
+                                IP
+                            </th>
+                            <th>
+                                Time
+                            </th>
+                        </tr></thead>
+                        <tbody>`;
+        data.forEach(el=>{
+            let index = (parseInt(pageNumber) - 1) * perPage + i + 1;
+            output += `<tr>
+                                        <td>
+                                        ${index}
+                                        </td>
+                                        <td>
+                                            ${el.action}
+                                        </td>
+                                        <td>
+                                        ${el.message}
+                                        </td>
+                                        <td>
+                                        ${el.ip}
+                                        </td>
+                                        <td>
+                                        ${el.time} UTC
+                                        </td>
+                                    </tr>`;
+                                    i++;
+        });
+        output += `       </tbody>
+                        </table>
+                    </div`;
+    }
+    else{
+        var output = "<h4 class='font-weight-bold my-4 text-center'>There is no logs at your provided page, please choose from pagination below</h4>";
+    }
+    $("#errors-log").html(output);
+}
+function displayMenuItems(){
+    let action = "getMenuItems"
+    $.ajax({
+        type: "GET",
+        url: "models/admin/content-manipulation/menu/get-menu-items.php",
+        data: {action},
+        dataType: "json",
+        success: function (response) {
+            showMenuItems(response);
+        }
+    });
+}
+function showMenuItems(data){
+    let output = "";
+    if(data != undefined){
+        output += ` <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #   
+                                    </th>
+                                    <th>
+                                        Text
+                                    </th>
+                                    <th>
+                                        Link
+                                    </th>
+                                    <th>
+                                        Priority
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+        data.forEach((el, index)=>{
+            output += ` <tr>
+                            <td>
+                                ${++index}
+                            </td>
+                            <td>${el.text}</td>
+                            <td>${el.href}</td>
+                            <td>${el.priority}</td>
+                            <td class="td-actions text-right">
+                            <button data-id="${el.id}" class="btn btn-primary btn-link btn-sm edit">
+                                <i class="material-icons">Edit</i>
+                            </button>
+                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm delete">
+                                <i class="material-icons">Delete</i>
+                            </button>
+                            </td>
+                        </tr>`;
+        });
+        output += `     </tbody>
+                    </table>
+                </div>`;
+    }
+    else{
+        output += "<h4 class='font-weight-bold my-4 text-center'>There is no menu items at the moment</h4>";
+    }
+    $("#admin-menu").html(output);
+}
+function setTopOffsetForAccessAndErrorsDiv(){
+    let focusPointAccess = $("#access-log").offset().top;
+    localStorage.setItem("focusPointAccess", focusPointAccess);
+    let focusPointErrors = $("#errors-log").offset().top;
+    localStorage.setItem("focusPointErrors", focusPointErrors);
+}
+function validateAddMenuItem(e){
+    e.preventDefault();
+    let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/;
+    let regExpUrl = /(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9@:_\+~#=]{2,20}\.[a-z0-9]{2,6}[a-zA-Z0-9@:%_\+.~#?&\/=\.]*/;
+
+    let nameIspravno = proveraTb($("#name"), regExpName, 0, false);
+    let urlIspravno = proveraTb($("#url"), regExpUrl, 2, false);
+    let priorityIspravno = true;
+    if($("#priority").val() < 1){
+        $("#priority").next().removeClass("d-none");
+        priorityIspravno = false;
+    }
+    else{
+        if(!($("#priority").next().hasClass("d-none"))){
+            $("#priority").next().addClass("d-none");
+            priorityIspravno = true;
+        }
+    }
+    if(nameIspravno && urlIspravno && priorityIspravno){
+        console.log("sve je ispravno");
+        let action = "insertMenu"
+        let name = $("#name").val();
+        let priority = $("#priority").val();
+        let url = $("#url").val();
+        $.ajax({
+            type: "POST",
+            url: "models/admin/content-manipulation/menu/insert-menu-item.php",
+            data: {
+                action,
+                name,
+                priority,
+                url
+            },
+            dataType: "json",
+            success: function (response) {
+                $(".errorInfo").hide();
+                $(".successInfo").slideDown();
+            },
+            error: function (error){
+                if(error.status == 422){
+                    location.reload();
+                }
+                if(error.status == 409){
+                    console.log("desio se konflikt");
+                    $(".successInfo").hide();
+                    $(".errorInfo").slideDown();
+                }
+            }
+        });
+    }
+}
+//21 min / 3:02

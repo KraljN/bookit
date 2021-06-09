@@ -29,36 +29,13 @@ if(isset($_POST["action"]) && $_POST["action"]=="uloguj"){
         $pripremaLog->execute();
         if($pripremaLog -> rowCount() == 1 && $_SESSION["capchaText"] == $capcha){
             $_SESSION["korisnik"] = $pripremaLog->fetch();
-
-            // $daLiJeVecUActivities = $db -> prepare("SELECT * 
-            //                                         FROM `user_activities` 
-            //                                         WHERE user_id = :userId");
-            // $daLiJeVecUActivities -> bindParam(":userId", $_SESSION["korisnik"] -> user_id);
-            // $daLiJeVecUActivities -> execute();
-            // if($daLiJeVecUActivities -> rowCount() == 1){
-                
-            //     $updateActivities = $db -> prepare("UPDATE user_activities
-            //                                         SET last_activity = :activity
-            //                                         WHERE user_id = :userId");
-            //     $updateActivities -> bindParam(":userId", $_SESSION["korisnik"] -> user_id);
-            //     $currentTime = date("Y-m-d H-i-s", time());
-            //     $updateActivities -> bindParam(":activity", $currentTime);
-            //     $updateActivities -> execute(); 
-            // }
-            // else{
-            //     $insertActivities = $db -> prepare("INSERT INTO  user_activities
-            //                                         VALUES(NULL, :userId, :activity)");
-            //     $insertActivities -> bindParam(":userId", $_SESSION["korisnik"] -> user_id);
-            //     $currentTime = date("Y-m-d H-i-s", time());
-            //     $insertActivities -> bindParam(":activity", $currentTime);
-            //     $insertActivities -> execute();
-            // }
             $open = fopen(ACCESS_LOG, "a");
             if($open){
                 fwrite($open, "logged-in". SEPARATOR ."{$_SERVER['REMOTE_ADDR']}". SEPARATOR . gmdate("Y-m-d H:i:s") ."\n");
                 fclose($open);
             }
-            $output = ["logged" => true];
+            $admin = $_SESSION["korisnik"]->role_id == ADMIN ? true : false;
+            $output = ["logged" => true, "admin"=>$admin];
             vratiJSON($output, 200);
         }
         else{

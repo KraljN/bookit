@@ -16,17 +16,6 @@
                 <span class="navbar-toggler-icon icon-bar"></span>
                 <span class="navbar-toggler-icon icon-bar"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end">
-                <!-- <form class="navbar-form">
-                <span class="bmd-form-group"><div class="input-group no-border">
-                    <input type="text" value="" class="form-control" placeholder="Search...">
-                    <button type="submit" class="btn btn-white btn-round btn-just-icon">
-                    <i class="material-icons">search</i>
-                    <div class="ripple-container"></div>
-                    </button>
-                </div></span>
-                </form> -->
-            </div>
             </div>
         </nav>
         <div class="content">
@@ -47,7 +36,7 @@
                             <h4 class="card-title ">Errors Logs</h4>
                             <p class="card-category"> Take a look at errors encoutered on your site</p>
                             </div>
-                            <div class="card-body" id="page-statistic">
+                            <div class="card-body" id="errors-log">
                             </div>
                         </div>
                     </div>

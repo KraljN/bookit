@@ -21,8 +21,8 @@
               <p>Reports</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="./tables.html">
+          <li class="nav-item <?php if($_GET["page"]  == "content-manipulation")  echo("active") ?>">
+            <a class="nav-link" href="index.php?page=content-manipulation">
               <i class="fas fa-edit"></i>
               <p>Content Manipulation</p>
             </a>

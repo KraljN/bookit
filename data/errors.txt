@@ -59,3 +59,8 @@ user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or 
 user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`book_it`.`order_items`, CONSTRAINT `order_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE)	127.0.0.1	2021-05-25 22:36:05
 user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`book_it`.`order_items`, CONSTRAINT `order_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE)	127.0.0.1	2021-05-25 22:36:48
 user-insert	SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`book_it`.`order_items`, CONSTRAINT `order_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE)	127.0.0.1	2021-05-25 22:37:43
+insert-menu-item	SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens	127.0.0.1	2021-06-09 13:22:24
+insert-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-09 14:09:52
+insert-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-09 14:10:57
+insert-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-09 14:19:03
+insert-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-09 14:21:13
