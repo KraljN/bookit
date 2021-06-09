@@ -9,7 +9,7 @@
           <div class="navbar-wrapper">
             <a class="navbar-brand">Content Manipulation</a>
           </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler mr-4" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
             <span class="navbar-toggler-icon icon-bar"></span>
             <span class="navbar-toggler-icon icon-bar"></span>
@@ -53,47 +53,7 @@
                 </div>
                 <div class="card-body">
                   <div class="tab-content">
-                    <div class="tab-pane active" id="admin-menu">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        #   
-                                    </th>
-                                    <th>
-                                        Text
-                                    </th>
-                                    <th>
-                                        Link
-                                    </th>
-                                    <th>
-                                        Priority
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        1
-                                    </td>
-                                    <td>Home</td>
-                                    <td>index.php?page=home</td>
-                                    <td>10</td>
-                                    <td class="td-actions text-right">
-                                    <button data-id="1" class="btn btn-primary btn-link btn-sm edit">
-                                        <i class="material-icons">Edit</i>
-                                    </button>
-                                    <button data-id="1" class="btn btn-danger btn-link btn-sm delete">
-                                        <i class="material-icons">Delete</i>
-                                    </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                      </table>
-                    </div>
-                    </div>
+                    <div class="tab-pane active" id="admin-menu"></div>
                   </div>
                 </div>
               </div>

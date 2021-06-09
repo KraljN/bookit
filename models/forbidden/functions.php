@@ -164,3 +164,17 @@ function formatDate($datetime){
     @$output = date("d-m-Y H:i:s", mktime($hours, $minutes, $seconds, $month, $day, $year));
     return $output;
 }
+function validateMenuItem($data){
+    $greske = array();
+    $regExpName = "/^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}+(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/";
+    $regExpPriority = "/^[0-9]{1,10}$/";
+    $regExpUrl = "/(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9@:_\+~#=]{2,20}\.[a-z0-9]{2,6}[a-zA-Z0-9@:%_\+.~#?&\/=\.]*/";
+    if(!isset($_POST["name"])) array_push($greske, "Name for Menu Tab is required");
+    if(!isset($_POST["priority"])) array_push($greske, "Priority for Menu Tab is required");
+    if(!isset($_POST["url"])) array_push($greske, "Url for Menu Tab is required");
+    if( @!preg_match($regExpName , $data["name"])) array_push($greske, "Name must be well formated (Home Page)");
+    if( @!preg_match($regExpPriority , $data["priority"])) array_push($greske, "Priority must be number above zero");
+    if( @!preg_match($regExpUrl , $data["url"])) array_push($greske, "Provide valid url address ([www.]pera.com)");
+
+    return $greske;
+}

@@ -1,9 +1,6 @@
 $(document).ready(function () {
     menu();
     insertAccess();
-    // if($("#isLogged").val().trim()=="true"){
-    //     setInterval(updateActivity, 10000);// ============PODESITI VREME ZA KOJE SE VRSI UPDATE U BAZU AKTIVNOSTI==========
-    // }
     newlyAdded();
     $("#card").keyup(prilagodiFormat);
     $("#register").click(proveraRegister);
@@ -52,7 +49,15 @@ $(document).ready(function () {
         displayMenuItems();
     }
     if(window.location.href.includes("menu-item-form")){
-        $("#add-menu-submit").on("click", validateAddMenuItem)
+        setDefaultMenuItemValues();
+        let previousErrorText = $(".errorInfo").text();
+        $("#add-menu-submit").on("click", function(event){
+            validateMenuItem(event, "insertMenu", "insert-menu-item.php");
+        });
+        $("#edit-menu-submit").on("click", function(event){
+            validateMenuItem(event, "editMenu", "edit-menu-item.php", previousErrorText);
+        });
+
     }
 });
 function menu(){
@@ -851,7 +856,6 @@ function displayErrorsLog(data){
         const perPage = 10;
         let i = 0;
         let pageNumber = $("#errorsPageNumber").val();
-        let displayRootPath = $("#displayRoothPath").val();
         var output = `<div class="table-responsive">
                         <table class="table">
                         <thead class=" text-primary">
@@ -946,9 +950,9 @@ function showMenuItems(data){
                             <td>${el.href}</td>
                             <td>${el.priority}</td>
                             <td class="td-actions text-right">
-                            <button data-id="${el.id}" class="btn btn-primary btn-link btn-sm edit">
+                            <a href="index.php?page=menu-item-form&id=${el.id}" class="btn btn-primary btn-link btn-sm edit">
                                 <i class="material-icons">Edit</i>
-                            </button>
+                            </a>
                             <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm delete">
                                 <i class="material-icons">Delete</i>
                             </button>
@@ -970,8 +974,8 @@ function setTopOffsetForAccessAndErrorsDiv(){
     let focusPointErrors = $("#errors-log").offset().top;
     localStorage.setItem("focusPointErrors", focusPointErrors);
 }
-function validateAddMenuItem(e){
-    e.preventDefault();
+function validateMenuItem(event, actionString, targetPage, previousErrorText = $(".errorInfo").text()){
+    event.preventDefault();
     let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/;
     let regExpUrl = /(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9@:_\+~#=]{2,20}\.[a-z0-9]{2,6}[a-zA-Z0-9@:%_\+.~#?&\/=\.]*/;
 
@@ -988,37 +992,66 @@ function validateAddMenuItem(e){
             priorityIspravno = true;
         }
     }
-    if(nameIspravno && urlIspravno && priorityIspravno){
-        console.log("sve je ispravno");
-        let action = "insertMenu"
+    let distinctData = true;
+    let defaultValues = null;
+    if(localStorage.getItem("defaultMenuItemData") != null){
+        defaultValues = localStorage.getItem("defaultMenuItemData").split(",");
+    }
+    if(defaultValues != null){
+        if($("#name").val() == defaultValues[0] && $("#priority").val() == defaultValues[1] && $("#url").val() == defaultValues[2]){
+            distinctData = false;
+            $(".successInfo").hide();
+            $(".errorInfo").hide();
+            $(".errorInfo").text("You must enter at least 1 distinct data");
+            $(".errorInfo").slideDown();
+        }
+        else{
+            $(".errorInfo").hide();
+            $(".errorInfo").text(previousErrorText);
+        }
+    }
+    if(nameIspravno && urlIspravno && priorityIspravno && distinctData){
         let name = $("#name").val();
         let priority = $("#priority").val();
         let url = $("#url").val();
+        let id = $("#id").val();
         $.ajax({
             type: "POST",
-            url: "models/admin/content-manipulation/menu/insert-menu-item.php",
+            url: "models/admin/content-manipulation/menu/" + targetPage,
             data: {
-                action,
+                actionString,
                 name,
                 priority,
-                url
+                url,
+                id
             },
             dataType: "json",
             success: function (response) {
+                $(".successInfo").hide();
                 $(".errorInfo").hide();
                 $(".successInfo").slideDown();
+                setDefaultMenuItemValues();
             },
             error: function (error){
                 if(error.status == 422){
                     location.reload();
                 }
                 if(error.status == 409){
-                    console.log("desio se konflikt");
+                    $(".errorInfo").hide();
                     $(".successInfo").hide();
                     $(".errorInfo").slideDown();
                 }
             }
         });
     }
+}
+function setDefaultMenuItemValues(){
+    let output = [];
+    output.push($("#name").val());
+    output.push($("#priority").val());
+    output.push($("#url").val());
+
+    localStorage.setItem("defaultMenuItemData", output)
+
 }
 //21 min / 3:02

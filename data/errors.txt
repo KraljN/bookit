@@ -64,3 +64,12 @@ insert-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate
 insert-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-09 14:10:57
 insert-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-09 14:19:03
 insert-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-09 14:21:13
+insert-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-09 16:42:11
+edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 17:10:58
+edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 17:12:04
+edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 17:51:34
+edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 17:52:03
+edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 17:54:50
+edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 17:55:26
+edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 17:56:25
+edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 18:07:10
