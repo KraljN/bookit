@@ -47,6 +47,10 @@ $(document).ready(function () {
     $(".addCart").on("click", increaseCartQuantity);
     if(window.location.href.includes("content-manipulation")){
         displayMenuItems();
+        displayGenres();
+        $("#add-genre").on("click", function(event){
+            validateGenre(event, "insertGenre", "add-genres.php");
+        });
     }
     if(window.location.href.includes("menu-item-form")){
         setDefaultMenuItemValues();
@@ -904,7 +908,7 @@ function displayMenuItems(){
         dataType: "json",
         success: function (response) {
             showMenuItems(response);
-            $(".delete").on("click", function(){deleteItem(this, "deleteMenuItem", "/menu/delete-menu-item.php", displayMenuItems)});
+            $(".delete").on("click", function(){deleteItem(this, "deleteMenuItem", "menu/delete-menu-item.php", displayMenuItems)});
         }
     });
 }
@@ -1048,7 +1052,7 @@ function deleteItem(obj, actionString, targetPage, callback){
     let id = obj.dataset.id;
     $.ajax({
         type: "POST",
-        url: "models/admin/content-manipulation" + targetPage,
+        url: "models/admin/content-manipulation/" + targetPage,
         data: {
             id,
             actionString
@@ -1058,5 +1062,104 @@ function deleteItem(obj, actionString, targetPage, callback){
             callback();
         }
     });
+}
+function displayGenres(){
+    let actionString = "displayGenres"
+    $.ajax({
+        type: "GET",
+        url: "models/admin/content-manipulation/genres/get-genres.php",
+        data: {
+            actionString
+        },
+        dataType: "json",
+        success: function (response) {
+            showGenres(response);
+        }
+    });
+}
+function showGenres(data){
+    let output = "";
+    if(data != undefined){
+        output += ` <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #   
+                                    </th>
+                                    <th>
+                                      Name
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+        data.forEach((el, index)=>{
+            output += ` <tr>
+                            <td>
+                                ${++index}
+                            </td>
+                            <td colspan="3"><div class="px-0 px-2 col-sm-6 col-lg-4 col-xl-3"><input class="form-control genres"  type="text" value="${el.name}"/></div></td>
+                            <td class="td-actions text-right">
+                            <button data-id="${el.id}" class="btn btn-primary btn-link btn-sm editGenre">
+                                <i class="material-icons">Edit</i>
+                            </button>
+                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm deleteGenre">
+                                <i class="material-icons">Delete</i>
+                            </button>
+                            </td>
+                        </tr>`;
+        });
+        output += `     </tbody>
+                    </table>
+                </div>`;
+    }
+    else{
+        output += "<h4 class='font-weight-bold my-4 text-center'>There is no menu items at the moment</h4>";
+    }
+    $("#admin-genres").html(output);
+}
+function validateGenre(event, actionString, targetPage){
+    event.preventDefault();
+    $("#errorGenre").hide();
+    let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/;
+
+    let nameIspravno = proveraTb($("#genre-name"), regExpName, 0, false);
+    console.log(nameIspravno);
+    
+    if(nameIspravno){
+        let name = $("#genre-name").val();
+        $.ajax({
+            type: "POST",
+            url: "models/admin/content-manipulation/genres/" + targetPage,
+            data: {
+                actionString,
+                name
+            },
+            dataType: "json",
+            success: function (response) {
+                $("#errorGenre").hide();
+                $("#successGenre").hide();
+                $("#successGenre").slideDown();
+                displayGenres();
+
+                // setDefaultMenuItemValues();
+            },
+            error: function (error){
+                if(error.status == 422){
+                    location.reload();
+                }
+                if(error.status == 409){
+                    $("#successGenre").hide();
+                    $("#errorGenre").hide();
+                    $("#errorGenre").slideDown();
+                }
+            }
+        });
+    }
 }
 //21 min / 3:02

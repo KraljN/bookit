@@ -26,6 +26,10 @@
     #menu-item-add-form{
         margin-bottom: 30px!important;
       }
+    .material-icons{
+        @include font-size(.8rem!important);
+
+    }
 }
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {

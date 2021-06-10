@@ -73,3 +73,21 @@ edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate e
 edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 17:55:26
 edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 17:56:25
 edit-menu-item	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Home' for key 'NAME'	127.0.0.1	2021-06-09 18:07:10
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:33:09
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:34:07
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:34:37
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:36:38
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:37:28
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:37:30
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:37:30
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:37:30
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:38:36
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:39:45
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:41:14
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:44:53
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:45:44
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:46:51
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:47:36
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:48:07
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:48:14
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera Mika' for key 'NAME'	127.0.0.1	2021-06-10 11:51:57
