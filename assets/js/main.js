@@ -1150,9 +1150,20 @@ function validateGenre(event, actionString, targetPage, oldValues = null, obj = 
         });
         name = element.value;
         if(regExpName.test(name)){
+            if($(obj).parent().prev().children().children().length == 2){
+                $(obj).parent().prev().children().children().eq(1).remove();
+            }
             nameIspravno = true;
         }
         else{
+            if($(obj).parent().prev().children().children().length == 2){
+                $(obj).parent().prev().children().children().eq(1).remove();
+            }
+            if($(obj).parent().prev().children().children().length == 1){
+                let htmlBefore = $(obj).parent().prev().children().html();
+                htmlBefore += '<p class="text-center mt-2 mb-0 text-danger">Genre Name Must be in valid format (Sci Fi)</p>';
+                $(obj).parent().prev().children().html(htmlBefore);
+            }
             nameIspravno = false;
         }
     }
@@ -1169,18 +1180,21 @@ function validateGenre(event, actionString, targetPage, oldValues = null, obj = 
                 oldName = el.name;
             }
         })  
-        if(oldName == name){
+        if(nameIspravno && oldName == name){
             distinctData = false;
             $("#successGenre").hide();
             $("#errorGenre").hide();
+            if($(obj).parent().prev().children().children().length == 2){
+                $(obj).parent().prev().children().children().eq(1).remove();
+            }
             if($(obj).parent().prev().children().children().length == 1){
                 let htmlBefore = $(obj).parent().prev().children().html();
-                htmlBefore += '<p class="text-center mt-2 mb-0 text-danger">Name cant be same as before</p>';
+                htmlBefore += '<p class="text-center mt-2 mb-0 text-danger text-danger">Name cant be same as before</p>';
                 $(obj).parent().prev().children().html(htmlBefore);
             }
 
         }
-        else{
+        else if(nameIspravno && oldName != name){
             if($(obj).parent().prev().children().children().length == 2){
                 $(obj).parent().prev().children().children().eq(1).remove();
             }
@@ -1239,12 +1253,12 @@ function displayPublishers(){
         success: function (response) {
             showPublishers(response);
             let oldValues = getAllValuesFromClass("publishers");
-            // $(".editGenre").on("click", function(event){
-            //     validateGenre(event,"editGenres", "edit-genres.php", oldValues , this);
-            // })
-            // $(".deleteGenre").on("click", function(event){
-            //     deleteItem(this, "deleteGenre", "genres/delete-genres.php", displayGenres);
-            // })
+            $(".editPublisher").on("click", function(event){
+                validatePublisher(event,"editPublishers", "edit-publishers.php", oldValues , this);
+            })
+            $(".deletePublisher").on("click", function(){
+                deleteItem(this, "deletePublisher", "publishers/delete-publishers.php", displayPublishers);
+            })
         }
     });
 }
@@ -1310,9 +1324,20 @@ function validatePublisher(event, actionString, targetPage, oldValues = null, ob
         });
         name = element.value;
         if(regExpName.test(name)){
+            if($(obj).parent().prev().children().children().length == 2){
+                $(obj).parent().prev().children().children().eq(1).remove();
+            }
             nameIspravno = true;
         }
         else{
+            if($(obj).parent().prev().children().children().length == 2){
+                $(obj).parent().prev().children().children().eq(1).remove();
+            }
+            if($(obj).parent().prev().children().children().length == 1){
+                let htmlBefore = $(obj).parent().prev().children().html();
+                htmlBefore += '<p class="text-center mt-2 mb-0 text-danger">Publisher Name Must be in valid format (St. Martin\'s Press)</p>';
+                $(obj).parent().prev().children().html(htmlBefore);
+            }
             nameIspravno = false;
         }
     }
@@ -1320,7 +1345,7 @@ function validatePublisher(event, actionString, targetPage, oldValues = null, ob
         name = $("#publisher-name").val();
         nameIspravno = proveraTb($("#publisher-name"), regExpName, 1, false );
     }
-    $("#errorGenre").hide();
+    $("#errorPublisher").hide();
 
     if(oldValues != null){
         var oldName;
@@ -1329,10 +1354,10 @@ function validatePublisher(event, actionString, targetPage, oldValues = null, ob
                 oldName = el.name;
             }
         })  
-        if(oldName == name){
+        if(nameIspravno && oldName == name){
             distinctData = false;
-            $("#successGenre").hide();
-            $("#errorGenre").hide();
+            $("#successPublisher").hide();
+            $("#errorPublisher").hide();
             if($(obj).parent().prev().children().children().length == 1){
                 let htmlBefore = $(obj).parent().prev().children().html();
                 htmlBefore += '<p class="text-center mt-2 mb-0 text-danger">Name cant be same as before</p>';
@@ -1340,7 +1365,7 @@ function validatePublisher(event, actionString, targetPage, oldValues = null, ob
             }
 
         }
-        else{
+        else if(nameIspravno && oldName != name){
             if($(obj).parent().prev().children().children().length == 2){
                 $(obj).parent().prev().children().children().eq(1).remove();
             }

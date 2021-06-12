@@ -1,19 +1,19 @@
-<?php if(isset($_POST["actionString"]) && $_POST["actionString"] == "editGenres"){
+<?php if(isset($_POST["actionString"]) && $_POST["actionString"] == "editPublishers"){
     session_start();
     require_once("../../../../config/connection.php");
     require_once("../../../forbidden/functions.php");
     $greske = array();
-    $regExpName = "/^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/";
-    if(!isset($_POST["name"])) array_push($greske, "Genre Name is required field");
-    if(!isset($_POST["id"])) array_push($greske, "Genre Id is required field");
+    $regExpName = "/^[A-ZĐŠĆŽČ][a-zšđćžč][a-zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/";
+    if(!isset($_POST["name"])) array_push($greske, "Publisher Name is required field");
+    if(!isset($_POST["id"])) array_push($greske, "Publisher Id is required field");
     if(!preg_match($regExpName, $_POST["name"])){
-        array_push($greske, "Genre name must be in valid format (Sci FI)");
+        array_push($greske, "Publisher Name Must be in valid format (St. Martin's Press)");
     }
 
     if(count($greske) == 0){
-        $query = "UPDATE genres 
-                  SET genre_name = ?
-                  WHERE genre_id = ?";
+        $query = "UPDATE publishers 
+                  SET publisher_name = ?
+                  WHERE publisher_id = ?";
         $prepareInsert = $db -> prepare($query);
         
         try{
@@ -21,7 +21,7 @@
             vratiJSON(["success" => true], 201);
         }
         catch(PDOException $e){
-            logError($e->getMessage(), "edit-genre");
+            logError($e->getMessage(), "edit-publisher");
             vratiJSON(["error" => true] , 409);
     }   
     }

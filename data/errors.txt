@@ -96,3 +96,6 @@ insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate ent
 insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Two' for key 'publisher_name'	127.0.0.1	2021-06-12 14:15:27
 insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Two' for key 'publisher_name'	127.0.0.1	2021-06-12 14:15:36
 insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Two' for key 'publisher_name'	127.0.0.1	2021-06-12 14:15:58
+edit-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Three' for key 'publisher_name'	127.0.0.1	2021-06-12 14:30:21
+insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Two' for key 'publisher_name'	127.0.0.1	2021-06-12 14:30:35
+edit-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Four' for key 'publisher_name'	127.0.0.1	2021-06-12 14:59:08
