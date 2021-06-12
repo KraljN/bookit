@@ -87,7 +87,7 @@
                   </div>
                 </div>
                 <p class="text-danger font-weight-bold errorInfo text-center mt-3 mb-0" id="errorGenre">Genre with that name already exist</p>
-                <p class="text-success font-weight-bold successInfo text-center mt-3 mb-0" id="successGenre">Successfully added genre</p>
+                <p class="text-success font-weight-bold successInfo text-center mt-3 mb-0" id="successGenre">Genres successfully updated</p>
                 <div class="card-body">
                   <?php if(isset($_SESSION["greskeGenre"])): ?>
                       <ul class="text-center mt-3 list-unstyled">
@@ -99,9 +99,56 @@
                     endif;
                     unset($_SESSION["greskeGenre"]);
                     ?>
-                  <p class="text-danger wrong d-none text-center mt-3 mb-0">Genre Name Must be in valid format (Sci FI)</p>
+                  <p class="text-danger wrong d-none text-center mt-3 mb-0">Genre Name Must be in valid format (Sci Fi)</p>
                   <div class="tab-content">
                     <div class="tab-pane active" id="admin-genres"></div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-12">
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-primary">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <ul class="nav nav-tabs">
+                        <li class="nav-item d-flex align-items-center">
+                          <div class="nav-link active mr-3">
+                          <i class="fas fa-book mr-2"></i> Publishers
+                            <div class="ripple-container"></div>
+                          </div>
+                        </li>
+                        <li class="nav-item ml-sm-auto mx-auto mt-2 mt-sm-0 mr-sm-5">
+                            <form class="navbar-form">
+                              <span class="bmd-form-group"><div class="input-group no-border d-flex align-items-center">
+                                <input type="text" class="form-control mr-sm-2 text-white" id="publisher-name" placeholder="Pubisher Name">
+                                <button type="submit" id="add-publisher" class="btn btn-white btn-round btn-just-icon mb-2">
+                                  <i class="fas fa-plus"></i>
+                                  <div class="ripple-container"></div>
+                                </button>
+                              </div></span>
+                            </form>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-danger font-weight-bold errorInfo text-center mt-3 mb-0" id="errorPublisher">Publisher with that name already exist</p>
+                <p class="text-success font-weight-bold successInfo text-center mt-3 mb-0" id="successPublisher">Publishers successfully updated</p>
+                <div class="card-body">
+                  <?php if(isset($_SESSION["greskePublisher"])): ?>
+                      <ul class="text-center mt-3 list-unstyled">
+                          <?php foreach($_SESSION["greskePublisher"] as $greska): ?>
+                              <li class="text-danger"><?= $greska ?></li>
+                          <?php endforeach; ?>
+                      </ul>
+                    <?php
+                    endif;
+                    unset($_SESSION["greskePublisher"]);
+                    ?>
+                  <p class="text-danger wrong d-none text-center mt-3 mb-0">Publisher Name Must be in valid format (St. Martin's Press)</p>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="admin-publishers"></div>
                   </div>
                 </div>
               </div>

@@ -48,8 +48,12 @@ $(document).ready(function () {
     if(window.location.href.includes("content-manipulation")){
         displayMenuItems();
         displayGenres();
+        displayPublishers();
         $("#add-genre").on("click", function(event){
             validateGenre(event, "insertGenre", "add-genres.php");
+        });
+        $("#add-publisher").on("click", function(event){
+            validatePublisher(event, "insertPublisher", "add-publishers.php");
         });
     }
     if(window.location.href.includes("menu-item-form")){
@@ -1074,12 +1078,22 @@ function displayGenres(){
         dataType: "json",
         success: function (response) {
             showGenres(response);
+            let oldValues = getAllValuesFromClass("genres");
+            $(".editGenre").on("click", function(event){
+                validateGenre(event,"editGenres", "edit-genres.php", oldValues , this);
+            })
+            $(".deleteGenre").on("click", function(event){
+                deleteItem(this, "deleteGenre", "genres/delete-genres.php", displayGenres);
+            })
         }
     });
 }
 function showGenres(data){
     let output = "";
-    if(data != undefined){
+    if(data == undefined || data.length == 0){
+        output += "<h4 class='font-weight-bold my-4 text-center'>There is no genres at the moment</h4>";
+    }
+    else{
         output += ` <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -1103,7 +1117,7 @@ function showGenres(data){
                             <td>
                                 ${++index}
                             </td>
-                            <td colspan="3"><div class="px-0 px-2 col-sm-6 col-lg-4 col-xl-3"><input class="form-control genres"  type="text" value="${el.name}"/></div></td>
+                            <td colspan="3"><div class="px-0 px-2 col-sm-6 col-lg-4 col-xl-3"><input class="form-control genres" data-id="${el.id}" type="text" value="${el.name}"/></div></td>
                             <td class="td-actions text-right">
                             <button data-id="${el.id}" class="btn btn-primary btn-link btn-sm editGenre">
                                 <i class="material-icons">Edit</i>
@@ -1118,27 +1132,69 @@ function showGenres(data){
                     </table>
                 </div>`;
     }
-    else{
-        output += "<h4 class='font-weight-bold my-4 text-center'>There is no menu items at the moment</h4>";
-    }
     $("#admin-genres").html(output);
 }
-function validateGenre(event, actionString, targetPage){
+function validateGenre(event, actionString, targetPage, oldValues = null, obj = null){
     event.preventDefault();
-    $("#errorGenre").hide();
+    let name
     let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/;
+    let distinctData = true;
+    let nameIspravno = false;
+    if(obj != null){
+        var id = obj.dataset.id;
+        var element;
+        $.each($(".genres"), function (index, el) { 
+             if(el.dataset.id == id){
+                 element = el;
+             }
+        });
+        name = element.value;
+        if(regExpName.test(name)){
+            nameIspravno = true;
+        }
+        else{
+            nameIspravno = false;
+        }
+    }
+    else{
+        name = $("#genre-name").val();
+        nameIspravno = proveraTb($("#genre-name"), regExpName, 0, false );
+    }
+    $("#errorGenre").hide();
 
-    let nameIspravno = proveraTb($("#genre-name"), regExpName, 0, false);
-    console.log(nameIspravno);
-    
-    if(nameIspravno){
-        let name = $("#genre-name").val();
+    if(oldValues != null){
+        var oldName;
+        oldValues.forEach(el => {
+            if(el.id == id){
+                oldName = el.name;
+            }
+        })  
+        if(oldName == name){
+            distinctData = false;
+            $("#successGenre").hide();
+            $("#errorGenre").hide();
+            if($(obj).parent().prev().children().children().length == 1){
+                let htmlBefore = $(obj).parent().prev().children().html();
+                htmlBefore += '<p class="text-center mt-2 mb-0 text-danger">Name cant be same as before</p>';
+                $(obj).parent().prev().children().html(htmlBefore);
+            }
+
+        }
+        else{
+            if($(obj).parent().prev().children().children().length == 2){
+                $(obj).parent().prev().children().children().eq(1).remove();
+            }
+            distinctData = true;
+        }
+    }
+    if(nameIspravno && distinctData){
         $.ajax({
             type: "POST",
             url: "models/admin/content-manipulation/genres/" + targetPage,
             data: {
                 actionString,
-                name
+                name,
+                id
             },
             dataType: "json",
             success: function (response) {
@@ -1146,8 +1202,6 @@ function validateGenre(event, actionString, targetPage){
                 $("#successGenre").hide();
                 $("#successGenre").slideDown();
                 displayGenres();
-
-                // setDefaultMenuItemValues();
             },
             error: function (error){
                 if(error.status == 422){
@@ -1157,6 +1211,166 @@ function validateGenre(event, actionString, targetPage){
                     $("#successGenre").hide();
                     $("#errorGenre").hide();
                     $("#errorGenre").slideDown();
+                }
+            }
+        });
+    }
+}
+function getAllValuesFromClass(targetClass){
+    let output = [];
+    $.each($("." + targetClass), function (index, el) { 
+         let id = el.dataset.id;
+         output.push({
+             "id" : id,
+             "name": el.value
+         })
+    });
+    return output;
+}
+function displayPublishers(){
+    let actionString = "displayPublishers"
+    $.ajax({
+        type: "GET",
+        url: "models/admin/content-manipulation/publishers/get-publishers.php",
+        data: {
+            actionString
+        },
+        dataType: "json",
+        success: function (response) {
+            showPublishers(response);
+            let oldValues = getAllValuesFromClass("publishers");
+            // $(".editGenre").on("click", function(event){
+            //     validateGenre(event,"editGenres", "edit-genres.php", oldValues , this);
+            // })
+            // $(".deleteGenre").on("click", function(event){
+            //     deleteItem(this, "deleteGenre", "genres/delete-genres.php", displayGenres);
+            // })
+        }
+    });
+}
+function showPublishers(data){
+    let output = "";
+    if(data == undefined || data.length == 0){
+        output += "<h4 class='font-weight-bold my-4 text-center'>There is no publishers at the moment</h4>";
+    }
+    else{
+        output += ` <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #   
+                                    </th>
+                                    <th>
+                                      Name
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+        data.forEach((el, index)=>{
+            output += ` <tr>
+                            <td>
+                                ${++index}
+                            </td>
+                            <td colspan="3"><div class="px-0 px-2 col-sm-9 col-lg-8 col-xl-5"><input class="form-control publishers" data-id="${el.id}" type="text" value="${el.name}"/></div></td>
+                            <td class="td-actions text-right">
+                            <button data-id="${el.id}" class="btn btn-primary btn-link btn-sm editPublisher">
+                                <i class="material-icons">Edit</i>
+                            </button>
+                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm deletePublisher">
+                                <i class="material-icons">Delete</i>
+                            </button>
+                            </td>
+                        </tr>`;
+        });
+        output += `     </tbody>
+                    </table>
+                </div>`;
+    }
+    $("#admin-publishers").html(output);
+}
+function validatePublisher(event, actionString, targetPage, oldValues = null, obj = null){
+    event.preventDefault();
+    let name
+    let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč][a-zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/;
+    let distinctData = true;
+    let nameIspravno = false;
+    if(obj != null){
+        var id = obj.dataset.id;
+        var element;
+        $.each($(".publishers"), function (index, el) { 
+             if(el.dataset.id == id){
+                 element = el;
+             }
+        });
+        name = element.value;
+        if(regExpName.test(name)){
+            nameIspravno = true;
+        }
+        else{
+            nameIspravno = false;
+        }
+    }
+    else{
+        name = $("#publisher-name").val();
+        nameIspravno = proveraTb($("#publisher-name"), regExpName, 1, false );
+    }
+    $("#errorGenre").hide();
+
+    if(oldValues != null){
+        var oldName;
+        oldValues.forEach(el => {
+            if(el.id == id){
+                oldName = el.name;
+            }
+        })  
+        if(oldName == name){
+            distinctData = false;
+            $("#successGenre").hide();
+            $("#errorGenre").hide();
+            if($(obj).parent().prev().children().children().length == 1){
+                let htmlBefore = $(obj).parent().prev().children().html();
+                htmlBefore += '<p class="text-center mt-2 mb-0 text-danger">Name cant be same as before</p>';
+                $(obj).parent().prev().children().html(htmlBefore);
+            }
+
+        }
+        else{
+            if($(obj).parent().prev().children().children().length == 2){
+                $(obj).parent().prev().children().children().eq(1).remove();
+            }
+            distinctData = true;
+        }
+    }
+    if(nameIspravno && distinctData){
+        $.ajax({
+            type: "POST",
+            url: "models/admin/content-manipulation/publishers/" + targetPage,
+            data: {
+                actionString,
+                name,
+                id
+            },
+            dataType: "json",
+            success: function (response) {
+                $("#errorPublisher").hide();
+                $("#successPublisher").hide();
+                $("#successPublisher").slideDown();
+                displayPublishers();
+            },
+            error: function (error){
+                if(error.status == 422){
+                    location.reload();
+                }
+                if(error.status == 409){
+                    $("#successPublisher").hide();
+                    $("#errorPublisher").hide();
+                    $("#errorPublisher").slideDown();
                 }
             }
         });

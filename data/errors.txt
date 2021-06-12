@@ -91,3 +91,8 @@ insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate ent
 insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:48:07
 insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera' for key 'NAME'	127.0.0.1	2021-06-10 11:48:14
 insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Pera Mika' for key 'NAME'	127.0.0.1	2021-06-10 11:51:57
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Fiction' for key 'NAME'	127.0.0.1	2021-06-12 12:43:56
+insert-genre	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Love Story' for key 'NAME'	127.0.0.1	2021-06-12 13:09:26
+insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Two' for key 'publisher_name'	127.0.0.1	2021-06-12 14:15:27
+insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Two' for key 'publisher_name'	127.0.0.1	2021-06-12 14:15:36
+insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Two' for key 'publisher_name'	127.0.0.1	2021-06-12 14:15:58
