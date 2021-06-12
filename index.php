@@ -50,6 +50,12 @@
                                                                                                         </script><?php");
                 include "views/admin/menu-item-form.php";
                 break;
+            case "author-form":
+                if(!(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] -> role_id == ADMIN)) echo("<script type='text/javascript'>
+                                                                                                                window.location.href = 'index.php';
+                                                                                                        </script><?php");
+                include "views/admin/author-form.php";
+                break;
         }
     }
     include "views/fixed/footer.php";

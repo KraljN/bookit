@@ -99,3 +99,4 @@ insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate
 edit-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Three' for key 'publisher_name'	127.0.0.1	2021-06-12 14:30:21
 insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Two' for key 'publisher_name'	127.0.0.1	2021-06-12 14:30:35
 edit-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Four' for key 'publisher_name'	127.0.0.1	2021-06-12 14:59:08
+delete from db	SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`book_it`.`books`, CONSTRAINT `books_authors` FOREIGN KEY (`author_id`) REFERENCES `authors` (`author_id`))	127.0.0.1	2021-06-12 21:54:39

@@ -2,7 +2,6 @@
     session_start();
     require_once("../../../../config/connection.php");
     require_once("../../../forbidden/functions.php");
-    $greske = array();
     $greske = validateMenuItem($_POST);
     if(count($greske) == 0){
         $query = "INSERT INTO navigation VALUES(NULL,?,?,?)";

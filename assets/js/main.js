@@ -49,6 +49,8 @@ $(document).ready(function () {
         displayMenuItems();
         displayGenres();
         displayPublishers();
+        displayAuthors();
+        displayUsers();
         $("#add-genre").on("click", function(event){
             validateGenre(event, "insertGenre", "add-genres.php");
         });
@@ -65,7 +67,16 @@ $(document).ready(function () {
         $("#edit-menu-submit").on("click", function(event){
             validateMenuItem(event, "editMenu", "edit-menu-item.php", previousErrorText);
         });
-
+    }
+    if(window.location.href.includes("author-form")){
+        setDefaultAuthorValues();
+        let previousErrorText = $(".errorInfo").text();
+        $("#add-author-submit").on("click", function(event){
+            validateAuthor(event, "insertAuthor", "add-author.php");
+        });
+        $("#edit-author-submit").on("click", function(event){
+            validateAuthor(event, "editAuthor", "edit-author.php", previousErrorText);
+        });
     }
 });
 function menu(){
@@ -152,7 +163,7 @@ function proveraRegister(e){
     let regExpCVV = /^[0-9]{3}$/;
     let regExpNumber = /^\+?[0-9]{9,19}$/;
     let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}$/;
-    let regExpLastName =/^([A-ZĐŠĆŽČ][a-zšđćžč]{1,14})+(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/;
+    let regExpLastName =/^([A-ZĐŠĆŽČ][a-zšđćžč]{1,14})(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/;
     let regExpEmail = /^([a-z0-9]{2,15}@[a-z]{2,10}\.[a-z]{2,5})(\.[a-z]{2,5})*$/;
     let regExpUsername = /[\d\w\.-_]{4,15}/;
     let regExpCreditCard = /^\d{4}(\-\d{4}){3}$/;
@@ -912,13 +923,16 @@ function displayMenuItems(){
         dataType: "json",
         success: function (response) {
             showMenuItems(response);
-            $(".delete").on("click", function(){deleteItem(this, "deleteMenuItem", "menu/delete-menu-item.php", displayMenuItems)});
+            $(".delete").on("click", function(){deleteItem(this, "deleteMenuItem", "menu/delete-menu-item.php", displayMenuItems )});
         }
     });
 }
 function showMenuItems(data){
     let output = "";
-    if(data != undefined){
+    if(data == undefined || data.length == 0){
+        output += "<h4 class='font-weight-bold my-4 text-center'>There is no menu items at the moment</h4>";
+    }
+    else{
         output += ` <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -961,9 +975,6 @@ function showMenuItems(data){
                     </table>
                 </div>`;
     }
-    else{
-        output += "<h4 class='font-weight-bold my-4 text-center'>There is no menu items at the moment</h4>";
-    }
     $("#admin-menu").html(output);
 }
 function setTopOffsetForAccessAndErrorsDiv(){
@@ -995,7 +1006,7 @@ function validateMenuItem(event, actionString, targetPage, previousErrorText = $
     if(localStorage.getItem("defaultMenuItemData") != null){
         defaultValues = localStorage.getItem("defaultMenuItemData").split(",");
     }
-    if(defaultValues != null){
+    if(nameIspravno && lastNameIspravno && defaultValues != null){
         if($("#name").val() == defaultValues[0] && $("#priority").val() == defaultValues[1] && $("#url").val() == defaultValues[2]){
             distinctData = false;
             $(".successInfo").hide();
@@ -1052,20 +1063,50 @@ function setDefaultMenuItemValues(){
     localStorage.setItem("defaultMenuItemData", output)
 
 }
-function deleteItem(obj, actionString, targetPage, callback){
+function deleteItem(obj, actionString, deleteTargetPage, callback, checkIdTargetPage = null){
     let id = obj.dataset.id;
-    $.ajax({
-        type: "POST",
-        url: "models/admin/content-manipulation/" + targetPage,
-        data: {
-            id,
-            actionString
-        },
-        dataType: "json",
-        success: function (response) {
-            callback();
+    var confirmed = false;
+    if(checkIdTargetPage != null){
+        $.ajax({
+            type: "GET",
+            url: "models/admin/content-manipulation/" + checkIdTargetPage,
+            data: {
+                id,
+                actionString
+            },
+            async: false,
+            dataType: "json",
+            success: function (response) {
+                if(response.number > 0){
+                    if(confirm("Some books are going to be deleted if you delete this item. Are you Sure?")){
+                        confirmed = true;
+                    }
+                    else{
+                        confirmed = false;
+                    }
+                }
+                else{
+                    confirmed = true;
+                }
+            }
+        });
+        if(confirmed){
+            $.ajax({
+                type: "POST",
+                url: "models/admin/content-manipulation/" + deleteTargetPage,
+                async: false,
+                data: {
+                    id,
+                    actionString
+                },
+                dataType: "json",
+                success: function (response) {
+                    callback();
+                }
+            });
         }
-    });
+
+    }
 }
 function displayGenres(){
     let actionString = "displayGenres"
@@ -1083,7 +1124,7 @@ function displayGenres(){
                 validateGenre(event,"editGenres", "edit-genres.php", oldValues , this);
             })
             $(".deleteGenre").on("click", function(event){
-                deleteItem(this, "deleteGenre", "genres/delete-genres.php", displayGenres);
+                deleteItem(this, "deleteGenre", "genres/delete-genres.php", displayGenres, "genres/get-genre-with-id.php");
             })
         }
     });
@@ -1257,7 +1298,7 @@ function displayPublishers(){
                 validatePublisher(event,"editPublishers", "edit-publishers.php", oldValues , this);
             })
             $(".deletePublisher").on("click", function(){
-                deleteItem(this, "deletePublisher", "publishers/delete-publishers.php", displayPublishers);
+                deleteItem(this, "deletePublisher", "publishers/delete-publishers.php", displayPublishers, "publishers/get-publisher-with-id.php");
             })
         }
     });
@@ -1400,5 +1441,211 @@ function validatePublisher(event, actionString, targetPage, oldValues = null, ob
             }
         });
     }
+}
+function displayAuthors(){
+    let action = "getAuthors"
+    $.ajax({
+        type: "GET",
+        url: "models/admin/content-manipulation/authors/get-authors.php",
+        data: {action},
+        dataType: "json",
+        success: function (response) {
+            showAuthors(response);
+            $(".delete").on("click", function(){deleteItem(this, "deleteAuthor", "authors/delete-author.php", displayAuthors, "authors/get-author-with-id.php")});
+        }
+    });
+}
+function showAuthors(data){
+    let output = "";
+    if(data == undefined || data.length == 0){
+        output += "<h4 class='font-weight-bold my-4 text-center'>There is no authors at the moment</h4>";
+    }
+    else{
+        output += ` <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #   
+                                    </th>
+                                    <th>
+                                        First Name
+                                    </th>
+                                    <th>Last Name</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+        data.forEach((el, index)=>{
+            output += ` <tr>
+                            <td>
+                                ${++index}
+                            </td>
+                            <td>${el.name}</td>
+                            <td>${el.surname}</td>
+                            <td class="td-actions text-right">
+                            <a href="index.php?page=author-form&id=${el.id}" class="btn btn-primary btn-link btn-sm edit">
+                                <i class="material-icons">Edit</i>
+                            </a>
+                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm delete">
+                                <i class="material-icons">Delete</i>
+                            </button>
+                            </td>
+                        </tr>`;
+        });
+        output += `     </tbody>
+                    </table>
+                </div>`;
+    }
+    $("#admin-authors").html(output);
+}
+function validateAuthor(event, actionString, targetPage, previousErrorText = $(".errorInfo").text()){
+    event.preventDefault();
+    let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/;
+
+    let nameIspravno = proveraTb($("#name"), regExpName, 0, false);
+    let lastNameIspravno = proveraTb($("#surname"), regExpName, 1, false);
+    let distinctData = true;
+    let defaultValues = null;
+    if(localStorage.getItem("defaultMenuItemData") != null){
+        defaultValues = localStorage.getItem("defaultAuthorData").split(",");
+    }
+    if(nameIspravno && lastNameIspravno &&  defaultValues != null){
+        if($("#name").val() == defaultValues[0] && $("#surname").val() == defaultValues[1]){
+            distinctData = false;
+            $(".successInfo").hide();
+            $(".errorInfo").hide();
+            $(".errorInfo").text("You must enter at least 1 distinct data");
+            $(".errorInfo").slideDown();
+        }
+        else{
+            $(".errorInfo").hide();
+            $(".errorInfo").text(previousErrorText);
+        }
+    }
+    if(nameIspravno && lastNameIspravno && distinctData){
+        let name = $("#name").val();
+        let surname = $("#surname").val();
+        let id = $("#id").val();
+        $.ajax({
+            type: "POST",
+            url: "models/admin/content-manipulation/authors/" + targetPage,
+            data: {
+                actionString,
+                name,
+                surname,
+                id
+            },
+            dataType: "json",
+            success: function (response) {
+                $(".successInfo").hide();
+                $(".errorInfo").hide();
+                $(".successInfo").slideDown();
+                setDefaultAuthorValues();
+            },
+            error: function (error){
+                if(error.status == 422){
+                    location.reload();
+                }
+                if(error.status == 500){
+                    $(".errorInfo").hide();
+                    $(".successInfo").hide();
+                    $(".errorInfo").slideDown();
+                }
+            }
+        });
+    }
+}
+function setDefaultAuthorValues(){
+        let output = [];
+        output.push($("#name").val());
+        output.push($("#surname").val());
+        localStorage.setItem("defaultAuthorData", output)
+}
+function displayUsers(){
+    let action = "getUsers";
+    $.ajax({
+        type: "GET",
+        url: "models/admin/content-manipulation/users/get-users.php",
+        data: {
+            action
+        },
+        dataType: "json",
+        success: function (response) {
+            showUsers(response);
+        }
+    });
+}
+function showUsers(data){
+    let output = "";
+    if(data == undefined || data.length == 0){
+        output += "<h4 class='font-weight-bold my-4 text-center'>There is no users at the moment</h4>";
+    }
+    else{
+        output += ` <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #   
+                                    </th>
+                                    <th>
+                                        First Name
+                                    </th>
+                                    <th>Last Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Addres</th>
+                                    <th>Town</th>
+                                    <th>Country</th>
+                                    <th>Payments</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+        data.forEach((el, index)=>{
+            output += ` <tr>
+                            <td>
+                                ${++index}
+                            </td>
+                            <td>${el.name}</td>
+                            <td>${el.surname}</td>
+                            <td>${el.username}</td>
+                            <td>${el.email}</td>
+                            <td>${el.addres}</td>
+                            <td>${el.city_name}</td>
+                            <td>${el.country_name}</td>
+                            <td>
+                                <ul class="list-unstyled m-0">`;
+                                el.payments.forEach((el)=>{
+                                    output += `<li>${el.card_number}</li>`
+                                })
+                            output+=`</ul></td>
+                            <td>${el.role}</td>
+                            <td>`;
+                                if(el.active == 1){
+                                    output += `<p class="text-center text-success">Active</p>`;
+                                }
+                                else{
+                                    output += `<p class="text-center text-danger">Deactivated</p>`;
+                                }
+                            output +=`</td>
+                            <td class="td-actions text-right">
+                            <a href="index.php?page=author-form&id=${el.id}" class="btn btn-primary btn-link btn-sm edit">
+                                <i class="material-icons">Edit</i>
+                            </a>
+                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm delete">
+                                <i class="material-icons">Delete</i>
+                            </button>
+                            </td>
+                        </tr>`;
+        });
+        output += `     </tbody>
+                    </table>
+                </div>`;
+    }
+    $("#admin-users").html(output);
 }
 //21 min / 3:02

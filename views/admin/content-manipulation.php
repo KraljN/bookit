@@ -153,6 +153,62 @@
                 </div>
               </div>
             </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-primary">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <ul class="nav nav-tabs">
+                        <li class="nav-item d-flex align-items-center">
+                          <div class="nav-link active mr-3">
+                          <i class="fas fa-pen-fancy mr-2"></i> Authors
+                            <div class="ripple-container"></div>
+                          </div>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link btn active adminAdd" href="index.php?page=author-form">
+                            <i class="fas fa-plus mr-2"></i> Add Author
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="admin-authors"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-primary">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <ul class="nav nav-tabs">
+                        <li class="nav-item d-flex align-items-center">
+                          <div class="nav-link active mr-3">
+                          <i class="fas fa-user mr-2"></i> Users
+                            <div class="ripple-container"></div>
+                          </div>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link btn active adminAdd" href="index.php?page=author-form">
+                            <i class="fas fa-plus mr-2"></i> Add User
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="admin-users"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
       </div>
     </div>
 </div>
