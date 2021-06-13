@@ -204,17 +204,6 @@ function validateUser(event, targetPage, actionString,  forAdminManipulation = f
     if(localStorage.getItem("defaultMenuItemData") != null){
         defaultValues = localStorage.getItem("defaultUserData").split(",");
     }
-    // console.log(defaultValues);
-    // console.log("staro : " + defaultValues[0]  + " novo : " + $("#regName").val());
-    // console.log("staro : " + defaultValues[1]  + " novo : " + $("#regLastName").val());
-    // console.log("staro : " + defaultValues[2]  + " novo : " + $("#email").val());
-    // console.log("staro : " + defaultValues[3]  + " novo : " + $("#regUser").val());
-    // console.log("staro : " + defaultValues[4]  + " novo : " + $("#card").val());
-    // console.log("staro : " + defaultValues[10]  + " novo : " + $('input[name="role"]:checked').val());
-
-
-
-
     if(validnoIme && validnoPrezime && validnoMail && validnoUsername && validnoCredit && validnoPass && validnoCountry && validnoCity && validnoAddress && validnoNumber && validnoCVV && defaultValues != null){
         if($("#regName").val() == defaultValues[0] &&
            $("#regLastName").val() == defaultValues[1] &&
@@ -1632,6 +1621,7 @@ function displayUsers(){
         dataType: "json",
         success: function (response) {
             showUsers(response);
+            $(".userManipulation").on("click", function(){changeActiveStatus(this)})
         }
     });
 }
@@ -1697,8 +1687,22 @@ function showUsers(data){
                             <a href="index.php?page=user-form&id=${el.id}" class="btn btn-primary btn-link btn-sm edit">
                                 <i class="material-icons">Edit</i>
                             </a>
-                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm delete">
-                                <i class="material-icons">Delete</i>
+                            <button data-id="${el.id}" data-status="${el.active}" class="btn `;
+                            if(el.active == 1){
+                                output += "text-danger ";
+                            }
+                            else{
+                                output += "text-success ";
+                            }
+                             output += `btn-link btn-sm userManipulation">
+                                <i class="material-icons">`;
+                                if(el.active == 1){
+                                    output += "Deactivate";
+                                }
+                                else{
+                                    output += "Activate";
+                                }
+                                output += `</i>
                             </button>
                             </td>
                         </tr>`;
@@ -1724,5 +1728,23 @@ function setDefaultUserVaules(){
     let role = $('input[name="role"]:checked').val();
     output.push(ime, prezime, email, username, creditCard, country, city, address, number, cvv, role)
     localStorage.setItem("defaultUserData", output)
+}
+function changeActiveStatus(obj){
+    let id = $(obj).data("id");
+    let status = $(obj).data("status");
+    let actionString = "changeStatus";
+    $.ajax({
+        type: "POST",
+        url: "models/admin/content-manipulation/users/change-user-status.php",
+        data: {
+            actionString,
+            id,
+            status
+        },
+        dataType: "json",
+        success: function (response) {
+            displayUsers();
+        }
+    });
 }
 //21 min / 3:02

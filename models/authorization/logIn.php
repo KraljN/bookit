@@ -23,7 +23,7 @@ if(isset($_POST["action"]) && $_POST["action"]=="uloguj"){
     if(count($greske) == 0){
         $pripremaLog = $db->prepare('SELECT u.user_id, u.username, u.role_id
                                      FROM users u INNER JOIN roles r ON U.role_id = r.role_id 
-                                     WHERE u.username = :user AND u.password = :pass');
+                                     WHERE u.username = :user AND u.password = :pass AND u.active = 1');
         $pripremaLog->bindParam(":user", $user);
         $pripremaLog->bindParam(":pass", $pass);
         $pripremaLog->execute();

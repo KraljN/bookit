@@ -21,50 +21,21 @@ if(isset($_POST["actionString"]) && $_POST["actionString"] == "editUser"){
     if(count($greske) == 0){
         $card = str_replace('-', '', $creditCard);
         $countryId = getCountryId($country);
-        $cityId = getCityId($city);
+        $cityId = getCityId($city, $countryId);
         $date = date("Y-m-d H:i:s");
         if((!$countryId && !$cityId) || (!$countryId && $cityId)){
             insertCountry($country);
             $insertedCountryId = getCountryId($country);
-            insertCity( $city, $insertedCountryId);
-            $insertedCityId = getCityId($city);
-            $paymentId = getPaymentId($id);
-            // insertPerson($name, $lastName);
-            // $lastPersonId = getLastInsertedId();
-            // if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged, $active)){
-            //     $lastUserId = getLastInsertedId();
-            //     insertPayment($card, $cvv, $lastUserId);
-            // }
-            // else{
-            //     deleteFromDb($lastPersonId, "persons", "person");
-            // }
+            insertCity($city, $insertedCityId);
+            $insertedCityId = getCityId($city, $insertedCountryId);
 
         }
         if($countryId && !$cityId){
-            $insertedCountryId = getCountryId($country); 
-            insertCity($city, $insertedCountryId);
-            $insertedCityId = getCityId($city);
-            // insertPerson($name, $lastName);
-            // $lastPersonId = getLastInsertedId();
-            // if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged, $active)){
-            //     $lastUserId = getLastInsertedId();
-            //     insertPayment($card, $cvv, $lastUserId);
-            // }
-            // else{
-            //     deleteFromDb( $lastPersonId, "persons", "person");
-            // }
+            insertCity($city, $countryId);
+            $insertedCityId = getCityId($city, $countryId);
         }
         if($countryId && $cityId){
-            $insertedCityId = getCityId($city);
-            // insertPerson($name, $lastName);
-            // $lastPersonId = getLastInsertedId();
-            // if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged, $active)){
-            //     $lastUserId = getLastInsertedId();
-            //     insertPayment($card, $cvv, $lastUserId);
-            // }
-            // else{
-            //     deleteFromDb($lastPersonId, "persons", "person");
-            // }
+            $insertedCityId = $cityId;
         }
         if(
             updatePerson($name, $lastName, $id) &&
@@ -82,5 +53,5 @@ if(isset($_POST["actionString"]) && $_POST["actionString"] == "editUser"){
 
 }
 else{
-    header("Location: ../../index.php?page=login");
+    header("Location: ../../../../index.php");
 }

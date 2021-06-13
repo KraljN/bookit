@@ -26,10 +26,11 @@ function getCountryId($countryName){
         return false;
     }
 }
-function getCityId($cityName){
+function getCityId($cityName, $countryId){
     global $db;
-    $prepare = $db->prepare("SELECT city_id FROM cities WHERE city_name = :city");
+    $prepare = $db->prepare("SELECT city_id FROM cities WHERE city_name = :city AND country_id = :country_id");
     $prepare->bindParam(":city", $cityName);
+    $prepare->bindParam(":country_id", $countryId);
     $prepare->execute();
     $result = $prepare->fetch();
     if($result){
@@ -181,9 +182,6 @@ function updateUser( $username, $address, $insertedCityId, $roleId, $number, $em
     $prepare->bindParam(":roleId", $roleId);
     $prepare->bindParam(":userame", $username);
     $prepare->bindParam(":id", $userId);
-
-
-
     try{
         $prepare->execute();
         return true;

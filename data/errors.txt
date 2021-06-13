@@ -106,3 +106,4 @@ user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entr
 user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'stole' for key 'username'	127.0.0.1	2021-06-13 11:48:57
 user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'stole' for key 'username'	127.0.0.1	2021-06-13 11:49:15
 user-update	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'kraljina' for key 'username'	127.0.0.1	2021-06-13 19:14:22
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'mile' for key 'username'	127.0.0.1	2021-06-13 19:51:40

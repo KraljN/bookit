@@ -65,14 +65,14 @@ if(isset($_POST["actionString"]) && $_POST["actionString"] == "insertUser"){
     if(count($greske) == 0){
         $card = str_replace('-', '', $creditCard);
         $countryId = getCountryId($country);
-        $cityId = getCityId($city);
+        $cityId = getCityId($city, $countryId);
         $date = date("Y-m-d H:i:s");
         $password = md5($password);
         if((!$countryId && !$cityId) || (!$countryId && $cityId)){
             insertCountry($country);
             $insertedCountryId = getCountryId($country);
             insertCity( $city, $insertedCountryId);
-            $insertedCityId = getCityId($city);
+            $insertedCityId = getCityId($city, $insertedCountryId);
             insertPerson($name, $lastName);
             $lastPersonId = getLastInsertedId();
             if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged, $active)){
@@ -87,7 +87,7 @@ if(isset($_POST["actionString"]) && $_POST["actionString"] == "insertUser"){
         if($countryId && !$cityId){
             $insertedCountryId = getCountryId($country); 
             insertCity($city, $insertedCountryId);
-            $insertedCityId = getCityId($city);
+            $insertedCityId = getCityId($city, $countryId);
             insertPerson($name, $lastName);
             $lastPersonId = getLastInsertedId();
             if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged, $active)){
@@ -99,7 +99,7 @@ if(isset($_POST["actionString"]) && $_POST["actionString"] == "insertUser"){
             }
         }
         if($countryId && $cityId){
-            $insertedCityId = getCityId($city);
+            $insertedCityId = $cityId;
             insertPerson($name, $lastName);
             $lastPersonId = getLastInsertedId();
             if(insertUser($username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged, $active)){
@@ -119,5 +119,5 @@ if(isset($_POST["actionString"]) && $_POST["actionString"] == "insertUser"){
 
 }
 else{
-    header("Location: ../../index.php?page=login");
+    header("Location: ../../index.php");
 }
