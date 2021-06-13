@@ -194,7 +194,7 @@
                           </div>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link btn active adminAdd" href="index.php?page=author-form">
+                          <a class="nav-link btn active adminAdd" href="index.php?page=user-form">
                             <i class="fas fa-plus mr-2"></i> Add User
                           </a>
                         </li>

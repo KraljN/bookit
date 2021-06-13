@@ -22,6 +22,8 @@
     define("NIJE_ULOGOVAN", 0);
     define("ADMIN", 1);
     define("KORISNIK", 2);
+    define("AKTIVAN_KORISNIK", 1);
+    define("DAKTIVIRAN_KORISNIK", 0);
 
 
 

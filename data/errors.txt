@@ -100,3 +100,9 @@ edit-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate e
 insert-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Two' for key 'publisher_name'	127.0.0.1	2021-06-12 14:30:35
 edit-publisher	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Doubleday Four' for key 'publisher_name'	127.0.0.1	2021-06-12 14:59:08
 delete from db	SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`book_it`.`books`, CONSTRAINT `books_authors` FOREIGN KEY (`author_id`) REFERENCES `authors` (`author_id`))	127.0.0.1	2021-06-12 21:54:39
+user-insert	SQLSTATE[21S01]: Insert value list does not match column list: 1136 Column count doesn't match value count at row 1	127.0.0.1	2021-06-13 11:40:06
+user-insert	SQLSTATE[21S01]: Insert value list does not match column list: 1136 Column count doesn't match value count at row 1	127.0.0.1	2021-06-13 11:42:49
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'stole' for key 'username'	127.0.0.1	2021-06-13 11:48:05
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'stole' for key 'username'	127.0.0.1	2021-06-13 11:48:57
+user-insert	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'stole' for key 'username'	127.0.0.1	2021-06-13 11:49:15
+user-update	SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'kraljina' for key 'username'	127.0.0.1	2021-06-13 19:14:22

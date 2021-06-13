@@ -33,8 +33,8 @@
             <div class="col-12 col-sm-10 col-md-9  col-lg-8 mx-auto">
               <div class="card" id="menu-item-add-form">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title">Add Author</h4>
-                  <p class="card-category">Add one author to your site</p>
+                  <h4 class="card-title"><?php if(!isset($_GET["id"])) echo("Add"); else echo("Edit") ?> Author</h4>
+                  <p class="card-category"><?php if(!isset($_GET["id"])) echo("Add author to your site"); else echo("Edit author on your site") ?></p>
                 </div>
                 <div class="card-body">
                   <form action="obrada.php" method="POST">

@@ -39,6 +39,19 @@ function getCityId($cityName){
         return false;
     }
 }
+// function getPaymentId($userId){
+//     global $db;
+//     $prepare = $db->prepare("SELECT payment_id FROM user_payments WHERE user_id = :id");
+//     $prepare->bindParam(":id", $userId);
+//     $prepare->execute();
+//     $result = $prepare->fetch();
+//     if($result){
+//         return $result->payment_id;
+//     }
+//     else{
+//         return false;
+//     }
+// }
 function insertCountry($countryName){
     global $db;
     $prepare = $db->prepare("INSERT INTO countries VALUES (NULL, :drzava)");
@@ -67,6 +80,26 @@ function insertCity($cityName, $countryId){
 
     }
 }
+function updatePayment($cardNumber, $ccv, $id){
+    global $db;
+    $prepare  = $db->prepare("UPDATE payments p INNER JOIN users_payments u ON p.payment_id = u.payment_id
+    SET p.card_number = :cardNumber, p.card_verification_value = :cvv
+    WHERE u.user_id = :id");
+    $prepare->bindParam(":cardNumber", $cardNumber);
+    $prepare->bindParam(":cvv", $ccv);
+    $prepare->bindParam(":id", $id);
+    try{
+        $prepare->execute();
+        return true;
+    }
+    catch(PDOException $ex){
+        logError($ex->getMessage(), "payment-update");
+        $message = "Error entering city";
+        vratiJSON(["message"=>$message], 500);
+
+    }
+
+}
 function insertPerson($name, $lastName){
     global $db;
     $prepare  = $db->prepare("INSERT INTO persons VALUES (NULL, :firstName, :lastName)");
@@ -83,14 +116,33 @@ function insertPerson($name, $lastName){
         return false;
     }
 }
+function updatePerson($name, $lastName, $id){
+    global $db;
+    $prepare  = $db->prepare("UPDATE persons p INNER JOIN users u ON p.person_id = u.person_id
+                              SET p.first_name = :firstName, p.last_name = :lastName
+                              WHERE u.user_id = :user_id ");
+    $prepare->bindParam(":firstName", $name);
+    $prepare->bindParam(":lastName", $lastName);
+    $prepare->bindParam(":user_id", $id);
+    try{
+        $prepare->execute();
+        return true;
+    }
+    catch(PDOException $ex){
+        logError($ex->getMessage(), "person-update");
+        $message = "Error updating person";
+        vratiJSON(["message"=>$message], 500);
+        return false;
+    }
+}
 function getLastInsertedId(){
     global $db;
    $output = $db->lastInsertId();
    return $output;
 }
-function insertUser( $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged){// $db,
+function insertUser( $username, $password, $lastPersonId, $address, $insertedCityId, $roleId, $number, $date, $email, $loged, $active){
     global $db;
-    $prepare = $db->prepare("INSERT INTO users VALUES (NULL, :userame, :password, :personId, :address, :cityId, :roleId, :phoneNumber, :date, :email)");
+    $prepare = $db->prepare("INSERT INTO users VALUES (NULL, :userame, :password, :personId, :address, :cityId, :roleId, :phoneNumber, :date, :email, :active)");
     $prepare->bindParam(":email", $email);
     $prepare->bindParam(":password", $password);
     $prepare->bindParam(":personId", $lastPersonId);
@@ -101,6 +153,8 @@ function insertUser( $username, $password, $lastPersonId, $address, $insertedCit
     $prepare->bindParam(":cityId", $insertedCityId);
     $prepare->bindParam(":roleId", $roleId);
     $prepare->bindParam(":userame", $username);
+    $prepare->bindParam(":active", $active);
+
 
     try{
         $prepare->execute();
@@ -108,6 +162,34 @@ function insertUser( $username, $password, $lastPersonId, $address, $insertedCit
     }
     catch(PDOException $ex){
         logError($ex->getMessage(), "user-insert");
+        $message = "User already exist";
+        vratiJSON(["message"=>$message], 409);
+        return false;
+    }
+}
+function updateUser( $username, $address, $insertedCityId, $roleId, $number, $email, $userId){
+    global $db;
+    $prepare = $db->prepare("UPDATE users 
+                             SET username = :userame, addres = :address, city_id = :cityId, role_id = :roleId, phone_number = :phoneNumber, date_updated = :date, email = :email
+                             WHERE user_id = :id");
+    $prepare->bindParam(":email", $email);
+    $prepare->bindParam(":address", $address);
+    $prepare->bindParam(":phoneNumber", $number);
+    $date = date("Y-m-d H:i:s");
+    $prepare->bindParam(":date", $date);
+    $prepare->bindParam(":cityId", $insertedCityId);
+    $prepare->bindParam(":roleId", $roleId);
+    $prepare->bindParam(":userame", $username);
+    $prepare->bindParam(":id", $userId);
+
+
+
+    try{
+        $prepare->execute();
+        return true;
+    }
+    catch(PDOException $ex){
+        logError($ex->getMessage(), "user-update");
         $message = "User already exist";
         vratiJSON(["message"=>$message], 409);
         return false;
@@ -190,4 +272,64 @@ function validateAuthor($data){
 
     return $greske;
 
+}
+function  validateUser($data, $withPassword = true){
+    $greske = array();
+    $regExpName ="/^([A-ZĐŠĆŽČ][a-zšđćžč]{1,14})(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/";
+    $regExpEmail = "/^([a-z0-9]{2,15}@[a-z]{2,10}\.[a-z]{2,5})(\.[a-z]{2,5})*$/";
+    $regExpUsername = "/[\d\w\.-_]{4,15}/";
+    $regExpCreditCard = "/^\d{4}(\-\d{4}){3}$/";
+    $regExpCountry = '/^[A-Z]\w{2,10}$/';
+    $regExpAddress = "/^[A-Z][\w]{5,20}(\s[\w]{5,20}){0,5}(\s[0-9]{1,4})$/";
+    $regExpPhoneNumber = "/^\+?[0-9]{9,15}$/";
+    $regExpCVV = "/^[0-9]{3}$/";
+
+    $name = $data["name"];
+    $lastName = $data["lastName"];
+    $email = $data["email"];
+    $username = $data["username"];
+    $creditCard = $data["creditCard"];
+    $country = $data["country"];
+    $city = $data["city"];
+    $address = $data["address"];
+    $number = $data["number"];
+    $cvv = $data["cvv"];
+
+    if(!preg_match($regExpName, $name)){
+        $greske[] = "Wrong name format (Exp. John)";
+        }
+    if(!preg_match($regExpName, $lastName)){
+        $greske[] = "Wrong last name format (Exp. Miles)";
+    }
+    if(!preg_match($regExpPhoneNumber, $number)){
+        $greske[] = "Wrong mobile number format (Ex. +381621235234)";
+    }
+    if(!preg_match($regExpEmail, $email)){
+        $greske[] = "Wrong mail format (john@gmail.com)";
+    }
+    if(!preg_match($regExpUsername, $username)){
+        $greske[] = "Wrong Username Minimum 5 maximum 15 ([A-z][0-9].-_)";
+    }
+    if($withPassword){
+        $password = $data["password"];
+        if(!preg_match($regExpUsername, $password)){
+            $greske[] = "Wrong Password Format Minimum 5 maximum 15 ([A-z][0-9].-_)";
+        }
+    }
+    if(!preg_match($regExpCreditCard, $creditCard)){
+        $greske[] = "Wrong credit card format(Exact 16 digits)";
+    }
+    if(!preg_match($regExpCountry, $country)){
+        $greske[] = "Wrong country format (Exp. Serbia)";
+    }
+    if(!preg_match($regExpCountry, $city)){
+        $greske[] = "Wrong city format (Exp. Serbia)";
+    }
+    if(!preg_match($regExpAddress, $address)){
+        $greske[] = "Wrong address format (Exp. Takovska 17)";
+    }
+    if(!preg_match($regExpCVV, $cvv)){
+        $greske[] = "Wrong CVV format(Last 3 numbers on back of your card)";
+    }
+    return $greske;
 }
