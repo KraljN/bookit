@@ -15,7 +15,7 @@ $key =  key($resultGenres);
             <h1 class="text-center text-sm-left"><?= $result->title ?></h1>
             <div class="row">
                 <div class="col-md-6 mb-4 mb-lg-0">
-                    <img src="<?= IMG_PATH .  $result->path ?>" alt="<?= $result->alt ?>" class="img-fluid"/>
+                    <img src="<?= DISPLAY_IMG_PATH .  $result->path ?>" alt="<?= $result->alt ?>" class="img-fluid"/>
                 </div>
                 <div class="col-md-6 slider-content">
                     <p><?= $result->description ?></p>

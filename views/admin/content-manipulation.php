@@ -57,9 +57,8 @@
                   </div>
                 </div>
               </div>
-            </div>
-      </div>
-      <div class="col-12">
+          </div>
+          <div class="col-12">
               <div class="card">
                 <div class="card-header card-header-tabs card-header-primary">
                   <div class="nav-tabs-navigation">
@@ -209,7 +208,41 @@
                 </div>
               </div>
             </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-primary">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <ul class="nav nav-tabs">
+                        <li class="nav-item d-flex align-items-center">
+                          <div class="nav-link active mr-3">
+                          <i class="fas fa-book-open mr-2"></i></i> Books
+                            <div class="ripple-container"></div>
+                          </div>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link btn active adminAdd" href="index.php?page=book-form">
+                            <i class="fas fa-plus mr-2"></i> Add Book
+                          </a>
+                        </li>
+                        <li class="nav-item mt-2 mt-sm-0 mx-auto mr-sm-0 ml-sm-auto">
+                          <a class="nav-link btn active adminAdd" href="#">
+                          <i class="fas fa-file-excel mr-2"></i>Download Catalog
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="admin-books"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
-</div>
+  </div>
 </div>

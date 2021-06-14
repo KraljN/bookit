@@ -51,6 +51,7 @@ $(document).ready(function () {
         displayPublishers();
         displayAuthors();
         displayUsers();
+        displayBooks();
         $("#add-genre").on("click", function(event){
             validateGenre(event, "insertGenre", "add-genres.php");
         });
@@ -87,6 +88,16 @@ $(document).ready(function () {
         $("#edit-user-submit").on("click", function(event){
             validateUser(event, "/admin/content-manipulation/users/edit-user.php", "editUser", true,  previousErrorText);
         });
+    }
+    if(window.location.href.includes("book-form")){
+        // setDefaultMenuItemValues();
+        // let previousErrorText = $(".errorInfo").text();
+        $("#add-book-submit").on("click", function(event){
+            validateBook(event, "addBook", "insert-menu-item.php");
+        });
+        // $("#edit-menu-submit").on("click", function(event){
+        //     validateMenuItem(event, "editMenu", "edit-menu-item.php", previousErrorText);
+        // });
     }
 });
 function menu(){
@@ -1746,5 +1757,195 @@ function changeActiveStatus(obj){
             displayUsers();
         }
     });
+}
+function displayBooks(){
+    let actionString = "displayBooks";
+    $.ajax({
+        type: "GET",
+        url: "models/admin/content-manipulation/books/get-books.php",
+        data: {
+            actionString
+        },
+        dataType: "json",
+        success: function (response) {
+            showBooks(response);
+        }
+    });
+}
+function showBooks(data){
+    let rootPath = $("#roothPath").val();
+    let output ="";
+    if(data == undefined || data.length == 0){
+        output += "<h4 class='font-weight-bold my-4 text-center'>There is no books at the moment</h4>";
+    }
+    else{
+        output += ` <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #   
+                                    </th>
+                                    <th>
+                                    Picture
+                                    </th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Genres</th>
+                                    <th>Price</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+        data.forEach((el, index)=>{
+            output += `<tr>
+                            <td>${++index} </td>
+                            <td>
+                                <img src="assets/img/thumb-${el.path}" class="img-fluid" alt="${el.alt}"/>
+                            </td>
+                            <td>${el.title}</td>
+                            <td>${el.name} ${el.surname}</td>
+                            <td>`;
+                                el.genres.forEach((book, index)=>{
+                                    if(index != 0) output +=`, `
+                                    output+=book.genre_name
+                                });
+                            output+=`</td>
+                            <td>${el.price} &euro;</td>
+                            <td>
+                                    <a href="index.php?page=book-form&id=${el.id}" class="btn btn-primary btn-link btn-sm edit float-left ">
+                                        <i class="material-icons">Edit</i>
+                                    </a>
+                                    <button data-id="${el.id}" class="btn btn-danger btn-link  float-left btn-sm delete">
+                                        <i class="material-icons">Delete</i>
+                                    </button>
+                            </td>
+                       </tr>`;
+        })
+    }
+    output += ` </tbody>
+            </table>
+        </div>`;
+    $("#admin-books").html(output);
+}
+    
+function  validateBook(event, actionString, target, previousErrorText = $(".errorInfo").text()){
+    event.preventDefault();
+    let extension = $("#picture").val().split('.')[1];
+    let isUploaded =$("#picture").get(0).files.length;
+
+    let slikaValidno, titleValidno, descriptionValidno, yearValidno, pagesValidno, authorValidno, publisherValidno, genreValidno, priceValidno;
+
+    let regExpTitle =/^[A-ZĐŠĆŽČ][a-zšđćžč][a-zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/;
+
+    let form = new FormData();
+    titleValidno = proveraTb($("#title"), regExpTitle, 0,  false);
+
+    if($("#description").val().length == 0){
+        descriptionValidno = false;
+        $("#description").next().html("Descripiton can\'t be empty");
+    }
+    else{
+        descriptionValidno = true;
+        $("#description").next().html("");
+    }
+
+    yearValidno = validateDropdown($("#year"), "Publification year must be chosen");
+    authorValidno = validateDropdown($("#author"), "Author must be chosen");
+    publisherValidno = validateDropdown($("#publisher"), "Publisher must be chosen");
+    pagesValidno = validateNumberInput($("#pages"));
+    priceValidno = validateNumberInput($("#price"));
+
+
+    if((extension == "jpg" || extension =="jpeg" || extension =="png" || extension == "gif") && isUploaded) imageSize =  document.getElementById("picture").files[0].size/1024/1024;
+    if(isUploaded && imageSize<2 && (extension == "jpg" || extension =="jpeg" || extension =="png" || extension == "gif")){
+        $("#picture").next().html("");
+        slikaValidno = true;
+    }
+    else{
+        $("#picture").next().html("Select .jpg, .jpeg, .png, .gif, smaller than 2MB ");
+        slikaValidno = false;
+    }
+
+    if($('input[name="genres"]:checked').length == 0){
+        $(".wrong:eq(1)").removeClass("d-none");
+        genreValidno =  false
+        
+    }
+    else{
+        if($(".wrong:eq(1)").hasClass("d-none")){
+            genreValidno =  true
+
+        }
+        else{
+            $(".wrong:eq(1)").addClass("d-none");
+            genreValidno =  true
+        }
+    }
+    let genres = [];
+
+    $.each($('input[name="genres"]:checked'), function (index, element) { 
+        genres.push($(element).val());
+    });
+    if(slikaValidno && titleValidno && descriptionValidno && yearValidno && pagesValidno && authorValidno && publisherValidno && genreValidno && priceValidno){
+        console.log("sve je ispravno");
+        form.append("picture", document.getElementById("picture").files[0]);
+        form.append("title", $("#title").val());
+        form.append("description", $("#description").val());
+        form.append("year", $("#year").val());
+        form.append("pages", $("#pages").val());
+        form.append("price", $("#price").val());
+        form.append("author", $("#author").val());
+        form.append("publisher", $("#publisher").val());
+        form.append("genres", genres);
+        form.append("actionString", actionString);
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            contentType: false,
+            processData: false,
+            url: "models/admin/content-manipulation/books/add-book.php",
+            data: form,
+            dataType: "json",
+            success: function (response) {
+                $(".successInfo").hide();
+                $(".errorInfo").hide();
+                $(".successInfo").slideDown();
+            },
+            error: function (error){
+                if(error.status == 422){
+                    location.reload();
+                }
+                if(error.status = 500){
+                    $(".errorInfo").hide();
+                    $(".successInfo").hide();
+                    $(".errorInfo").slideDown();
+                }
+            }
+        });
+    }
+}
+function validateDropdown(field, message){
+    if($(field).val() == 0){
+        $(field).next().html(message);
+        return false;
+    }
+    else{
+        $(field).next().html("");
+        return true;
+    }
+}
+function validateNumberInput(field){
+    if($(field).val() <= 0){
+        $(field).next().removeClass("d-none");
+        return false;
+    }
+    else{
+        if(!(field).next().hasClass("d-none")){
+            $(field).next().addClass("d-none");
+        }
+        return true;
+    }
 }
 //21 min / 3:02

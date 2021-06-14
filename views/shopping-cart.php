@@ -38,7 +38,7 @@
 
                     <div class="row">
                         <div class="col-12 col-sm-12 col-md-2 text-center mb-2 mb-sm-0">
-                                <img class="img-responsive" src="<?= IMG_PATH  . "thumb-" . $bookInCart->path  ?>" alt="<?= $bookInCart->alt ?>"/>
+                                <img class="img-responsive" src="<?= DISPLAY_IMG_PATH  . "thumb-" . $bookInCart->path  ?>" alt="<?= $bookInCart->alt ?>"/>
                         </div>
                         <div class="col-12 text-sm-center col-sm-12 text-center text-md-left col-md-4 d-flex flex-column justify-content-center">
                             <h4 class="product-name"><strong><?= $bookInCart->title ?></strong></h4>

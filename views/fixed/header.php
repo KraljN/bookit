@@ -24,7 +24,7 @@
         <input type="hidden" name="isLogged" id="isLogged" value="
         <?php echo isset($_SESSION["korisnik"])?"true":"false" ?>
         "/>
-        <input type="hidden" id="imgPath" value="<?= IMG_PATH ?>" />
+        <input type="hidden" id="imgPath" value="<?= DISPLAY_IMG_PATH ?>" />
         <input type="hidden" id="roothPath" value="<?= ROOT_PATH ?>" />
         <input type="hidden" id="displayRoothPath" value="<?= DISPLAY_ROOT_PATH ?>" />
         <header>

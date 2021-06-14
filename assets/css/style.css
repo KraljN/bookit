@@ -1372,6 +1372,9 @@ input[type=number] {
   background-color: rgba(255,255,255,0.4)!important;
   transition: 0.3s background-color 0.05s!important;
 }
-#menu-item-add-form{
+/* #menu-item-add-form{
   margin-bottom: 170px!important;
+} */
+.content{
+  min-height: 520px;
 }

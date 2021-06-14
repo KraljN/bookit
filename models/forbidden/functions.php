@@ -40,19 +40,6 @@ function getCityId($cityName, $countryId){
         return false;
     }
 }
-// function getPaymentId($userId){
-//     global $db;
-//     $prepare = $db->prepare("SELECT payment_id FROM user_payments WHERE user_id = :id");
-//     $prepare->bindParam(":id", $userId);
-//     $prepare->execute();
-//     $result = $prepare->fetch();
-//     if($result){
-//         return $result->payment_id;
-//     }
-//     else{
-//         return false;
-//     }
-// }
 function insertCountry($countryName){
     global $db;
     $prepare = $db->prepare("INSERT INTO countries VALUES (NULL, :drzava)");
@@ -330,4 +317,142 @@ function  validateUser($data, $withPassword = true){
         $greske[] = "Wrong CVV format(Last 3 numbers on back of your card)";
     }
     return $greske;
+}
+function validateBook($data, $files = null){
+    global $mb;
+    global $greske;
+    $regExpTitle = "/^[A-ZĐŠĆŽČ][a-zšđćžč][a-zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/";
+
+    if(!isset($data["title"])){
+        array_push($greske, "Title can't be empty");
+    }
+    else{
+        if(!preg_match($regExpTitle, $data["title"])){
+            array_push($greske, "Wrong title format (The Handmaid's Tale)");
+        }
+    }
+    if(!isset($data["description"])){
+        array_push($greske, "Description can't be empty");
+    }
+    else{
+        if(strlen($data["description"]) == 0){
+            array_push($greske, "Description can't be empty");
+        }
+    }
+    if(!isset($data["year"])){
+        array_push($greske, "Year can't be empty");
+    }
+    else{
+        if($data["year"] == 0 || intval($data["year"]) > intval(date("Y"))){
+            array_push($greske, "Year can't be empty and above current year");
+        }
+    }
+    if(!isset($data["pages"])){
+        array_push($greske, "Pages can't be empty");
+    }
+    else{
+        if($data["pages"] < 1){
+            array_push($greske, "Book must have at least 1 page");
+        }
+    }
+    if(!isset($data["price"])){
+        array_push($greske, "Price can't be empty");
+    }
+    else{
+        if($data["price"] <= 0){
+            array_push($greske, "Price must be above 0");
+        }
+    }
+    if(!isset($data["author"])){
+        array_push($greske, "Author can't be empty");
+    }
+    else{
+        if($data["author"] == 0){
+            array_push($greske, "Author must be selected");
+        }
+    }
+    if(!isset($data["genres"])){
+        array_push($greske, "Genres can't be empty");
+    }
+    else{ 
+        if(@count($data["genres"]) == 0){
+            array_push($greske, "At least 1 genre must be selected");
+        }
+    }
+    if($files != null){
+        list($name, $extension) = explode(".", $files["picture"]["name"]);
+        if($files["picture"]["size"] > 2 * $mb ){
+            array_push($greske, "Picure must be lower than 2 MB");
+        }
+        if(!($extension == "jpg" || $extension =="jpeg" || $extension =="png" || $extension == "gif")){
+            array_push($greske, "Picure must be in valid format (.jpg, .jpeg, .png, .gif)");
+        }
+    }
+}
+function getPriceId($price){
+    global $db;
+    $query = "SELECT price_id AS id
+              FROM prices
+              WHERE value = ?";
+    $queryPrepare = $db -> prepare($query);
+    $queryPrepare -> execute([$price]);
+    $result = $queryPrepare -> fetch();
+    if($result){
+        return $result->id;
+    }
+    else{
+        return false;
+    }
+}
+function saveResizedImage($image){
+    list($name, $extension) = explode(".", $image["name"]);
+    list($width, $height) = getimagesize($image["tmp_name"]);
+    $pictureName = "thumb-" . time() . "_" . $image["name"];
+    switch($extension){
+        case("jpg"):
+            header("Content-Type: image/jpeg");
+            break;
+        case("jpeg"):
+            header("Content-Type: image/jpeg");
+            break;
+        case("png"):
+            header("Content-Type: image/png");
+            break;
+        case("gif"):
+            header("Content-Type: image/gif");
+            break;
+    }
+    define("NEW_WIDTH", 80);
+    $newHeight = $height * NEW_WIDTH / $width;
+    $thumb = imagecreatetruecolor(NEW_WIDTH, $newHeight);
+    switch($extension){
+        case("jpg"):
+             $source = imagecreatefromjpeg($image["tmp_name"]);
+            break;
+        case("jpeg"):
+            $source = imagecreatefromjpeg($image["tmp_name"]);
+            break;
+        case("png"):
+            $source = imagecreatefrompng($image["tmp_name"]);
+            break;
+        case("gif"):
+            $source = imagecreatefromgif($image["tmp_name"]);
+            break;
+    }
+    imagecopyresized($thumb, $source, 0, 0, 0, 0, NEW_WIDTH, $newHeight, $width, $height);
+    switch($extension){
+        case("jpg"):
+             imagejpeg($thumb, IMG_PATH .  $pictureName);
+            break;
+        case("jpeg"):
+            imagejpeg($thumb, IMG_PATH .  $pictureName);
+            break;
+        case("png"):
+            imagepng($thumb, IMG_PATH .  $pictureName);
+            break;
+        case("gif"):
+            imagegif($thumb, IMG_PATH .  $pictureName);
+            break;
+    }
+    imagedestroy($thumb);
 }

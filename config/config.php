@@ -2,7 +2,8 @@
     //========PATHS========
     define("ROOT_PATH", $_SERVER["DOCUMENT_ROOT"] . "/bookIt");
     define("ENV_PATH", ROOT_PATH . "/config/.env");
-    define("IMG_PATH", "assets/img/"); //============ dodato samo / ispred assets
+    define("DISPLAY_IMG_PATH",  "assets/img/"); //============ dodato samo / ispred assets
+    define("IMG_PATH", ROOT_PATH . "/assets/img/"); //============ za upis slike u bazu
     define("DISPLAY_ROOT_PATH", "www.bookit.com/index?page=");
 
     //========LOGS========
@@ -24,6 +25,12 @@
     define("KORISNIK", 2);
     define("AKTIVAN_KORISNIK", 1);
     define("DAKTIVIRAN_KORISNIK", 0);
+
+
+
+
+    //==========OTHER=========
+    define("MB", 1000000);
 
 
 
