@@ -147,7 +147,7 @@
             </div>
             <?php endif ?>
             <div class="row m-0">
-            <span class="text-success text-center font-weight-bold successInfo mx-auto"><?php if(!isset($_GET["id"])) echo("Successful made user"); else echo("User successfully updated") ?></span>
+            <span class="text-success text-center font-weight-bold successInfo mx-auto"><?php if(!isset($_GET["id"])) echo("Successful made user"); else echo("User successfully updated. Reload page to see changes") ?></span>
             <span class="text-danger text-center font-weight-bold mb-3 errorInfo mx-auto">User with that username already exist</span>
             </div>
             <div class="row m-0">

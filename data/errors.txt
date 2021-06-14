@@ -114,3 +114,7 @@ image-insert	There is no active transaction	127.0.0.1	2021-06-14 12:09:43
 book-insert	There is no active transaction	127.0.0.1	2021-06-14 12:09:43
 image-insert	There is no active transaction	127.0.0.1	2021-06-14 12:10:43
 book-insert	There is no active transaction	127.0.0.1	2021-06-14 12:10:43
+book-price-insert	SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'book_id' cannot be null	127.0.0.1	2021-06-14 19:27:21
+book-update	There is no active transaction	127.0.0.1	2021-06-14 19:27:21
+book-price-insert	SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'book_id' cannot be null	127.0.0.1	2021-06-14 19:27:51
+book-update	There is no active transaction	127.0.0.1	2021-06-14 19:27:51

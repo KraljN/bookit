@@ -384,7 +384,7 @@ function validateBook($data, $files = null){
         if($files["picture"]["size"] > 2 * $mb ){
             array_push($greske, "Picure must be lower than 2 MB");
         }
-        if(!($extension == "jpg" || $extension =="jpeg" || $extension =="png" || $extension == "gif")){
+        if(!($extension == "jpg" || $extension !="jpeg" || $extension ="png" || $extension == "gif")){
             array_push($greske, "Picure must be in valid format (.jpg, .jpeg, .png, .gif)");
         }
     }
@@ -455,4 +455,59 @@ function saveResizedImage($image){
             break;
     }
     imagedestroy($thumb);
+}
+function insertPrice($price, $bookId){
+    global $db;
+    $date = date("Y-m-d H:i:s");
+    $priceBookQuery = "INSERT INTO books_prices VALUES(NULL, ?, ?, ?)";
+    $priceQuery = "INSERT INTO prices VALUES(NULL, ?)";
+
+    $priceId = getPriceId($price);
+    if(!$priceId){
+        $pricePrepare = $db -> prepare($priceQuery);
+        try{
+            $pricePrepare -> execute([$price]);
+            $priceId = getLastInsertedId();
+        }
+        catch(PDOException $ex){
+            logError($ex->getMessage(), "price-insert");
+            $message = "Error inserting price";
+            $db->rollBack();
+        }
+    }
+    $priceBookPrepare = $db -> prepare($priceBookQuery);
+    try{
+        $priceBookPrepare -> execute([$bookId, $priceId, $date]);
+        return;
+    }
+    catch(PDOException $ex){
+        logError($ex->getMessage(), "book-price-insert");
+        $message = "Error linking price with book";
+        $db->rollBack();
+        vratiJSON(["message"=>$message], 500);
+    }
+}
+function insertGenres($genres, $bookId){
+    global $db;
+    $genreQuery = "INSERT INTO genres_books VALUES(NULL, ?, ?)";
+    $genreInsertPrepare = $db -> prepare($genreQuery);
+    foreach(@$_POST["genres"] as $genre){
+        try{
+        $genreInsertPrepare -> execute([$genre, $bookId]);
+        }
+        catch(PDOException $ex){
+            logError($ex->getMessage(), "genre-book-insert");
+            $message = "Error linking genre with book";
+            $db->rollBack();
+            vratiJSON(["message"=>$message], 500);
+        }
+    }
+    return;
+}
+function getPicturePath($bookId){
+    global $db;
+    $query = "SELECT path FROM book_images WHERE book_id = ?";
+    $prepare = $db -> prepare($query);
+    $prepare -> execute([$bookId]);
+    return $prepare -> fetch() -> path;
 }

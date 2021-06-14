@@ -90,14 +90,14 @@ $(document).ready(function () {
         });
     }
     if(window.location.href.includes("book-form")){
-        // setDefaultMenuItemValues();
-        // let previousErrorText = $(".errorInfo").text();
+        setDefaultBookValues();
+        let previousErrorText = $(".errorInfo").text();
         $("#add-book-submit").on("click", function(event){
-            validateBook(event, "addBook", "insert-menu-item.php");
+            validateBook(event, "addBook", "add-book.php");
         });
-        // $("#edit-menu-submit").on("click", function(event){
-        //     validateMenuItem(event, "editMenu", "edit-menu-item.php", previousErrorText);
-        // });
+        $("#edit-user-submit").on("click", function(event){
+            validateBook(event, "editBook", "edit-book.php", previousErrorText);
+        });
     }
 });
 function menu(){
@@ -265,6 +265,7 @@ function validateUser(event, targetPage, actionString,  forAdminManipulation = f
                     $(".successInfo").hide();
                     $(".errorInfo").hide();
                     $(".successInfo").slideDown();
+                    setDefaultUserVaules();
             },
             error: function(error){
                 if(error.status == 409){
@@ -1044,6 +1045,7 @@ function setTopOffsetForAccessAndErrorsDiv(){
 }
 function validateMenuItem(event, actionString, targetPage, previousErrorText = $(".errorInfo").text()){
     event.preventDefault();
+    
     let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč]{1,14}(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/;
     let regExpUrl = /(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9@:_\+~#=]{2,20}\.[a-z0-9]{2,6}[a-zA-Z0-9@:%_\+.~#?&\/=\.]*/;
 
@@ -1838,6 +1840,9 @@ function  validateBook(event, actionString, target, previousErrorText = $(".erro
 
     let regExpTitle =/^[A-ZĐŠĆŽČ][a-zšđćžč][a-zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/;
 
+    let distinctData = true;
+    let defaultValues = null;
+
     let form = new FormData();
     titleValidno = proveraTb($("#title"), regExpTitle, 0,  false);
 
@@ -1857,14 +1862,32 @@ function  validateBook(event, actionString, target, previousErrorText = $(".erro
     priceValidno = validateNumberInput($("#price"));
 
 
-    if((extension == "jpg" || extension =="jpeg" || extension =="png" || extension == "gif") && isUploaded) imageSize =  document.getElementById("picture").files[0].size/1024/1024;
-    if(isUploaded && imageSize<2 && (extension == "jpg" || extension =="jpeg" || extension =="png" || extension == "gif")){
-        $("#picture").next().html("");
-        slikaValidno = true;
+    if(target != "edit-book.php"){
+        if((extension == "jpg" || extension =="jpeg" || extension =="png" || extension == "gif") && isUploaded) imageSize =  document.getElementById("picture").files[0].size/1024/1024;
+        if(isUploaded && imageSize<2 && (extension == "jpg" || extension =="jpeg" || extension =="png" || extension == "gif")){
+            $("#picture").next().html("");
+            slikaValidno = true;
+        }
+        else{
+            $("#picture").next().html("Select .jpg, .jpeg, .png, .gif, smaller than 2MB ");
+            slikaValidno = false;
+        }
     }
     else{
-        $("#picture").next().html("Select .jpg, .jpeg, .png, .gif, smaller than 2MB ");
-        slikaValidno = false;
+        if(isUploaded){
+            imageSize =  document.getElementById("picture").files[0].size/1024/1024;
+            if(imageSize<2 && (extension == "jpg" || extension =="jpeg" || extension =="png" || extension == "gif")){
+                $("#picture").next().html("");
+                slikaValidno = true;
+            }
+            else{
+                $("#picture").next().html("Select .jpg, .jpeg, .png, .gif, smaller than 2MB ");
+                slikaValidno = false;
+            }
+        }
+        else{
+            slikaValidno = true;
+        }
     }
 
     if($('input[name="genres"]:checked').length == 0){
@@ -1887,8 +1910,32 @@ function  validateBook(event, actionString, target, previousErrorText = $(".erro
     $.each($('input[name="genres"]:checked'), function (index, element) { 
         genres.push($(element).val());
     });
-    if(slikaValidno && titleValidno && descriptionValidno && yearValidno && pagesValidno && authorValidno && publisherValidno && genreValidno && priceValidno){
-        console.log("sve je ispravno");
+    if(localStorage.getItem("defaultBookData") != null){
+        defaultValues = JSON.parse(localStorage.getItem("defaultBookData"));
+    }
+    if(slikaValidno && titleValidno && descriptionValidno && yearValidno && pagesValidno && authorValidno && publisherValidno && genreValidno && priceValidno && defaultValues != null){
+        if($("#title").val() == defaultValues.title &&
+         $("#description").val() == defaultValues.description && 
+         $("#year").val() == defaultValues.year && 
+         $("#pages").val() == defaultValues.pages &&
+         $("#price").val() == defaultValues.price &&
+         $("#author").val() == defaultValues.author &&
+         $("#publisher").val() == defaultValues.publisher &&
+         JSON.stringify(genres) == JSON.stringify(defaultValues.genres) &&
+         !isUploaded
+         ){
+            distinctData = false;
+            $(".successInfo").hide();
+            $(".errorInfo").hide();
+            $(".errorInfo").text("You must enter at least 1 distinct data");
+            $(".errorInfo").slideDown();
+        }
+        else{
+            $(".errorInfo").hide();
+            $(".errorInfo").text(previousErrorText);
+        }
+    }
+    if(slikaValidno && titleValidno && descriptionValidno && yearValidno && pagesValidno && authorValidno && publisherValidno && genreValidno && priceValidno && distinctData){
         form.append("picture", document.getElementById("picture").files[0]);
         form.append("title", $("#title").val());
         form.append("description", $("#description").val());
@@ -1899,19 +1946,21 @@ function  validateBook(event, actionString, target, previousErrorText = $(".erro
         form.append("publisher", $("#publisher").val());
         form.append("genres", genres);
         form.append("actionString", actionString);
+        form.append("id",  $("#id").val());
 
         $.ajax({
             type: "POST",
             cache: false,
             contentType: false,
             processData: false,
-            url: "models/admin/content-manipulation/books/add-book.php",
+            url: "models/admin/content-manipulation/books/" + target,
             data: form,
             dataType: "json",
             success: function (response) {
                 $(".successInfo").hide();
                 $(".errorInfo").hide();
                 $(".successInfo").slideDown();
+                setDefaultBookValues();
             },
             error: function (error){
                 if(error.status == 422){
@@ -1947,5 +1996,22 @@ function validateNumberInput(field){
         }
         return true;
     }
+}
+function setDefaultBookValues(){
+    let output = {};
+    output.title = $("#title").val();
+    output.description = $("#description").val();
+    output.year = $("#year").val();
+    output.pages = $("#pages").val();
+    output.price = $("#price").val();
+    output.author = $("#author").val();
+    output.publisher = $("#publisher").val();
+    let genres = [];
+    $.each($('input[name="genres"]:checked'), function (index, element) { 
+        genres.push($(element).val());
+    });
+    output.genres = genres;
+    output =  JSON.stringify(output);
+    localStorage.setItem("defaultBookData", output)
 }
 //21 min / 3:02

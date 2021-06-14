@@ -16,6 +16,34 @@
                     FROM genres";
     $genres = doSelect($genresQuery);
 
+    if(isset($_GET["id"])){
+        $queryBook = "SELECT b.book_id AS id, bi.path, bi.alt, (SELECT p.value
+                                                            FROM books_prices bp INNER JOIN prices p ON bp.price_id = p.price_id
+                                                            WHERE bp.book_id = b.book_id
+                                                            ORDER BY date_become_effective DESC
+                                                            LIMIT 1) AS price, b.title, p.first_name AS name, p.last_name AS  surname,
+                                                            b.description, b.number_of_pages AS number, b.publication_year AS year, b.author_id AS author,
+                                                            b.publisher_id AS publisher
+                  FROM book_images bi  
+                  INNER JOIN books b ON bi.book_id = b.book_id 
+                  INNER JOIN authors a ON b.author_id = a.author_id
+                  INNER JOIN persons p ON p.person_id = a.person_id
+                  WHERE b.book_id = ?";
+        $bookPrepare = $db -> prepare($queryBook);
+        $bookPrepare -> execute([$_GET["id"]]);
+        $book = $bookPrepare -> fetch();
+        $queryGenre = "SELECT g.genre_id
+                       FROM genres g INNER JOIN genres_books gb ON g.genre_id = gb.genre_id
+                       WHERE gb.book_id = ?";
+        $genrePrepare = $db -> prepare($queryGenre);
+        $genrePrepare -> execute([$_GET["id"]]);
+        $genresResult = $genrePrepare -> fetchAll();
+        $genreIds = array();
+        foreach($genresResult as $genre){
+            array_push($genreIds, $genre->genre_id);
+        }
+
+    }
 ?>
 
 
@@ -49,44 +77,47 @@
                 <div class="card-body">
             <form class="row" action="obrada.php" enctype="multipart/form-data" method="post">
             <div class="row m-0">
-                <div class="col-md-6 d-flex align-items-center justify-content-center form-group">
+                <div class="col-md-6 d-flex align-items-center justify-content-center form-group d-flex flex-column">
+                <?php if(isset($_GET['id'])):?>
+                    <img src="<?= DISPLAY_IMG_PATH  . "thumb-" .  $book -> path ?>" class="img-fluid mb-2" alt="<?= $book -> path ?>"/>
+                <?php endif; ?>
                     <label for="picture">Book Picture</label>
                 </div>
-                <div class="col-md-6 form-group">
+                <div class="col-md-6 form-group d-flex flex-column justify-content-center">
                     <input type="file" id="picture"/>
                     <span class="text-danger ml-2 "></span>
                     <span class="required-star">*</span>
                 </div>
                 </div>
                 <div class="col-md-12 form-group ">
-                    <input type="text" value="<?php if(isset($_GET["id"])) echo($user -> email) ?>" class="form-control input-height mb-2" id="title" name="title" placeholder="Title"/>
+                    <input type="text" value="<?php if(isset($_GET["id"])) echo($book -> title) ?>" class="form-control input-height mb-2" id="title" name="title" placeholder="Title"/>
                     <span class="required-star">*</span>
                     <span class="text-danger ml-2 wrong d-none">Wrong title format (The Handmaid's Tale)</span>
                 </div>
                 <div class="row m-0">
                     <div class="container">
-                        <textarea class="form-control mb-1" id="description" placeholder="Description" cols="50" rows="3"></textarea>
+                        <textarea class="form-control mb-1" id="description" placeholder="Description" cols="50" rows="3"><?php if(isset($_GET["id"])) echo($book -> description) ?></textarea>
                         <span class="text-danger"></span>
                     </div>
                 </div>
             <div class="row m-0">
                 <div class="col-md-6 form-group">
-                    <select class="custom-select mb-1" id="year">
+                    <select class="custom-select mb-1" value="" id="year">
                         <option  value="0">Publification Year</option>
                     <?php for($i = $currentYear; $i>$borderYear; $i--): ?>
-                        <option value="<?= $i ?>"><?= $i ?></option>
+                        <option <?php if(isset($_GET["id"]) && $book -> year == $i) echo('selected="selected"') ?> value="<?= $i ?>"><?= $i ?></option>
                         <?php endfor; ?>
                     </select>
                     <span class="text-danger ml-2"></span>
                     <span class="required-star">*</span>
                 </div>
                 <div class="col-md-3 col-sm-6 form-group">
-                    <input type="number" min="1" class="form-control input-height mb-2" value="<?php if(isset($_GET["id"])) echo($user -> payments[0] -> card_verification_value) ?>" id="pages" name="pages" placeholder="Number Of Pages"/>
+                    <input type="number" min="1" class="form-control input-height mb-2" value="<?php if(isset($_GET["id"])) echo($book -> number) ?>" id="pages" name="pages" placeholder="Number Of Pages"/>
                     <span class="text-danger d-none">Number of pages must be above 0</span>
                     <span class="required-star">*</span>
                 </div>
                 <div class="col-md-3 col-sm-6 form-group">
-                    <input type="number" min="1" class="form-control input-height mb-2" value="<?php if(isset($_GET["id"])) echo($user -> payments[0] -> card_verification_value) ?>" id="price" name="price" placeholder="Price"/>
+                    <input type="number" min="1" step="any" class="form-control input-height mb-2" value="<?php if(isset($_GET["id"])) echo($book -> price) ?>" id="price" name="price" placeholder="Price"/>
                     <span class="text-danger  d-none">Price must be above 0</span>
                     <span class="required-star">*</span>
                 </div>
@@ -96,7 +127,7 @@
                     <select class="custom-select mb-1" id="author">
                         <option  value="0">Author</option>
                     <?php foreach($authors as $author): ?>
-                        <option value="<?= $author -> id ?>"><?= $author -> name . " " . $author -> surname ?></option>
+                        <option <?php if(isset($_GET["id"]) && $book -> author == $author -> id) echo('selected="selected"') ?>  value="<?= $author -> id ?>"><?= $author -> name . " " . $author -> surname ?></option>
                     <?php endforeach; ?>
                     </select>
                     <span class="text-danger"></span>
@@ -107,7 +138,7 @@
                     <select class="custom-select mb-1" id="publisher">
                         <option  value="0">Publisher</option>
                     <?php foreach($publishers as $publisher): ?>
-                        <option value="<?= $publisher -> id ?>"><?= $publisher -> name?></option>
+                        <option <?php if(isset($_GET["id"]) && $book -> publisher == $publisher -> id) echo('selected="selected"') ?> value="<?= $publisher -> id ?>"><?= $publisher -> name?></option>
                     <?php endforeach; ?>
                     </select>
                     <span class="text-danger"></span>
@@ -119,8 +150,8 @@
                 <div class="container">
                     <?php foreach($genres as $genre): ?>
                         <div class="form-check">
-                            <input class="form-check-input" name="genres" type="checkbox" value="<?= $genre -> id ?>"/>
-                            <label class="form-check-label" for="defaultCheck1">
+                            <input class="form-check-input" <?php if(isset($_GET["id"]) && in_array($genre -> id, $genreIds)) echo('checked="checked"') ?> name="genres" type="checkbox" value="<?= $genre -> id ?>"/>
+                            <label class="form-check-label">
                                 <?= $genre -> name ?>
                             </label>
                         </div>
@@ -129,7 +160,7 @@
                 </div>
             </div>
             <div class="row m-0">
-            <span class="text-success text-center font-weight-bold successInfo mx-auto"><?php if(!isset($_GET["id"])) echo("Successful added book"); else echo("Book successfully updated") ?></span>
+            <span class="text-success text-center font-weight-bold successInfo mx-auto"><?php if(!isset($_GET["id"])) echo("Successful added book"); else echo("Book successfully updated. Reload page to see changes") ?></span>
             <span class="text-danger text-center font-weight-bold mb-3 errorInfo mx-auto">Error encountered. Please try again later</span>
             </div>
             <div class="row m-0">

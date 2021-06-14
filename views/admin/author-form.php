@@ -55,7 +55,7 @@
                     <input type="submit" class="btn btn-primary float-right mt-3" id="<?php if(isset($_GET["id"])) echo("edit-author-submit"); else echo ("add-author-submit") ?>" value="<?php if(isset($_GET["id"])) echo("Edit"); else echo ("Add") ?>"/>
                     <div class="clearfix"></div>
                     <div class="row m-0 d-felx justify-content-center">
-                      <span class="text-success text-center font-weight-bold successInfo"><?php if(isset($_GET["id"])) echo("Author succefuly updated"); else echo ("Author succefuly added") ?></span>
+                      <span class="text-success text-center font-weight-bold successInfo"><?php if(isset($_GET["id"])) echo("Author succefuly updated. Reload page to see changes"); else echo ("Author succefuly added") ?></span>
                       <span class="text-danger text-center font-weight-bold mb-3 errorInfo">Please try again later</span>
                     </div>
                     <?php if(isset($_SESSION["greske"])): ?>
