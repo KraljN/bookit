@@ -16,7 +16,14 @@
     function logError($message = null, $customMessage = null){
         $open = fopen(ERRORS_LOG, "a");
         if($open){
-            fwrite($open,$customMessage . SEPARATOR .  $message. SEPARATOR ."{$_SERVER['REMOTE_ADDR']}". SEPARATOR . gmdate("Y-m-d H:i:s") ."\n");
+            fwrite($open,$customMessage . SEPARATOR .  $message. SEPARATOR ."{$_SERVER['REMOTE_ADDR']}". SEPARATOR . date("Y-m-d H:i:s", time()) ."\n");
             fclose($open);
         }
     }
+    function logFailedLogin($userId){
+        $open = fopen(FAILED_LOGIN_LOG, "a");
+        if($open){
+            fwrite($open, $userId . SEPARATOR  ."{$_SERVER['REMOTE_ADDR']}". SEPARATOR . date("Y-m-d H:i:s", time()) ."\n");
+            fclose($open);
+        }
+    }   

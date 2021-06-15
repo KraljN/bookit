@@ -12,7 +12,6 @@
         }
     ?>
    <body>
-        <?php  var_dump($_SESSION) ?>       <!-- =======OVE JE ISPIS CELE SESIJE  -->
         <input type="hidden" name="page" id="page" value="<?php 
             if(isset($_GET["page"])){
                 echo $_GET["page"]=="single-product"?"{$_GET["page"]}&id={$_GET["id"]}":$_GET["page"];

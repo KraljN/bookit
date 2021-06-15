@@ -35,7 +35,7 @@ include "models/capchas/generateCapchaText.php"
                     </div>
                     <div class="col-md-12 col-lg-8 form-group d-flex flex-column">
                         <button class="btn black button-width" id="login">Login</button>
-                        <span class="text-danger font-weight-bold ml-1 mt-3 loginInfo">Wrong username, password or capcha</span>
+                        <span class="text-danger font-weight-bold ml-1 mt-3 loginInfo"></span>
                     </div>
 
                 </div>

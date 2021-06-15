@@ -11,6 +11,7 @@
     define("SEPARATOR", "\t");
     @define("ACCESS_LOG", ROOT_PATH . "/data/access.txt");
     @define("ERRORS_LOG", ROOT_PATH . "/data/errors.txt");
+    @define("FAILED_LOGIN_LOG", ROOT_PATH . "/data/failedLogins.txt");
 
     //========DATABASE========
     define("DBNAME", getParameter("DBNAME"));
@@ -31,6 +32,7 @@
 
     //==========OTHER=========
     define("MB", 1000000);
+    define("NOT_SENT", 2);
 
 
 

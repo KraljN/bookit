@@ -31,7 +31,7 @@ if(isset($_POST["action"]) && $_POST["action"]=="uloguj"){
             $_SESSION["korisnik"] = $pripremaLog->fetch();
             $open = fopen(ACCESS_LOG, "a");
             if($open){
-                fwrite($open, "logged-in". SEPARATOR ."{$_SERVER['REMOTE_ADDR']}". SEPARATOR . gmdate("Y-m-d H:i:s") ."\n");
+                fwrite($open, "logged-in". SEPARATOR ."{$_SERVER['REMOTE_ADDR']}". SEPARATOR . date("Y-m-d H:i:s", time()) ."\n");
                 fclose($open);
             }
             $admin = $_SESSION["korisnik"]->role_id == ADMIN ? true : false;
@@ -41,24 +41,41 @@ if(isset($_POST["action"]) && $_POST["action"]=="uloguj"){
         else{
 
 
-            $proveraUser = $db -> prepare("SELECT email
+            $proveraUser = $db -> prepare("SELECT email, user_id AS id
                                            FROM users
                                            WHERE username = :username");
             $proveraUser -> bindParam(":username", $user);
             $proveraUser -> execute();
             if($proveraUser -> rowCount() == 1){
-                $mail = $proveraUser -> fetch() -> email;
+                $userId = $proveraUser -> fetch() -> id;
+                logFailedLogin($userId);
+                $failedLogPath = FAILED_LOGIN_LOG;
+                $separator = SEPARATOR;
+                $failedLoginCount = counFailedAttemptsAtLast5Minutes($userId);
+                if($failedLoginCount == 3){
+                    $query = "UPDATE users SET active = 0, date_updated = ?
+                              WHERE user_id = ?";
+                    try{
+                        $updatePrepare = $db -> prepare($query);
+                        $updatePrepare -> execute([date("Y-m-d H:i:s"), $userId]);
+                    }
+                    catch(PDOException $ex){
+                        logError($ex->getMessage(), "status-update");
+                        vratiJSON(["message"=>$message], 500);
+                    }
+                // $mail = $proveraUser -> fetch() -> email;
 
-                $to = $mail;
-                $subject = 'Failed attempt of loging onto our website';
-                $message = 'Hi, \r\n Somebody tried to login onto our site with your username. \r\n Contact support if it isn\'t you \r\n';
-                $headers = 'From: book-it.com' . "\r\n";
+                // $to = $mail;
+                // $subject = 'Failed attempt of loging onto our website';
+                // $message = 'Hi, \r\n Somebody tried to login onto our site with your username. \r\n Contact support if it isn\'t you \r\n';
+                // $headers = 'From: book-it.com' . "\r\n";
 
-                $uspesno = mail($to, $subject, $message, $headers);
+                // $uspesno = mail($to, $subject, $message, $headers);
                 // var_dump($uspesno);    Treba se namestiti mail server za ovo!!!
+                }
                 
             }
-            $output = ["logged" => false];
+            $output = ["failedLogginCount" => $failedLoginCount];
             vratiJSON($output, 401);
         }
     }

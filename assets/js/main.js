@@ -25,10 +25,6 @@ $(document).ready(function () {
         dohvatiSubjects();
         $("#authorDownload").on("click", preuzmiWord)
     }
-    if(window.location.href.includes("contact")){
-        dohvatiSubjects();
-        $("#authorDownload").on("click", preuzmiWord)
-    }
     if(window.location.href.includes("shopping-cart")){
         $("input[type=number]").on("blur", function(){
             manipulateShoppingCart(this);
@@ -38,7 +34,7 @@ $(document).ready(function () {
     if(window.location.href.includes("admin-dashboard")){
         getDashboardInfo();
         getPagesStatistic();
-
+        getOrders();
     }
     if(window.location.href.includes("admin-reports")){
         displayReports();
@@ -341,7 +337,6 @@ function proveriLogin(e){
                     window.location.href = "index.php?page=login";
                 }
                 if(data.logged){
-                    console.log(data.admin);
                     if(data.admin)window.location.href = "index.php?page=admin-dashboard";
                     else{
                         window.location.href = "index.php?page=home";
@@ -349,6 +344,19 @@ function proveriLogin(e){
                 }
             },
             error: function(error, status, message){
+                $(".loginInfo").html("Wrong username, password or capcha");
+                let failedLogginCount = error.responseJSON.failedLogginCount;
+                if(failedLogginCount == 2){
+                    $(".loginInfo").hide();
+                    $(".loginInfo").html("Your account will be locked if you miss login parameters again");
+                    $(".loginInfo").slideDown();
+                }
+                if(failedLogginCount == 3){
+                    $(".loginInfo").hide();
+                    $(".loginInfo").html("Your account is locked, please contact administrators");
+
+                    $(".loginInfo").slideDown();
+                }
                 if(error.responseText){
                     $(".loginInfo").hide();
                     $(".loginInfo").slideDown();
@@ -823,7 +831,10 @@ function displayReports(){
     });
 }
 function displayAccessLog(data){
-    if(data != undefined){
+    if(data == undefined || data.length == 0){
+        var output = "<h4 class='font-weight-bold my-4 text-center'>There is no logs at your provided page, please choose from pagination below</h4>";
+    }
+    else{
         const perPage = 10;
         let i = 0;
         let pageNumber = $("#accessPageNumber").val();
@@ -867,9 +878,6 @@ function displayAccessLog(data){
         output += `         </tbody>
                         </table>
                     </div`;
-    }
-    else{
-        var output = "<h4 class='font-weight-bold my-4 text-center'>There is no logs at your provided page, please choose from pagination below</h4>";
     }
     $("#access-log").html(output);
 }
@@ -983,7 +991,7 @@ function displayMenuItems(){
         dataType: "json",
         success: function (response) {
             showMenuItems(response);
-            $(".delete").on("click", function(){deleteItem(this, "deleteMenuItem", "menu/delete-menu-item.php", displayMenuItems )});
+            $(".deleteMenuItem").on("click", function(){deleteItem(this, "deleteMenuItem", "menu/delete-menu-item.php", displayMenuItems )});
         }
     });
 }
@@ -1025,7 +1033,7 @@ function showMenuItems(data){
                             <a href="index.php?page=menu-item-form&id=${el.id}" class="btn btn-primary btn-link btn-sm edit">
                                 <i class="material-icons">Edit</i>
                             </a>
-                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm delete">
+                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm deleteMenuItem">
                                 <i class="material-icons">Delete</i>
                             </button>
                             </td>
@@ -1067,7 +1075,7 @@ function validateMenuItem(event, actionString, targetPage, previousErrorText = $
     if(localStorage.getItem("defaultMenuItemData") != null){
         defaultValues = localStorage.getItem("defaultMenuItemData").split(",");
     }
-    if(nameIspravno && lastNameIspravno && defaultValues != null){
+    if(nameIspravno && urlIspravno && priorityIspravno && defaultValues != null){
         if($("#name").val() == defaultValues[0] && $("#priority").val() == defaultValues[1] && $("#url").val() == defaultValues[2]){
             distinctData = false;
             $(".successInfo").hide();
@@ -1126,7 +1134,7 @@ function setDefaultMenuItemValues(){
 }
 function deleteItem(obj, actionString, deleteTargetPage, callback, checkIdTargetPage = null){
     let id = obj.dataset.id;
-    var confirmed = false;
+    var confirmed = true;
     if(checkIdTargetPage != null){
         $.ajax({
             type: "GET",
@@ -1151,26 +1159,25 @@ function deleteItem(obj, actionString, deleteTargetPage, callback, checkIdTarget
                 }
             }
         });
-        if(confirmed){
-            $.ajax({
-                type: "POST",
-                url: "models/admin/content-manipulation/" + deleteTargetPage,
-                async: false,
-                data: {
-                    id,
-                    actionString
-                },
-                dataType: "json",
-                success: function (response) {
-                    callback();
-                }
-            });
-        }
-
+    }
+    if(confirmed){
+        $.ajax({
+            type: "POST",
+            url: "models/admin/content-manipulation/" + deleteTargetPage,
+            async: false,
+            data: {
+                id,
+                actionString
+            },
+            dataType: "json",
+            success: function (response) {
+                callback();
+            }
+        });
     }
 }
 function displayGenres(){
-    let actionString = "displayGenres"
+    let actionString = "getOrders"
     $.ajax({
         type: "GET",
         url: "models/admin/content-manipulation/genres/get-genres.php",
@@ -1512,7 +1519,7 @@ function displayAuthors(){
         dataType: "json",
         success: function (response) {
             showAuthors(response);
-            $(".delete").on("click", function(){deleteItem(this, "deleteAuthor", "authors/delete-author.php", displayAuthors, "authors/get-author-with-id.php")});
+            $(".deleteAuthor").on("click", function(){deleteItem(this, "deleteAuthor", "authors/delete-author.php", displayAuthors, "authors/get-author-with-id.php")});
         }
     });
 }
@@ -1548,7 +1555,7 @@ function showAuthors(data){
                             <a href="index.php?page=author-form&id=${el.id}" class="btn btn-primary btn-link btn-sm edit">
                                 <i class="material-icons">Edit</i>
                             </a>
-                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm delete">
+                            <button data-id="${el.id}" class="btn btn-danger btn-link btn-sm deleteAuthor">
                                 <i class="material-icons">Delete</i>
                             </button>
                             </td>
@@ -1771,6 +1778,7 @@ function displayBooks(){
         dataType: "json",
         success: function (response) {
             showBooks(response);
+            $(".deleteBook").on("click", function(){deleteItem(this, "deleteBook", "books/delete-book.php", displayBooks)});
         }
     });
 }
@@ -1818,7 +1826,7 @@ function showBooks(data){
                                     <a href="index.php?page=book-form&id=${el.id}" class="btn btn-primary btn-link btn-sm edit float-left ">
                                         <i class="material-icons">Edit</i>
                                     </a>
-                                    <button data-id="${el.id}" class="btn btn-danger btn-link  float-left btn-sm delete">
+                                    <button data-id="${el.id}" class="btn btn-danger btn-link  float-left btn-sm deleteBook">
                                         <i class="material-icons">Delete</i>
                                     </button>
                             </td>
@@ -2014,4 +2022,135 @@ function setDefaultBookValues(){
     output =  JSON.stringify(output);
     localStorage.setItem("defaultBookData", output)
 }
-//21 min / 3:02
+function getOrders(){
+    let actionString = "getOrders";
+    $.ajax({
+        type: "GET",
+        url: "models/admin/dashboard/get-orders.php",
+        data: {
+            actionString
+        },
+        dataType: "json",
+        success: function (response) {
+            showOrders(response);
+            $(".changeStatus").on("change", changeOrderStatus);
+        }
+    });
+}
+function showOrders(data){
+    let output = "";
+    if(data == undefined || data.length == 0){
+        output += "<h4 class='font-weight-bold my-4 text-center'>There is no genres at the moment</h4>";
+    }
+    else{
+        output += `<div class="table-responsive">
+                    <table class="table">
+                    <thead class=" text-primary">
+                        <tr><th colspan="2">
+                        #
+                        </th>
+                        <th colspan="2">
+                            Buyer Name
+                        </th>
+                        <th colspan="2">
+                            Address
+                        </th>
+                        <th>
+                            Order Lines
+                        </th>
+                        <th>Total</th>
+                        <th>
+                            Order Status
+                        </th>
+                        <th></th>
+                    </tr></thead>
+                    <tbody>`;
+    data.orders.forEach((el, index) => {
+        let total = 0;
+        output+= `<tr class="order-row">
+                    <td>${++index}<td>
+                    <td>${el.name} ${el.surname}<td>
+                    <td>${el.address}<td>
+                    <td class="orderLineTd">
+                        <ul class="list-unstyled mb-0">`;
+                        el.orderItems.forEach((orderLine)=>{
+                            total += parseFloat(orderLine.price) * orderLine.quantity;
+                            output += `<li class="mb-1">${orderLine.pName}: ${orderLine.quantity} pcs  ${orderLine.price}&euro;</li>`;
+                        });
+                    output += `</ul></td>
+                    <td>
+                        ${total}&euro;
+                    </td>
+                    <td>`;
+                        switch(el.status){
+                            case("Not sent"):
+                                output += `<span class="text-warning font-weight-bold">${el.status}<span>`;
+                                break;
+                            case("Shipped"):
+                                output += `<span class="text-info font-weight-bold">${el.status}<span>`;
+                                break;
+                            case("Received"):
+                                output += `<span class="text-success font-weight-bold">${el.status}<span>`;
+                                break;
+                            case("Canceled"):
+                                output += `<span class="text-danger font-weight-bold">${el.status}<span>`;
+                                break;
+                                
+                        }
+                     output += `</td>
+                    <td>
+                        <select data-id="${el.id}" data-current-status="${el.statusId}" class="custom-select mb-2 changeStatus">
+                                            <option value="0">Change Status</option>`;
+                        data.statuses.forEach(el => {
+                                output += `<option value="${el.id}">${el.name}</option>`;
+                        })
+                         output +=`</select>
+                         <span class="text-danger ml-2"></span>
+                    </td>
+                </tr>`;
+    });
+    output += `</tbody>
+            </table>
+        </div>`;
+    }
+    $("#order-table").html(output);
+}
+function changeOrderStatus(){
+    let orderId = $(this).data("id");
+    let currentStatusId = $(this).data("current-status");
+    let valid = false;
+    let statusId = $(this).val();
+
+    if(statusId == 0){
+        $(this).next().html("You must choose valid status");
+        valid = false;
+    }
+    else if(statusId == currentStatusId){
+        $(this).next().html("Status can't be same as before");
+        valid = false;
+    }
+    else{
+        $(this).next().html("");
+        valid = true;
+    }
+    if(valid){
+        let actionString = "changeStatus"
+        $.ajax({
+            type: "POST",
+            url: "models/admin/dashboard/change-order-status.php",
+            data: {
+                actionString,
+                orderId,
+                statusId 
+            },
+            dataType: "dataType",
+            success: function (response) {
+                getOrders();
+            },
+            error: function(error){
+                $(".errorInfo").hide();
+                $(".errorInfo").slideDown();
+            }
+        });
+    }
+}

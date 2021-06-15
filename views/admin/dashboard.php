@@ -16,15 +16,6 @@
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end">
-            <!-- <form class="navbar-form">
-              <span class="bmd-form-group"><div class="input-group no-border">
-                <input type="text" value="" class="form-control" placeholder="Search...">
-                <button type="submit" class="btn btn-white btn-round btn-just-icon">
-                  <i class="material-icons">search</i>
-                  <div class="ripple-container"></div>
-                </button>
-              </div></span>
-            </form> -->
           </div>
         </div>
       </nav>
@@ -102,6 +93,27 @@
                   <p class="card-category"> Take a look at statistic for every page on site</p>
                 </div>
                 <div class="card-body" id="page-statistic">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">Orders</h4>
+                  <p class="card-category"> Take a look at orders</p>
+                </div>
+                <div class="row m-0 w-100 justify-content-center mt-3 text-danger font-weight-bold"><p class="errorInfo">Error changing status, please try again later</p></div>
+                <div class="card-body" id="order-table">
+                </div>
+              </div>
+              <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">Orders</h4>
+                  <p class="card-category"> Take a look at orders</p>
+                </div>
+                <div class="row m-0 w-100 justify-content-center mt-3 text-danger font-weight-bold"><p class="errorInfo">Error changing status, please try again later</p></div>
+                <div class="card-body" id="order-table">
                 </div>
               </div>
             </div>

@@ -16,15 +16,6 @@
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end">
-            <!-- <form class="navbar-form">
-              <span class="bmd-form-group"><div class="input-group no-border">
-                <input type="text" value="" class="form-control" placeholder="Search...">
-                <button type="submit" class="btn btn-white btn-round btn-just-icon">
-                  <i class="material-icons">search</i>
-                  <div class="ripple-container"></div>
-                </button>
-              </div></span>
-            </form> -->
           </div>
         </div>
       </nav>
@@ -226,7 +217,7 @@
                           </a>
                         </li>
                         <li class="nav-item mt-2 mt-sm-0 mx-auto mr-sm-0 ml-sm-auto">
-                          <a class="nav-link btn active adminAdd" href="#">
+                          <a class="nav-link btn active adminAdd" href="models/excel/export-books-excel.php">
                           <i class="fas fa-file-excel mr-2"></i>Download Catalog
                           </a>
                         </li>

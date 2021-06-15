@@ -511,3 +511,37 @@ function getPicturePath($bookId){
     $prepare -> execute([$bookId]);
     return $prepare -> fetch() -> path;
 }
+function getFullAddres($id){
+    global $db;
+    $query = 'SELECT CONCAT(u.addres, " ", c.city_name, " ", co.country_name) AS address 
+                            FROM users u INNER JOIN cities c ON u.city_id = c.city_id
+                            INNER JOIN countries co ON c.country_id = co.country_id
+                            WHERE u.user_id = ?';
+    $prepare = $db -> prepare($query);
+    $prepare -> execute([$id]);
+    return $prepare -> fetch()-> address;
+}
+function getNameForProduct($id){
+    global $db;
+    $query = "SELECT title FROM `books` 
+    WHERE book_id = ?";
+    $prepare = $db -> prepare($query);
+    $prepare -> execute([$id]);
+    return $prepare -> fetch()-> title;
+}
+function counFailedAttemptsAtLast5Minutes($userId){
+    global $failedLogPath;
+    global $separator;
+    $failedAttemts = 0;
+    $rows = file($failedLogPath);
+    define("UNIX_5_MINUTES_BEFORE", strtotime('-5 minutes', time()));
+    foreach($rows as $row){
+        list($id, $ip, $datetime) =  explode($separator, $row);
+        list($date, $time) = explode(" ", $datetime);
+        list($year, $month, $day) = explode('-', $date);
+        list($hours, $minutes,$seconds) = explode(':', $time);
+        @$unixLog = mktime($hours, $minutes, $seconds, $month, $day, $year);
+        if($unixLog > UNIX_5_MINUTES_BEFORE && $id == $userId) $failedAttemts ++;
+    }
+    return $failedAttemts;
+}

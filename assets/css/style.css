@@ -1378,3 +1378,6 @@ input[type=number] {
 .content{
   min-height: 520px;
 }
+#order-table table{
+min-width: 1000px;
+}

@@ -3,11 +3,15 @@
     if(isset($_POST["action"]) && $_POST["action"] == "purchase" && isset($_SESSION["korisnik"])){
         require_once "../../config/connection.php";
         require_once "../forbidden/functions.php";
-        $query = "INSERT INTO orders VALUES (NULL, :user_id, :date)";
+        $query = "INSERT INTO orders VALUES (NULL, :user_id, :date, :address, :order_status_id)";
         $pripremaOrder = $db -> prepare ($query);
         $userId = $_SESSION["korisnik"]->user_id;
-        $pripremaOrder -> bindParam(":user_id", $userId);
         $date = date("Y-m-d H:i:s");
+        $address = getFullAddres($userId);
+        $orderStatus = NOT_SENT;
+        $pripremaOrder -> bindParam(":user_id", $userId);
+        $pripremaOrder -> bindParam(":address", $address);
+        $pripremaOrder -> bindParam(":order_status_id", $orderStatus);
         $pripremaOrder->bindParam(":date", $date);
         $db -> beginTransaction();
         try{
@@ -23,7 +27,7 @@
 
 
 
-        $query = "INSERT INTO order_items VALUES (NULL, :book_id, :order_id, :quantity, :price)";
+        $query = "INSERT INTO order_items VALUES (NULL, :book_id, :order_id, :quantity, :price, :name)";
         $pripremaOrder = $db -> prepare($query);
 
         $priceQuery = "SELECT p.value AS price
@@ -40,12 +44,14 @@
             $pripremaOrder -> bindParam(":order_id", $orderId);
             $pripremaOrder -> bindParam(":quantity", $quantity["productQuantity"]);
             $pripremaOrder -> bindParam(":price", $price);
+            $title = getNameForProduct($productId);
+            $pripremaOrder -> bindParam(":name", $title);
 
             $pripremaPrice -> bindParam(":book_id", $productId);
             $pripremaPrice -> execute();
 
             $price = $pripremaPrice -> fetch();
-            $price = $price -> price * $quantity["productQuantity"];
+            $price = round($price -> price, 2) ;
 
             try{
                    $pripremaOrder -> execute(); 
