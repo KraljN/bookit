@@ -44,24 +44,24 @@
             }
             if($files != null){
                 $previousPicturePath = getPicturePath($_POST["id"]);
-                var_dump($previousPicturePath);
-                //Obrisati prethodnu sliku i uploadovati novu!!!!
-            //     saveResizedImage($_FILES["picture"]);
-            //     $isMoved = move_uploaded_file($_FILES["picture"]["tmp_name"], IMG_PATH . $pictureName);
-            //     if($isMoved){
-            //         try{
-            //             $pictureUpdatePrepare -> execute([$pictureAlt, $pictureName, $_POST["id"]]);
-            //         }
-            //         catch(PDOException $ex){
-            //             logError($ex->getMessage(), "image-update");
-            //             $message = "Error updating image for book";
-            //             $db->rollBack();
-            //             vratiJSON(["message"=>$message], 500);
-            //         }
-            //    }
+                unlink(IMG_PATH . "thumb-" . $previousPicturePath);
+                unlink(IMG_PATH .  $previousPicturePath);
+                saveResizedImage($_FILES["picture"]);
+                $isMoved = move_uploaded_file($_FILES["picture"]["tmp_name"], IMG_PATH . $pictureName);
+                if($isMoved){
+                    try{
+                        $pictureUpdatePrepare -> execute([$pictureAlt, $pictureName, $_POST["id"]]);
+                    }
+                    catch(PDOException $ex){
+                        logError($ex->getMessage(), "image-update");
+                        $message = "Error updating image for book";
+                        $db->rollBack();
+                        vratiJSON(["message"=>$message], 500);
+                    }
             }
-            // $db -> commit();
-            // vratiJSON(["message"=> "success"], 204);
+            }
+             $db -> commit();
+             vratiJSON(["message"=> "success"], 204);
         }
         catch(PDOException $ex){
             logError($ex->getMessage(), "book-update");
