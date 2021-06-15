@@ -97,5 +97,4 @@ if(isset($_POST["action"]) && $_POST["action"] == "contact"){
 }
 else{
     header("Location: ../../index.php?page=home");
-    //uneti u log fajl da je pokusan prekrsaj
 }
