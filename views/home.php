@@ -4,7 +4,7 @@
         <div class="container text-uppercase">
             <h1 class="mt-2">Welcome to Book It</h1>
             <h2 class="lead mt-3">Order our best books from comfort of  your home</h2>
-            <a href="index.php?page=shop" class="btn .btn-outline-* mt-5">Shop now!</a>
+            <a href="index.php?page=products" class="btn .btn-outline-* mt-5">Shop now!</a>
         </div>
         </div>
     </div>

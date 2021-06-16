@@ -3,7 +3,7 @@
     require_once("../../../../config/connection.php");
     require_once("../../../forbidden/functions.php");
     $greske = array();
-    $regExpName = "/^[A-ZĐŠĆŽČ][a-zšđćžč][a-zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/";
+    $regExpName = "/^[A-ZĐŠĆŽČ][a-zšđćžč][a-zA-Zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/";
     if(!isset($_POST["name"])) array_push($greske, "Publiser Name is required field"); 
     if(!preg_match($regExpName, $_POST["name"])){
         array_push($greske, "Publisher Name Must be in valid format (St. Martin's Press)");

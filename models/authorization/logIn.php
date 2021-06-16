@@ -22,7 +22,7 @@ if(isset($_POST["action"]) && $_POST["action"]=="uloguj"){
     }
     if(count($greske) == 0){
         $pripremaLog = $db->prepare('SELECT u.user_id, u.username, u.role_id
-                                     FROM users u INNER JOIN roles r ON U.role_id = r.role_id 
+                                     FROM users u INNER JOIN roles r ON u.role_id = r.role_id 
                                      WHERE u.username = :user AND u.password = :pass AND u.active = 1');
         $pripremaLog->bindParam(":user", $user);
         $pripremaLog->bindParam(":pass", $pass);
@@ -63,15 +63,12 @@ if(isset($_POST["action"]) && $_POST["action"]=="uloguj"){
                         logError($ex->getMessage(), "status-update");
                         vratiJSON(["message"=>$message], 500);
                     }
-                // $mail = $proveraUser -> fetch() -> email;
-
-                // $to = $mail;
-                // $subject = 'Failed attempt of loging onto our website';
-                // $message = 'Hi, \r\n Somebody tried to login onto our site with your username. \r\n Contact support if it isn\'t you \r\n';
-                // $headers = 'From: book-it.com' . "\r\n";
-
-                // $uspesno = mail($to, $subject, $message, $headers);
-                // var_dump($uspesno);    Treba se namestiti mail server za ovo!!!
+                    $mail = $proveraUser -> fetch() -> email;
+                    $from = "From: Mail Contact Form <book-it@>book-it.com";//NIJE PODESEN MAIL ACCOUNT JER SE TA OPCIJA NAPLACUJE
+                    $to = $mail;
+                    $subject = 'Account Lock';
+                    $message = 'Your account has been locked due to too may tries over short period. Please contact administration.';
+                    mail($to, $subject, $message, $from);
                 }
                 
             }

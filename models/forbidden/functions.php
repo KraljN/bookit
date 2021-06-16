@@ -265,7 +265,7 @@ function  validateUser($data, $withPassword = true){
     $regExpUsername = "/[\d\w\.-_]{4,15}/";
     $regExpCreditCard = "/^\d{4}(\-\d{4}){3}$/";
     $regExpCountry = '/^[A-Z]\w{2,10}$/';
-    $regExpAddress = "/^[A-Z][\w]{5,20}(\s[\w]{5,20}){0,5}(\s[0-9]{1,4})$/";
+    $regExpAddress = "/^[A-Z][\w]{4,20}(\s[\w]{1,20}){0,3}(\s[0-9]{1,4})$/";
     $regExpPhoneNumber = "/^\+?[0-9]{9,15}$/";
     $regExpCVV = "/^[0-9]{3}$/";
 

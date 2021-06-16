@@ -192,7 +192,7 @@ function validateUser(event, targetPage, actionString,  forAdminManipulation = f
     let wrongClassOffset = 0;
     let redBorder = true;
     if(forAdminManipulation){
-        wrongClassOffset = 3
+        wrongClassOffset = 4;
         redBorder = false;
     }
 
@@ -411,7 +411,7 @@ function proveraContact(e){
     let other = $("#otherTb");
     let message = $("#message");
 
-    let nameRegexp = /^([A-ZĐŠĆŽČ][a-zšđćžč]{1,14})+(\s[A-ZĐŠĆŽČ][a-zšđćžč]{1,14})*$/;
+    let nameRegexp = /^([A-ZĐŠĆŽČ][a-zšđćžč]{0,14})+(\s[A-ZĐŠĆŽČ][a-zšđćžč]{0,14})*$/;
     let emailRegexp = /^([a-z0-9]{2,15}@[a-z]{2,10}\.[a-z]{2,5})(\.[a-z]{2,5})*$/;
     let nameIspravno, emailIspravno, subjectsIspravno, otherIspravno, messageIspravno;
     messageIspravno =  message.val().length > 0 ? true : false;
@@ -870,7 +870,7 @@ function displayAccessLog(data){
                                         ${el.ip}
                                         </td>
                                         <td>
-                                        ${el.time} UTC
+                                        ${el.time}
                                         </td>
                                     </tr>`;
                                     i++;
@@ -968,7 +968,7 @@ function displayErrorsLog(data){
                                         ${el.ip}
                                         </td>
                                         <td>
-                                        ${el.time} UTC
+                                        ${el.time}
                                         </td>
                                     </tr>`;
                                     i++;
@@ -1177,7 +1177,7 @@ function deleteItem(obj, actionString, deleteTargetPage, callback, checkIdTarget
     }
 }
 function displayGenres(){
-    let actionString = "getOrders"
+    let actionString = "displayGenres";
     $.ajax({
         type: "GET",
         url: "models/admin/content-manipulation/genres/get-genres.php",
@@ -1420,7 +1420,7 @@ function showPublishers(data){
 function validatePublisher(event, actionString, targetPage, oldValues = null, obj = null){
     event.preventDefault();
     let name
-    let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč][a-zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/;
+    let regExpName = /^[A-ZĐŠĆŽČ][a-zšđćžč][a-zA-Zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/;
     let distinctData = true;
     let nameIspravno = false;
     if(obj != null){
@@ -1844,7 +1844,7 @@ function  validateBook(event, actionString, target, previousErrorText = $(".erro
     let extension = $("#picture").val().split('.')[1];
     let isUploaded =$("#picture").get(0).files.length;
 
-    let slikaValidno, titleValidno, descriptionValidno, yearValidno, pagesValidno, authorValidno, publisherValidno, genreValidno, priceValidno;
+    let slikaValidno, imageSize,  titleValidno, descriptionValidno, yearValidno, pagesValidno, authorValidno, publisherValidno, genreValidno, priceValidno;
 
     let regExpTitle =/^[A-ZĐŠĆŽČ][a-zšđćžč][a-zšđćžč\.']{1,14}(\s[A-ZĐŠĆŽČa-zšđćžč'\.]{1,14})*$/;
 
@@ -1871,7 +1871,7 @@ function  validateBook(event, actionString, target, previousErrorText = $(".erro
 
 
     if(target != "edit-book.php"){
-        if((extension == "jpg" || extension =="jpeg" || extension =="png" || extension == "gif") && isUploaded) imageSize =  document.getElementById("picture").files[0].size/1024/1024;
+        if(isUploaded) imageSize =  document.getElementById("picture").files[0].size/1024/1024;
         if(isUploaded && imageSize<2 && (extension == "jpg" || extension =="jpeg" || extension =="png" || extension == "gif")){
             $("#picture").next().html("");
             slikaValidno = true;

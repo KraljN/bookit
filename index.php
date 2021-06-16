@@ -68,6 +68,9 @@
                                                                                                         </script><?php");
                 include "views/admin/book-form.php";
                 break;
+            default:
+                include "views/home.php";
+                break;
         }
     }
     include "views/fixed/footer.php";

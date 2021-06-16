@@ -121,15 +121,15 @@ include "models/capchas/generateCapchaText.php"
                 <button type="submit" value="submit" class="btn button-width" name="register" id="register">
                     Register
                 </button>
-                <?php if(isset($_SESSION["greske"])): ?>
+                <?php if(isset($_SESSION["greskeRegister"])): ?>
                     <ul class="text-center">
-                        <?php foreach($_SESSION["greske"] as $greska): ?>
+                        <?php foreach($_SESSION["greskeRegister"] as $greska): ?>
                             <li class="text-danger"><?= $greska ?></li>
                         <?php endforeach; ?>
                     </ul>
                 <?php
                  endif;
-                 unset($_SESSION["greske"]);
+                 unset($_SESSION["greskeRegister"]);
                  ?>
             </div>
         </form>

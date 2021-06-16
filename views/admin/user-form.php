@@ -18,7 +18,6 @@
         $paymentPrepare -> execute([$user -> id]);
         $payments = $paymentPrepare -> fetchAll();
         $user -> payments = $payments;
-        var_dump($user);
     }
 ?>
 

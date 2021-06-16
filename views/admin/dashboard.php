@@ -109,11 +109,37 @@
               <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Orders</h4>
-                  <p class="card-category"> Take a look at orders</p>
+                  <h4 class="card-title ">Contact Messages</h4>
+                  <p class="card-category"> Take a look at your site mailbox</p>
                 </div>
-                <div class="row m-0 w-100 justify-content-center mt-3 text-danger font-weight-bold"><p class="errorInfo">Error changing status, please try again later</p></div>
-                <div class="card-body" id="order-table">
+                <div class="card-body" id="contact">
+                    <?php require_once "models/admin/dashboard/contact-messages/get-contact-messages.php" ?>
+                  <div class="table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+                            <tr>
+                              <th>#</th>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Text</th>
+                              <th>Subject</th>
+                              <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <?php foreach($contacts as $index => $contact): ?>
+                            <tr>
+                              <td><?= ++$index ?></td>
+                              <td><?= $contact -> name ?></td>
+                              <td><?= $contact -> email ?></td>  
+                              <td><?= $contact -> message ?></td>
+                              <td><?= $contact -> subject ?></td>
+                              <td><?= $contact -> date ?></td>
+                            </tr>
+                          <?php endforeach ?>
+                        </tbody>
+                      </table>
+                  </div>
                 </div>
               </div>
             </div>
